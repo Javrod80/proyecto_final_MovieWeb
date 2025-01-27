@@ -6,3 +6,13 @@ const router = Router();
 
 //BBDD MongoDB
 router.get('/movieapp/v1/favorites/all-favorites', favorites.getFavorites);
+
+
+
+
+
+
+
+
+
+export { router };
