@@ -128,3 +128,11 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
+
+
+# Ignorar archivos sensibles
+.env
+.env.local
+.env.development
+.env.test
+.env.production
