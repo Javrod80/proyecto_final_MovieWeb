@@ -4,7 +4,7 @@ import * as mysql from 'mysql2/promise'
 const my_host = "localhost"; 
 const my_user = 'root';
 const my_pass = 'root';
-const my_db = "MoviesWeb"; 
+const my_db = "moviesDB"; 
 export default {
 
 	mySQLConnection: async () => {

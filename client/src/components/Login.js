@@ -16,7 +16,7 @@ const Login = () => {
         const password = formData.get('password');
 
         try {
-            const response = await fetch("http://127.0.0.1:5000/login", {
+            const response = await fetch("http://127.0.0.1:5000/movieapp/v1/users/login", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

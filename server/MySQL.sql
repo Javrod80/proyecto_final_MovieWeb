@@ -1,3 +1,7 @@
+CREATE DATABASE MovieDB;
+
+USE MovieDB;
+
 CREATE TABLE users(
 	id INT AUTO_INCREMENT PRIMARY KEY,
 	user_name VARCHAR(100) NOT NULL,
@@ -15,3 +19,7 @@ CREATE TABLE watch_history(
     FOREIGN KEY (user_id) REFERENCES users(id),
     
 );
+
+    INSERT INTO users (user_name, user_lastnames, email, password)
+VALUES ("Javier", "ELmismo", "elmismo@gmail.com", "miPass1");
+    
