@@ -11,7 +11,7 @@ const Home = () => {
         navigate('/login'); // Navegar a la página de login
     };
     const gotoRegister = () => {
-        navigate('/login'); // Navegar a la página de registro
+        navigate('/register'); // Navegar a la página de registro
     }
     return (
         <div className="home">

@@ -6,6 +6,7 @@ const { sign } = jwt;
 const userController = {
     // Registro de un nuevo usuario
     signupUser: async (req, res) => {
+        console.log("Datos recibidos:", req.body);
         const { user_name, user_lastnames, email, password } = req.body;
 
         if (!user_name || !user_lastnames || !email || !password) {
@@ -37,18 +38,18 @@ const userController = {
         }
 
         try {
-            // Llamamos a la función `loginUsers` del CRUD para obtener el usuario por su correo
-            const values = ['user_name', 'user_lastnames', 'email', 'password', 'users', 'email', email, 'password', password];
-
-            const users = await crudMysql.loginUsers(values);
+           
+            const users = await crudMysql.loginUsers([email, password]); 
+          
 
             console.log("Usuarios encontrados:", users);
 
-            if (users.length === 0) {
+            if (!users || users.length === 0 || users[0].length === 0) {
                 return res.status(401).json({ message: 'Usuario no encontrado o credenciales inválidas' });
             }
 
-            const user = users[0];
+
+            const user = users[0][0];
 
            
             if (password !== user.password) {

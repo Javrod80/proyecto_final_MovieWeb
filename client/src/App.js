@@ -15,6 +15,7 @@ import { FavoritesProvider } from './providers/FavoritesProvider';
 import Profile from './components/Profile';
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import SignupForm from './components/SignupForm';
 
 
 
@@ -33,6 +34,7 @@ function App() {
                 <Route path="/movie/:imdbID" element={<MovieDetails />} />
                 <Route path="/favorites" element={<Favorites />} />
                 <Route path="/login" element={<Login />} />
+                <Route path="/register" element={<SignupForm />} />
                 <Route path="/profile" element={<Profile />} />
               </Routes>
             </Router>

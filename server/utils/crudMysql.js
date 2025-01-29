@@ -6,23 +6,29 @@ const connection = await sql.mySQLConnection();
 export default {
 
     loginUsers: async (values) => {
-        const query = `
-       SELECT ??, ??, ??, ??
-FROM ??
-WHERE ?? = ? AND ?? = ?
+        const [email, password] = values;
 
-    `
-        const result = await connection.query(query, [...values]);
+        const query = `
+    SELECT user_name, user_lastnames, email, password
+    FROM users
+    WHERE email = ? AND password = ?
+`;
+  
+        const result = await connection.query(query, [email, password]);
+    
+        
         return result;
     },
     createUser: async (values) => {
-        const query = `
-        INSERT INTO ??
-        VALUES(NULL, ?, ?, ?, ?, ?)
+        
+            const query = `
+        INSERT INTO users (user_name, user_lastnames, email, password, created_at)
+        VALUES (?, ?, ?, ?, ?)
     `;
-        const [result] = await connection.query(query, [...values]);
-        return result.insertId;
-    },
+            const [result] = await connection.query(query, values);
+            return result.insertId;
+        },
+    
 
 
     updateUser: async (values) => {
