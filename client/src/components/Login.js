@@ -7,12 +7,10 @@ const Login = () => {
     const { login } = useAuth();
     const navigate = useNavigate();
 
-
     const handleSubmit = async (e) => {
         e.preventDefault();
         const formData = new FormData(e.target);
-        const action = formData.get('action');
-        const username = formData.get('username');
+        const email = formData.get('email');
         const password = formData.get('password');
 
         try {
@@ -21,26 +19,27 @@ const Login = () => {
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify({ action, username, password }),
+                body: JSON.stringify({ email, password }), // Enviar email y password
             });
 
             const data = await response.json();
             console.log('Response data:', data); // Verificar los datos de la respuesta
 
             if (!response.ok) {
-                throw new Error(`Error en la solicitud: ${response.statusText}`);
+                throw new Error(data.message || `Error en la solicitud: ${response.statusText}`);
             }
 
             // Mostrar mensaje de éxito
             toast.success(data.message || "Operación exitosa");
 
-            if (action === 'login') {
-                login();  // Llamar al login para actualizar el estado
-                // Si el login es exitoso, redirigir a la página de búsqueda
-                navigate('/search');
-            } else {
-                navigate('/login');
-            }
+            // Almacenar el token en localStorage
+            localStorage.setItem('token', data.token);
+
+          
+            login();
+
+            // Redirigir a la página de búsqueda después del login exitoso
+            navigate('/search');
         } catch (error) {
             console.error("Error:", error);
             alert(error.message || "Ocurrió un error");
@@ -52,13 +51,13 @@ const Login = () => {
             <form onSubmit={handleSubmit} method="POST">
                 <div className='divForm'>
                     <div>
-                        <label htmlFor="username">Username: </label>
+                        <label htmlFor="email">Email: </label>
                         <input
-                            type="text"
-                            id="username"
+                            type="email"
+                            id="email"
                             aria-describedby="emailHelp"
-                            placeholder="Enter your username"
-                            name="username"
+                            placeholder="Enter your email"
+                            name="email"
                             required
                         />
                     </div>
@@ -74,27 +73,16 @@ const Login = () => {
                         />
                     </div>
 
-                    <input type="hidden" name="action" value="signup" />
                     <div className='divBotones In'>
                         <button
                             type="submit"
                             className="botonLog"
-                            onClick={() => (document.querySelector('[name="action"]').value = 'signup')}
-                        >
-                            SIGNUP
-                        </button>
-                        <button
-                            type="submit"
-                            className="botonLog"
-                            onClick={() => (document.querySelector('[name="action"]').value = 'login')}
                         >
                             LOGIN
                         </button>
                     </div>
                 </div>
             </form>
-
-
         </div>
     );
 };

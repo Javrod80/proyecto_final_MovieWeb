@@ -1,188 +1,73 @@
 import crudMysql from '../utils/crudMysql.js';
 import jwt from 'jsonwebtoken';
 
-const { sign, verify } = jwt;
+const { sign } = jwt;
 
-/* ------------- FUNCTIONS ----------------*/
+const userController = {
+    // Registro de un nuevo usuario
+    signupUser: async (req, res) => {
+        const { user_name, user_lastnames, email, password } = req.body;
 
-export default {
+        if (!user_name || !user_lastnames || !email || !password) {
+            return res.status(400).json({ message: 'Todos los campos son obligatorios' });
+        }
+
+        try {
+         
+            const values = [user_name, user_lastnames, email, password, new Date()];
+            const userId = await crudMysql.createUser(values);
+
+            res.status(201).json({ message: 'Usuario registrado exitosamente', userId });
+        } catch (error) {
+            console.error('Error al registrar usuario:', error);
+            if (error.code === 'ER_DUP_ENTRY') {
+                res.status(409).json({ message: 'El correo ya está registrado' });
+            } else {
+                res.status(500).json({ message: 'Error al registrar usuario', error });
+            }
+        }
+    },
+
+    // Inicio de sesión
     loginUser: async (req, res) => {
-        try {
-            const { login, pass } = req.body;
-            if (!login) {
-                return res.status(400).json({ message: 'Faltan datos obligatorios' });
-            }
+        const { email, password } = req.body;
 
-            let user;
-
-            async function testInTables(tableName) {
-                let values = ['email', 'pass', `${tableName}`, 'pass', pass, 'email', login];
-                user = await crudMysql.loginUsers(values);
-
-                if (user[0].length === 0) {
-                    console.log(`No está en ${tableName}`);
-                    return true;
-                } else {
-                    console.log(`Está en ${tableName}`);
-                    generateToken(user, tableName, '1000s');
-                    return false;
-                }
-            }
-
-            function generateToken(user, name, expires) {
-                const tokenFrom = { ...user[0][0], rol: 'rol', name: name };
-                console.log('TOKEN FROM', tokenFrom);
-
-                sign(tokenFrom, 'secretkey', { expiresIn: expires }, (err, token) => {
-                    if (err) {
-                        return res.status(504).json({ error: 'El usuario y/o contraseña no válido' });
-                    }
-                    const response = {
-                        message: '---- Usuario logueado ------',
-                        token: 'Bearer ' + token
-                    };
-                    return res.status(201).json(response);
-                });
-            }
-        } catch (error) {
-            console.error('Error al hacer login:', error);
-            res.status(500).json({ message: 'Error al hacer login', error });
+        if (!email || !password) {
+            return res.status(400).json({ message: 'Correo y contraseña son obligatorios' });
         }
-    },
 
-    dataUser: async (req, res) => {
         try {
-            const value = ['users'];
-            const data = await crudMysql.getUsers(value);
-            console.log(data[0]);
+            // Llamamos a la función `loginUsers` del CRUD para obtener el usuario por su correo
+            const values = ['user_name', 'user_lastnames', 'email', 'password', 'users', 'email', email, 'password', password];
 
-            const response = [
-                data.map(res => {
-                    const custom_response = {
-                        id: res.id_user,
-                        full_name: (res.user_name + ' ' + res.user_lastnames),
-                        email: res.email
-                    };
-                    return custom_response;
-                })
-            ];
-            console.log(response);
-            res.status(201).json(response);
-        } catch (error) {
-            console.error('Error: ', error);
-            res.status(500).json({ message: 'Error ', error });
-        }
-    },
+            const users = await crudMysql.loginUsers(values);
 
-    updatePass: async (req, res) => {
-        try {
-            const { email } = req.body;
-            if (!email) {
-                return res.status(400).json({ message: "El campo email es obligatorio" });
+            console.log("Usuarios encontrados:", users);
+
+            if (users.length === 0) {
+                return res.status(401).json({ message: 'Usuario no encontrado o credenciales inválidas' });
             }
 
-            const values = ["students", "email", email];
-            const infoAlum = await crudMysql.getAlumn(values);
+            const user = users[0];
 
-            if (infoAlum.length === 0) {
-                return res.status(400).json({ message: "Usuario no encontrado" });
+           
+            if (password !== user.password) {
+                return res.status(401).json({ message: 'Usuario no encontrado o credenciales inválidas' });
             }
 
-            sign({ email }, "secretkey", { expiresIn: "15m" }, (err, token) => {
-                if (err) {
-                    return res.status(500).json({ message: "Error al generar el token", error: err });
-                }
+            // Generación del token JWT
+            const token = sign({ id: user.id, email: user.email }, 'secretkey', { expiresIn: '1h' });
 
-                return res.status(200).json({
-                    message: "Usuario encontrado. Aquí está el token para cambiar la contraseña.",
-                    token: `Bearer ${token}`,
-                });
+            res.status(200).json({
+                message: 'Inicio de sesión exitoso',
+                token: `Bearer ${token}`,
+                user: { id: user.id, email: user.email, user_name: user.user_name },
             });
-        } catch (e) {
-            console.log("Error en updatePass: ", e);
-            res.status(500).json({ message: "Error en el servidor", error: e });
+        } catch (error) {
+            console.error('Error al iniciar sesión:', error);
+            res.status(500).json({ message: 'Error al iniciar sesión', error });
         }
     },
-
-    confirmPass: async (req, res) => {
-        try {
-            verify(req.params.token, 'secretkey', (err, token) => {
-                if (err) {
-                    console.log("Error en validating token: ", err);
-                    return res.status(500).json({ message: "Error al validar el token", error: err });
-                } else {
-                    const { email } = token;
-                    const values = ['students', 'pass', req.body.pass, 'email', email];
-                    crudMysql.updateAlumnValue(values);
-
-                    console.log("Contraseña actualizada correctamente");
-                    return res.status(500).json({ message: 'Contraseña actualizada correctamente.' });
-                }
-            });
-        } catch (e) {
-            console.log("Error en updatePass: ", e);
-            res.status(500).json({ message: "Error en el servidor", error: e });
-        }
-    },
-
-    getLoginStudent: async (req, res) => {
-        jwt.verify(req.token, 'secretkey', async (err, authData) => {
-            if (err) {
-                res.sendStatus(403).json({ message: "Error al validar el token", error: err });
-                console.log(err);
-            } else {
-                console.log('AUTHdATA', authData);
-                const dataAlunm = [authData.rol, "dni", authData.dni];
-                const infoAlumn = await crudMysql.getAlumn(dataAlunm);
-                const userName = infoAlumn[0].student_name || infoAlumn[0].professor_name || infoAlumn[0].staff_name;
-                const useraddress = infoAlumn[0].student_address || infoAlumn[0].professor_address || infoAlumn[0].staff_address;
-                const userLastName = infoAlumn[0].student_lastnames || infoAlumn[0].professor_lastnames || infoAlumn[0].staff_lastnames;
-                console.log(infoAlumn);
-                if (infoAlumn.length === 0) {
-                    return res.status(400).json({ message: "Alumno no existe" });
-                } else {
-                    const response = {
-                        dni: infoAlumn[0].dni,
-                        phone: infoAlumn[0].phone,
-                        full_name: (userName + ' ' + userLastName),
-                        email: infoAlumn[0].email,
-                        address: useraddress,
-                        rol: authData.rol
-                    };
-                    console.log(response);
-                    return res.status(200).json(response);
-                }
-            }
-        });
-    },
-
-    registerUser: async (req, res) => {
-        try {
-            const { info } = req.body;
-            if (!info) {
-                return res.status(400).json({ message: "El campo email/DNI es obligatorio" });
-            }
-
-            let values = [];
-            let updateValues = [];
-
-            if (info.includes(".com")) {
-                values = ['email', "isRegistered", 'students', 'email', info];
-                updateValues = ['students', "isRegistered", true, 'email', info];
-            } else {
-                values = ['dni', "isRegistered", 'students', 'dni', info];
-                updateValues = ['students', "isRegistered", true, 'dni', info];
-            }
-
-            const [result] = await crudMysql.setRegisteredUser(values);
-
-            if (result.length > 0 && result[0].isRegistered === 0) {
-                crudMysql.updateAlumnValue(updateValues);
-                return res.status(200).json({ message: `${result[0].email} registrado con éxito!` });
-            }
-            return res.status(401).json({ message: `El email no está en la base de datos o ya se encuentra registrado` });
-        } catch (err) {
-            return res.status(500).json({ message: 'Error en el registro', err });
-        }
-    }
 };
+
+export default userController;

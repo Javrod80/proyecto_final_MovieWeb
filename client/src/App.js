@@ -32,7 +32,7 @@ function App() {
                 <Route path="/search" element={<MoviesSearch />} />
                 <Route path="/movie/:imdbID" element={<MovieDetails />} />
                 <Route path="/favorites" element={<Favorites />} />
-                <Route path="*" element={<Login />} />
+                <Route path="/login" element={<Login />} />
                 <Route path="/profile" element={<Profile />} />
               </Routes>
             </Router>

@@ -7,7 +7,7 @@ CREATE TABLE users(
 	user_name VARCHAR(100) NOT NULL,
     user_lastnames VARCHAR(100) NOT NULL,
 	email VARCHAR(150) UNIQUE NOT NULL,
-	password VARCHAR(30),
+	password VARCHAR(100),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
