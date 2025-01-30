@@ -15,7 +15,7 @@ const MoviesSearch = () => {
 
     const handleSearch = async () => {
         try {
-            const response = await fetch(`http://localhost:5000/api/movies?title=${title}`);
+            const response = await fetch(`http://localhost:5000/movieapp/v1/movies/search?title=${title}`);
             if (!response.ok) {
                 throw new Error("No se encontró la película");
             }

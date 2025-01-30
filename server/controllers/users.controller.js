@@ -42,7 +42,7 @@ const userController = {
             const users = await crudMysql.loginUsers([email, password]); 
           
 
-            console.log("Usuarios encontrados:", users);
+          //  console.log("Usuarios encontrados:", users);
 
             if (!users || users.length === 0 || users[0].length === 0) {
                 return res.status(401).json({ message: 'Usuario no encontrado o credenciales inválidas' });
