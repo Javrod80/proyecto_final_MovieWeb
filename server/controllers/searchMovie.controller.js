@@ -1,6 +1,6 @@
 import fetch from 'node-fetch';
-import dotenv from 'dotenv';
-dotenv.config();
+
+
 
 
 console.log('OMDB_API_KEY:', process.env.OMDB_API_KEY);
