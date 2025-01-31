@@ -1,25 +1,32 @@
-import mongo from '../database/mongo.connection.js'
+import fetch from 'node-fetch';
 
-const client = await mongo.connectToMongo()
-const close = await mongo.closeClient()
 
-const mydb = 'moviesweb'
 
 export default {
+    
+   getMovieDetails: async (req, res) => {
+       
+    const { imdbID } = req.params;
+const apiKey = process.env.OMDB_API_KEY;
 
-   
-    getDetails: async (req, res) => {
+try {
+    // Realizando la solicitud para obtener detalles de la película por su imdbID
+    const response = await fetch(`https://www.omdbapi.com/?i=${imdbID}&apikey=${apiKey}`);
 
-        try {
-            const db = client.db(mydb)
-            const collection = db.collection('DetailsMovies')
-            const result = await collection.find({}).toArray()
-
-            res.json(result)
-
-        } finally {
-            close()
-
-        }
+    if (!response.ok) {
+        throw new Error("Error en la respuesta de la API");
     }
+    const movieDetails = await response.json(); // Obtener los detalles de la película en formato JSON
+    if (movieDetails.Response === "False") {
+        return res.status(404).json({ message: "Película no encontrada" });
+    }
+
+    res.json(movieDetails); // Enviar los detalles de la película al cliente
+} catch (err) {
+    console.error(err); // Para depurar el error
+    res.status(500).json({ error: "Error al obtener los detalles de la película" });
+}
+   }
+
+
 }

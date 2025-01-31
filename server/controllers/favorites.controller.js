@@ -1,25 +1,15 @@
-import mongo from '../database/mongo.connection.js'
-
-const client = await mongo.connectToMongo()
-const close = await mongo.closeClient()
-
-const mydb = 'moviesweb'
+import crudMongoDB from "../utils/crudMongoDB.js";
 
 export default {
-
-   
-    getFavorites: async (req, res) => {
+    addFavorites: async (req, res) => {
+        const movieData = req.body;
 
         try {
-            const db = client.db(mydb)
-            const collection = db.collection('MoviesFavorites')
-            const result = await collection.find({}).toArray()
-
-            res.json(result)
-
-        } finally {
-            close()
-
+            const result = await crudMongoDB.insertFavorites(movieData);
+            res.status(201).json({ message: 'Película agregada a favoritos', result });
+        } catch (error) {
+            console.error('Error al agregar a favoritos:', error);
+            res.status(500).json({ message: 'Error al agregar la película a favoritos' });
         }
     }
-}
+};

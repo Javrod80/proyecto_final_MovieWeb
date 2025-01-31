@@ -12,8 +12,9 @@ const MovieDetails = () => {
     useEffect(() => {
         const fetchMovieDetails = async () => {
             try {
-                const response = await fetch(`http://localhost:5000/api/movie/${imdbID}`);
-                if (!response.ok) {
+                const response = await fetch(`http://localhost:5000/movieapp/v1/movies/${imdbID}`);
+                       
+                if (!response.ok) {   
                     throw new Error("Error al obtener los detalles de la película");
                 }
                 const data = await response.json();
@@ -51,7 +52,7 @@ const MovieDetails = () => {
         };
 
         try {
-            const response = await fetch("http://localhost:5000/api/favorites", {
+            const response = await fetch("http://localhost:5000/movieapp/v1/favorites/add-favorite", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"

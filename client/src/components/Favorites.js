@@ -8,7 +8,7 @@ const Favorites = () => {
     useEffect(() => {
         const fetchFavorites = async () => {
             try {
-                const response = await fetch("http://localhost:5000/api/favorites");
+                const response = await fetch("http://localhost:5000/movieapp/v1/favorites/all-favorites");
                 if (!response.ok) {
                     throw new Error("Error al obtener las películas favoritas");
                 }
