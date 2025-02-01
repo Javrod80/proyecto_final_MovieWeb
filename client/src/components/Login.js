@@ -32,11 +32,19 @@ const Login = () => {
             // Mostrar mensaje de éxito
             toast.success(data.message || "Operación exitosa");
 
+            console.log("Response data:", data);
+            console.log("User object:", data.user);
+            console.log("User ID:", data.user.id);
+
+
+
+
             // Almacenar el token en localStorage
             localStorage.setItem('token', data.token);
-
-          
-            login();
+            localStorage.setItem('userId', data.user?.id);
+            console.log("UserID guardado en localStorage:", localStorage.getItem('userId'));
+                     
+            login(data.user?.id); 
 
             // Redirigir a la página de búsqueda después del login exitoso
             navigate('/search');

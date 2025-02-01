@@ -7,7 +7,7 @@ const MovieDetails = () => {
     const { imdbID } = useParams();
     const [movie, setMovie] = useState(null);
     const [error, setError] = useState("");
-    const { isAuthenticated } = useAuth();
+    const { isAuthenticated, userId } = useAuth();
 
     useEffect(() => {
         const fetchMovieDetails = async () => {
@@ -34,7 +34,14 @@ const MovieDetails = () => {
             toast.error("Debes estar logueado para agregar a favoritos");
             return;
         }
+
+        if (!userId) {
+            toast.error("Error: No se pudo obtener el ID del usuario");
+            return;
+        }
         const movieData = {
+            userId,
+            imdbID: movie.imdbID,
             Title: movie.Title,
             Poster: movie.Poster,
             Plot: movie.Plot,

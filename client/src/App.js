@@ -22,7 +22,7 @@ import SignupForm from './components/SignupForm';
 function App() {
   return (
     <AuthProvider>
-      <FavoritesProvider>
+    <FavoritesProvider>
         <SearchProvider>
           <div className="MiApp">
             <ToastContainer />
@@ -41,7 +41,7 @@ function App() {
             <Footer />
           </div>
         </SearchProvider>
-      </FavoritesProvider>
+        </FavoritesProvider>
     </AuthProvider>
   );
 }

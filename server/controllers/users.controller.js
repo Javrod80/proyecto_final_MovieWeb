@@ -52,7 +52,7 @@ const userController = {
             const user = users[0][0];
 
            
-            if (password !== user.password) {
+            if (!user || password !== user.password) {
                 return res.status(401).json({ message: 'Usuario no encontrado o credenciales inválidas' });
             }
 
@@ -62,6 +62,7 @@ const userController = {
             res.status(200).json({
                 message: 'Inicio de sesión exitoso',
                 token: `Bearer ${token}`,
+                userId: user.id,
                 user: { id: user.id, email: user.email, user_name: user.user_name },
             });
         } catch (error) {

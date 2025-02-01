@@ -9,7 +9,7 @@ export default {
         const [email, password] = values;
 
         const query = `
-    SELECT user_name, user_lastnames, email, password
+    SELECT id, user_name, user_lastnames, email, password
     FROM users
     WHERE email = ? AND password = ?
 `;
