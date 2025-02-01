@@ -24,7 +24,8 @@ export default {
         const collection = db.collection(collectionName);
 
         try {
-            const result = await collection.find({userId}).toArray();
+            const result = await collection.find({ userId: userId }).toArray();
+            console.log('Resultado de la consulta con find:', result);
             return result;
         } finally {
             await mongoConnection.closeClient(client);
