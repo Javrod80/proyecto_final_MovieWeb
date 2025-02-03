@@ -45,4 +45,15 @@ export default {
         const [result] = await connection.query(query, [...values]);
         return result.affectedRows;
     },
+
+
+    watchHistory: async (values) => {
+        const query = `
+        SELECT * FROM watch_history
+        WHERE user_id = ?
+    `;
+        const [result] = await connection.query(query, values);
+        return result;
+    }
+
 }

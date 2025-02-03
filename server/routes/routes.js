@@ -4,6 +4,7 @@ import searchMovieController from '../controllers/searchMovie.controller.js';
 import detailsController from '../controllers/details.controller.js';
 import favoritesController from '../controllers/favorites.controller.js';
 import getFavorites from '../controllers/getFavorites.controller.js';
+import watchHistoryController from '../controllers/watchHistory.controller.js';
 
 
 
@@ -28,5 +29,8 @@ router.post('/movieapp/v1/favorites/add-favorite', favoritesController.addFavori
 
 // Ruta Obtener los favoritos del usuario
 router.get('/movieapp/v1/favorites/all-favorites', getFavorites.getFavorites); // Obtenemos los favoritos del usuario
+
+// Ruta para watch history
+router.get('/movieapp/v1/watched/watch-history', watchHistoryController.getWatchHistory);
 
 export { router };
