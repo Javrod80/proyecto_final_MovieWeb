@@ -54,6 +54,15 @@ export default {
     `;
         const [result] = await connection.query(query, values);
         return result;
-    }
+    },
+    addWatchHistory: async (values) => {
+        const query = `
+        INSERT INTO watch_history (user_id, movie_id, title, poster, created_at)
+        VALUES (?, ?, ?, ?,NOW() )
+    `;
+       // console.log(values);
+        const [result] = await connection.query(query, values);
+        return result.insertId;
+    },
 
 }

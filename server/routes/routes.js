@@ -31,6 +31,7 @@ router.post('/movieapp/v1/favorites/add-favorite', favoritesController.addFavori
 router.get('/movieapp/v1/favorites/all-favorites', getFavorites.getFavorites); // Obtenemos los favoritos del usuario
 
 // Ruta para watch history
-router.get('/movieapp/v1/watched/watch-history', watchHistoryController.getWatchHistory);
+router.get('/movieapp/v1/watched/watch-history/:user_id', watchHistoryController.getWatchHistory);
+router.post('/movieapp/v1/watched/add-watch-history', watchHistoryController.addWatchHistory);
 
 export { router };

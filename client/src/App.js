@@ -16,6 +16,8 @@ import Profile from './components/Profile';
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import SignupForm from './components/SignupForm';
+import WatchedProvider from './providers/WatchedProvider';
+import MovieWatched from './components/MovieWatched';
 
 
 
@@ -24,6 +26,7 @@ function App() {
     <AuthProvider>
     <FavoritesProvider>
         <SearchProvider>
+          <WatchedProvider>
           <div className="MiApp">
             <ToastContainer />
             <Header />
@@ -36,10 +39,14 @@ function App() {
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<SignupForm />} />
                 <Route path="/profile" element={<Profile />} />
+                <Route path="*" element={<h1>Not Found</h1>} />
+                <Route path="/watched" element={<MovieWatched />} />
+
               </Routes>
             </Router>
             <Footer />
           </div>
+          </WatchedProvider>
         </SearchProvider>
         </FavoritesProvider>
     </AuthProvider>

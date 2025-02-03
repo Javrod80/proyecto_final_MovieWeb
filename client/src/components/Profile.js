@@ -8,6 +8,9 @@ const Profile = () => {
     const goToFavorites = () => {
         navigate('/favorites'); // Navegar a la página de favoritos
     };
+const goToWatched = () => {
+    navigate('/watched'); // Navegar a la página de vistas
+};
 
     return (
         <div className="profile-page">
@@ -16,6 +19,7 @@ const Profile = () => {
                 <p>Aquí podrás ver tus películas favoritas.</p>
                 <img src={peliculasImage} alt="Imagen de fondo" />
                 <button onClick={goToFavorites} className="btn secondary-btn">Ver Películas Favoritas</button>
+                <button onClick={goToWatched} className="btn secondary-btn">Ver Películas Vistas</button>
 
             </div>
         </div>

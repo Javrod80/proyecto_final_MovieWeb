@@ -9,7 +9,7 @@ export default {
 
         const apiKey = process.env.OMDB_API_KEY;
         const { title } = req.query;
-        console.log('OMDB_API_KEY:', process.env.OMDB_API_KEY);
+        //  console.log('OMDB_API_KEY:', process.env.OMDB_API_KEY);
         if (!apiKey) {
             console.error("API key is missing");
             return res.status(500).json({ error: "API key is missing" });

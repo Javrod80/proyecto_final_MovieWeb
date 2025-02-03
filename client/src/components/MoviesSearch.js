@@ -1,15 +1,24 @@
-import React, { useState } from "react";
+import React, { useState , useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useSearch } from "../providers/SearchProvider";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../providers/AuthContext";
+import { useWatched } from "../providers/WatchedProvider";
 
 const MoviesSearch = () => {
     const { movies, setMovies, title, setTitle } = useSearch();
     const [error, setError] = useState("");
     const { isAuthenticated, logout } = useAuth();
     const navigate = useNavigate();
+    const {  markAsWatched, watched,fetchWatched} = useWatched();
+  
 
+    // Obtener historial de películas vistas
+    useEffect(() => {
+        if (isAuthenticated) {
+            fetchWatched(); 
+        }
+    }, [fetchWatched, isAuthenticated]);
 
 
 
@@ -25,6 +34,7 @@ const MoviesSearch = () => {
             }
             setMovies(data.Search);
             setError("");
+            
         } catch (err) {
             setError(err.message);
             setMovies([]);
@@ -33,6 +43,9 @@ const MoviesSearch = () => {
     const handleLogout = () => {
         logout(); // Llama a la función logout
         navigate("/"); // Redirige al usuario a la página de inicio después de cerrar sesión
+    };
+    const isWatched = (movieId) => {
+        return watched.some((movie) => movie.movie_id === movieId);
     };
 
     return (
@@ -56,8 +69,13 @@ const MoviesSearch = () => {
                             <Link to={`/movie/${movie.imdbID}`} >
                                 Ver detalles
                             </Link>
-
-
+                            <button onClick={() => markAsWatched(movie)}>
+                                {isWatched(movie.imdbID) ? (
+                                    <img src="/images/ojo.jpg" alt="Visto" style={{ width: "30px" }} />
+                                ) : (
+                                    <img src="/images/ojo2.jpg" alt="Marcar como visto" style={{ width: "30px" }} />
+                                )}
+                            </button>
                         </div>
                     ))}
                 </div>
