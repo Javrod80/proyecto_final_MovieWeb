@@ -3,6 +3,7 @@ import mongoConnection from '../database/mongo.connection.js';
 
 const dbName = 'movieDatabase';
 const collectionName = 'favorites';
+const collectionNameReviews = 'movieReviews';
 
 export default {
     insertFavorites: async (userId, movie) => {
@@ -49,14 +50,14 @@ export default {
      // Obtener todas las reseñas de una película
      getMovieReviews: async (movieId) => {
         const db = client.db(mydb);
-        const collection = db.collection('movieReviews');
+        const collection = db.collection(collectionNameReviews);
         return await collection.find({ movieId: movieId }).toArray();
     },
 
     // Agregar una reseña de una película
     addMovieReview: async (userId, movieId, rating, review) => {
         const db = client.db(mydb);
-        const collection = db.collection('movieReviews');
+        const collection = db.collection(collectionNameReviews);
         return await collection.insertOne({ userId: userId, movieId: movieId, rating: rating, review: review, createdAt: new Date() });
     },
 
