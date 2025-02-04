@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import { useFavorites } from "../providers/FavoritesProvider";
+import Reviews from "./Reviews";
 
 const Favorites = () => {
     const { favorites, isLoading, fetchFavorites } = useFavorites();
@@ -23,6 +24,7 @@ const Favorites = () => {
                         <li key={movie.imdbID}>
                             <h3>{movie.Title}</h3>
                             <img src={movie.Poster} alt={movie.Title} width="100" />
+                            <Reviews movieId={movie.imdbID} /> {/* Enviar movieId a Reviews */}
                         </li>
                     ))}
                 </ul>

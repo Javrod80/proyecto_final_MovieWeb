@@ -47,18 +47,28 @@ export default {
     },
 
 
-     // Obtener todas las reseñas de una película
-     getMovieReviews: async (movieId) => {
-        const db = client.db(mydb);
+    getMovieReviews: async (movieId) => {
+        const client = await mongoConnection.connectToMongo(); 
+        const db = client.db(dbName);
         const collection = db.collection(collectionNameReviews);
-        return await collection.find({ movieId: movieId }).toArray();
+
+        try {
+            return await collection.find({ movieId: movieId }).toArray();
+        } finally {
+            await mongoConnection.closeClient(client); 
+        }
     },
 
-    // Agregar una reseña de una película
     addMovieReview: async (userId, movieId, rating, review) => {
-        const db = client.db(mydb);
+        const client = await mongoConnection.connectToMongo(); 
+        const db = client.db(dbName);
         const collection = db.collection(collectionNameReviews);
-        return await collection.insertOne({ userId: userId, movieId: movieId, rating: rating, review: review, createdAt: new Date() });
+
+        try {
+            return await collection.insertOne({ userId, movieId, rating, review, createdAt: new Date() });
+        } finally {
+            await mongoConnection.closeClient(client); 
+        }
     },
 
 

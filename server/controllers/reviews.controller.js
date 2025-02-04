@@ -1,15 +1,35 @@
-import crudMongoDB from "../utils/crudMongoDB.js"
-
+import crudMongoDB from "../utils/crudMongoDB.js";
 
 export default {
-    insertReview: async (userId, movieId, rating, review) => {
-        return crudMongoDB.addMovieReview(userId, movieId, rating, review);
+    insertReview: async (req, res) => {
+        const { userId, movieId,rating,  review } = req.body;
+
+        if (!userId || !movieId || !review) {
+            return res.status(400).json({ error: "Faltan datos requeridos" });
+        }
+
+        try {
+            const newReview = await crudMongoDB.addMovieReview(userId, movieId,rating,  review);
+            return res.status(201).json({ message: "Reseña agregada exitosamente", review: newReview });
+        } catch (error) {
+            console.error("Error en insertReview:", error);
+            return res.status(500).json({ error: "Error interno del servidor" });
+        }
     },
 
-    getReviews: async (movieId) => {
-        return crudMongoDB.getMovieReviews(movieId);
+    getReviews: async (req, res) => {
+        const { movieId } = req.params;
+
+        if (!movieId) {
+            return res.status(400).json({ error: "Se requiere movieId" });
+        }
+
+        try {
+            const reviews = await crudMongoDB.getMovieReviews(movieId);
+            return res.status(200).json(reviews);
+        } catch (error) {
+            console.error("Error en getReviews:", error);
+            return res.status(500).json({ error: "Error interno del servidor" });
+        }
     }
-
-
-
-}
+};

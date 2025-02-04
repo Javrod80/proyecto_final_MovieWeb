@@ -21,7 +21,7 @@ const ReviewsProvider = ({ children }) => {
 
     const fetchReviews = async (movieId) => {
         try {
-            const response = await fetch(`/movieapp/v1/reviews/${movieId}`);
+            const response = await fetch(`http://localhost:5000/movieapp/v1/reviews/${movieId}`);
             const data = await response.json();
             setReviews(data);
         } catch (error) {
@@ -31,7 +31,7 @@ const ReviewsProvider = ({ children }) => {
 
     const addReview = async (userId, movieId, rating, review) => {
         try {
-            const response = await fetch('/movieapp/v1/reviews/add-review', {
+            const response = await fetch('http://localhost:5000/movieapp/v1/reviews/add-review', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
