@@ -18,6 +18,8 @@ import "react-toastify/dist/ReactToastify.css";
 import SignupForm from './components/SignupForm';
 import WatchedProvider from './providers/WatchedProvider';
 import MovieWatched from './components/MovieWatched';
+import Reviews from './components/Reviews';
+import { ReviewsProvider } from './providers/ReviewsProvider';
 
 
 
@@ -27,6 +29,7 @@ function App() {
     <FavoritesProvider>
         <SearchProvider>
           <WatchedProvider>
+            <ReviewsProvider>
           <div className="MiApp">
             <ToastContainer />
             <Header />
@@ -41,11 +44,13 @@ function App() {
                 <Route path="/profile" element={<Profile />} />
                 <Route path="*" element={<h1>Not Found</h1>} />
                 <Route path="/watched" element={<MovieWatched />} />
+                <Route path="/reviews" element={<Reviews />} />
 
               </Routes>
             </Router>
             <Footer />
           </div>
+          </ReviewsProvider>
           </WatchedProvider>
         </SearchProvider>
         </FavoritesProvider>

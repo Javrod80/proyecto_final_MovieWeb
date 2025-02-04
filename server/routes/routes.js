@@ -5,6 +5,7 @@ import detailsController from '../controllers/details.controller.js';
 import favoritesController from '../controllers/favorites.controller.js';
 import getFavorites from '../controllers/getFavorites.controller.js';
 import watchHistoryController from '../controllers/watchHistory.controller.js';
+import reviewsController from '../controllers/reviews.controller.js';
 
 
 
@@ -33,5 +34,11 @@ router.get('/movieapp/v1/favorites/all-favorites', getFavorites.getFavorites); /
 // Ruta para watch history
 router.get('/movieapp/v1/watched/watch-history/:user_id', watchHistoryController.getWatchHistory);
 router.post('/movieapp/v1/watched/add-watch-history', watchHistoryController.addWatchHistory);
+
+//Rutas para reseñas
+router.get('/movieapp/v1/reviews/:movieId', reviewsController.getReviews);
+router.post('/movieapp/v1/reviews/add-review', reviewsController.insertReview);
+
+
 
 export { router };
