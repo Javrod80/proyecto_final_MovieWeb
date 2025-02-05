@@ -57,7 +57,7 @@ export default {
     },
     addWatchHistory: async (values) => {
         const query = `
-        INSERT INTO watch_history (user_id, movie_id, title, poster, created_at)
+        INSERT INTO watch_history (user_id, movie_id, title, poster, watched_at)
         VALUES (?, ?, ?, ?,NOW() )
     `;
        // console.log(values);
@@ -66,3 +66,4 @@ export default {
     },
 
 }
+
