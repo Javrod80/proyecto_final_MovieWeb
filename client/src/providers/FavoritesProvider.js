@@ -12,7 +12,7 @@ export const FavoritesProvider = ({ children }) => {
     const [favorites, setFavorites] = useState([]);
     const { userId } = useAuth();
 
-    // Función para obtener los favoritos, memorizada con useCallback
+    
     const fetchFavorites = useCallback(async () => {
         if (!userId) return;
 

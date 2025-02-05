@@ -9,10 +9,11 @@ const Reviews = ({ movieId }) => {
     const [rating, setRating] = useState(5);
 
     useEffect(() => {
+
         if (movieId) {
             fetchReviews(movieId); // Cargar reseñas de la película
         }
-    }, [movieId]);
+    }, [movieId, fetchReviews]);
 
     const handleReviewSubmit = async (event) => {
         event.preventDefault();
@@ -22,23 +23,39 @@ const Reviews = ({ movieId }) => {
             return;
         }
         if (!reviewText.trim()) return; // Evitar reseñas vacías
-      
 
-        const response = await addReview(userId, movieId,rating, reviewText);
+
+        const response = await addReview(userId, movieId, rating, reviewText);
         if (response) {
-            setReviewText(""); // Limpiar el campo después de agregar la reseña
+
             setRating(5);
-            fetchReviews(movieId); // Recargar reseñas después de agregar una nueva
+
         }
+        fetchReviews(movieId);
+        setReviewText(""); 
     };
+
+    // Función para renderizar las estrellas
+    const renderStars = (rating) => {
+        let stars = [];
+        for (let i = 0; i < 5; i++) {
+            if (i < rating) {
+                stars.push('★');
+            } else {
+                stars.push('☆');
+            }
+        }
+        return stars.join(''); 
+    }
 
     return (
         <div>
             <h3>Reseñas</h3>
-            {reviews.length > 0 ? (
-                reviews.map((review) => (
+            {reviews[movieId]?.length > 0 ? (
+                reviews[movieId].map((review) => (
                     <div key={review._id}>
-                        <p><strong>{review.userId}:</strong> {review.review}</p>
+                        <p><strong>Review: </strong>{review.review}</p>
+                        <p><strong>Puntuación: </strong>{renderStars(review.rating)}</p>
                     </div>
                 ))
             ) : (
