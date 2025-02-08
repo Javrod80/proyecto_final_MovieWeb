@@ -1,4 +1,4 @@
-import mongoConnection from '../database/mongo.connection.js';
+import mongoConnection from '../../database/mongo.connection.js';
 import dotenv from 'dotenv';
 dotenv.config();
 

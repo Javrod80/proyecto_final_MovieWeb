@@ -12,13 +12,13 @@ export default {
   connectToMongo: async () => {
     
       await client.connect(); 
-      console.log('Conexión a MongoDB establecida');
+      //console.log('Conexión a MongoDB establecida');
     
     return client;
   },
   
   closeClient: async () => {
     await client.close();
-    console.log('Conexión a MongoDB cerrada');
+   // console.log('Conexión a MongoDB cerrada');
   }
 }

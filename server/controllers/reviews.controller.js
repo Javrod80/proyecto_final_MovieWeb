@@ -1,4 +1,4 @@
-import crudMongoDBReviews from "../models/reviews.js";
+import crudMongoDBReviews from "../models/MongoModels/reviews.js";
 
 export default {
     insertReview: async (req, res) => {
