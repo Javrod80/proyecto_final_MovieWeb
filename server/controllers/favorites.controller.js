@@ -1,4 +1,4 @@
-import crudMongoDB from "../utils/crudMongoDB.js";
+import crudMongoDB from "../models/crudMongoDB.js";
 
 export default {
     addFavorites: async (req, res) => {

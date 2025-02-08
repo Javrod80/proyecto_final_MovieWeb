@@ -1,0 +1,163 @@
+openapi: 3.0.0
+info:
+  title: API de Direcciones
+  version: 1.0.0
+paths:
+
+  /movieapp/v1/users/signup:
+    post:
+      tags:
+        - Users
+      summary: Registra un nuevo usuario
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                user_name:
+                  type: string
+                user_lastnames:
+                  type: string
+                email:
+                  type: string
+                password:
+                  type: string
+      responses:
+        200:
+          description: Usuario registrado exitosamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  userId:
+                    type: string
+                example:
+                  message: Usuario registrado exitosamente
+                  userId: 1
+
+        201:
+          description: Usuario registrado exitosamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  userId:
+                    type: string
+                example:
+                  message: Usuario registrado exitosamente
+                  userId: 1
+        400:
+          description: Todos los campos son obligatorios
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                example:
+                  message: Todos los campos son obligatorios
+
+        409:
+          description: El correo ya esta registrado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                example:
+                  message: El correo ya esta registrado
+
+        500:
+          description: Error al registrar usuario 
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                example:
+                  message: Error al registrar usuario
+
+  /movieapp/v1/users/login:
+    post:
+      tags:
+        - Users
+      summary: Inicia sesion
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+      responses:
+        200:
+          description: Usuario registrado exitosamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  userId:
+                    type: string
+                example:
+                  message: Usuario registrado exitosamente
+                  userId: 1 
+
+        400:
+          description: Todos los campos son obligatorios
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                example:
+                  message: Todos los campos son obligatorios  
+
+        404:
+          description: Usuario no encontrado o credenciales invalidas
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                example:
+                  message: Usuario no encontrado o credenciales invalidas
+
+        500:
+          description: Error al iniciar usuario 
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                example:
+                  message: Error al iniciar usuario 
+                  
+
+        
+   

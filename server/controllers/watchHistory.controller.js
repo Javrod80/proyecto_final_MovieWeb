@@ -1,4 +1,4 @@
-import crudMysql from "../utils/crudMysql.js";
+import crudMysql from "../models/crudMysql.js";
 
 export default {
     getWatchHistory: async (req, res) => {

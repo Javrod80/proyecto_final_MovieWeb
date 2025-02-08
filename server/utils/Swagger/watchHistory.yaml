@@ -1,0 +1,107 @@
+openapi: 3.0.0
+info:
+  title: API de Direcciones
+  version: 1.0.0
+paths:
+
+  /movieapp/v1/watched/watch-history/{user_id}:
+    get:
+      summary: Obtener historial de películas vistas
+      tags:
+        - Watch History
+      parameters:
+        - name: user_id
+          in: path
+          required: true  
+          description: ID del usuario
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    user_id:
+                      type: string
+                    movie_id:
+                      type: string
+                    title:
+                      type: string
+                    poster:
+                      type: string
+              example:
+                - user_id: "1"
+                  movie_id: "tt1234567"
+                  title: "Ejemplo de Película"
+                  poster: "https://image.tmdb.org/t/p/w500/example.jpg"
+        '400':  
+          description: Bad Request  
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string  
+                  error:
+                    type: string
+              example:
+                message: "Error en la solicitud"
+                error: "Bad Request"
+
+  /movieapp/v1/watched/add-watch-history:
+    post:
+      summary: Crear historial de películas vistas
+      tags:
+        - Watch History
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                user_id:
+                  type: string
+                movie_id:
+                  type: string
+                title:
+                  type: string
+                poster:
+                  type: string
+            example:
+              user_id: "1"
+              movie_id: "tt1234567"
+              title: "Ejemplo de Película"
+              poster: "https://image.tmdb.org/t/p/w500/example.jpg"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string  
+              example:
+                message: "Historial de películas agregado con éxito."
+        '400':  
+          description: Bad Request  
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  error:
+                    type: string
+              example:
+                message: "Error en la solicitud"
+                error: "Bad Request"
