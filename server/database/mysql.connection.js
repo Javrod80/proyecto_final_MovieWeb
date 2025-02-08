@@ -1,19 +1,18 @@
 import * as mysql from 'mysql2/promise'
+import dotenv from 'dotenv'
+dotenv.config()
 
+const my_host = process.env.SQL_LOCALHOST;
 
-const my_host = "localhost"; 
-const my_user = 'root';
-const my_pass = 'root';
-const my_db = "MovieDB"; 
 export default {
 
 	mySQLConnection: async () => {
 
 		const pool = mysql.createPool({
 			host: my_host,
-			user: my_user,
-			password: my_pass,
-			database: my_db,
+			user: process.env.SQL_USER,
+			password: process.env.SQL_PASS,
+			database: process.env.SQL_BBDD,
 			waitForConnections: true,
 			connectionLimit: 20,
 			queueLimit: 0

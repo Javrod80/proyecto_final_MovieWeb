@@ -1,4 +1,4 @@
-import crudMongoDB from "../models/crudMongoDB.js";
+import crudMongoDBReviews from "../models/reviews.js";
 
 export default {
     insertReview: async (req, res) => {
@@ -9,7 +9,7 @@ export default {
         }
 
         try {
-            const newReview = await crudMongoDB.addMovieReview(userId, movieId,rating,  review);
+            const newReview = await crudMongoDBReviews.addMovieReview(userId, movieId,rating,  review);
             return res.status(201).json({ message: "Reseña agregada exitosamente", review: newReview });
         } catch (error) {
             console.error("Error en insertReview:", error);
@@ -25,7 +25,7 @@ export default {
         }
 
         try {
-            const reviews = await crudMongoDB.getMovieReviews(movieId);
+            const reviews = await crudMongoDBReviews.getMovieReviews(movieId);
             return res.status(200).json(reviews);
         } catch (error) {
             console.error("Error en getReviews:", error);

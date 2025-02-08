@@ -1,4 +1,7 @@
-import crudMongoDB from "../models/crudMongoDB.js";
+import crudMongoDB from "../models/favorites.js";
+
+
+
 
 export default {
     addFavorites: async (req, res) => {
@@ -20,3 +23,4 @@ export default {
         }
     }
 };
+

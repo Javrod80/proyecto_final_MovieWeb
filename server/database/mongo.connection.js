@@ -1,21 +1,24 @@
 import { MongoClient } from 'mongodb';
+import dotenv from 'dotenv'
+dotenv.config()
 
 
-const url = "mongodb://127.0.0.1:27017/"
+const url = process.env.URI_MONGOLOCAL
+const client = new MongoClient(url);
+
 
 export default {
 
   connectToMongo: async () => {
-    const client = new MongoClient(url)
-    await client.connect()
-
-    return client
+    
+      await client.connect(); 
+      console.log('Conexión a MongoDB establecida');
+    
+    return client;
   },
-
+  
   closeClient: async () => {
-    const client = new MongoClient(url)
-    await client.close()
-
-    return client
+    await client.close();
+    console.log('Conexión a MongoDB cerrada');
   }
 }

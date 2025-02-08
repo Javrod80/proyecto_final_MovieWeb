@@ -1,9 +1,11 @@
-import {MongoClient} from 'mongodb';
-import mongoConnection from '../database/mongo.connection.js';
+/*import mongoConnection from '../database/mongo.connection.js';
+import dotenv from 'dotenv';
+dotenv.config();
 
-const dbName = 'movieDatabase';
-const collectionName = 'favorites';
-const collectionNameReviews = 'movieReviews';
+
+const dbName = process.env.MONGO_BBDD;  
+const collectionName = process.env.COLL_FAV;
+const collectionNameReviews = process.env.COLL_REV;
 
 export default {
     insertFavorites: async (userId, movie) => {
@@ -79,4 +81,4 @@ export default {
 
 
 
-};
+};*/
