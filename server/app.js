@@ -11,15 +11,15 @@ dotenv.config();
 const app = express()
 const PORT = process.env.PORT || 5000
 
-// Configuración de Swagger UI
-app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
-
-
-
 
 // Middleware para urlencoded
 app.use(express.json());
 app.use(urlencoded({ extended: false }))
+
+
+// Configuración de Swagger UI
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs, { explorer: true }));
+
 
 app.use(cors())
 
