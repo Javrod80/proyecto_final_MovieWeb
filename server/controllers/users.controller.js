@@ -1,4 +1,4 @@
-import crudMysql from '../models/crudMysql.js';
+import usersModel from '../models/MySQLModels/users.js';
 import jwt from 'jsonwebtoken';
 
 const { sign } = jwt;
@@ -6,7 +6,7 @@ const { sign } = jwt;
 const userController = {
     // Registro de un nuevo usuario
     signupUser: async (req, res) => {
-        console.log("Datos recibidos:", req.body);
+       // console.log("Datos recibidos:", req.body);
         const { user_name, user_lastnames, email, password } = req.body;
 
         if (!user_name || !user_lastnames || !email || !password) {
@@ -14,10 +14,7 @@ const userController = {
         }
 
         try {
-         
-            const values = [user_name, user_lastnames, email, password, new Date()];
-            const userId = await crudMysql.createUser(values);
-
+            const userId = await usersModel.createUser(user_name, user_lastnames, email, password);
             res.status(201).json({ message: 'Usuario registrado exitosamente', userId });
         } catch (error) {
             console.error('Error al registrar usuario:', error);
@@ -38,38 +35,20 @@ const userController = {
         }
 
         try {
-           
-            const users = await crudMysql.loginUsers([email, password]); 
-          
+            const users = await usersModel.loginUser(email, password);
 
-          //  console.log("Usuarios encontrados:", users);
-
-            if (!users || users.length === 0 || users[0].length === 0) {
+            if (!users || users.length === 0) {
                 return res.status(401).json({ message: 'Usuario no encontrado o credenciales inválidas' });
             }
 
-
-            const user = users[0][0];
-
-           
-            if (!user || password !== user.password) {
-                return res.status(401).json({ message: 'Usuario no encontrado o credenciales inválidas' });
-            }
-
-            // Generación del token JWT
+            const user = users[0];
             const token = sign({ id: user.id, email: user.email }, 'secretkey', { expiresIn: '1h' });
-
-            res.status(200).json({
-                message: 'Inicio de sesión exitoso',
-                token: `Bearer ${token}`,
-                userId: user.id,
-                user: { id: user.id, email: user.email, user_name: user.user_name },
-            });
+            res.status(200).json({ message: 'Inicio de sesión exitoso', token, user });
         } catch (error) {
             console.error('Error al iniciar sesión:', error);
             res.status(500).json({ message: 'Error al iniciar sesión', error });
         }
-    },
+    }
 };
 
 export default userController;

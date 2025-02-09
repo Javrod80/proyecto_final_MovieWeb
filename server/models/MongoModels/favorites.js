@@ -2,6 +2,8 @@ import { getDataFromCollection } from './genericCrud.js';
 import { insertIntoCollection } from './genericCrud.js';
 import { deleteFromCollection } from './genericCrud.js';
 import { updateInCollection } from './genericCrud.js';
+import dotenv from 'dotenv';
+dotenv.config();
 
 const collectionName = process.env.COLL_FAV;
 
