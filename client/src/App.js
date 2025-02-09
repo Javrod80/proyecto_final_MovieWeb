@@ -9,7 +9,7 @@ import Favorites from './components/Favorites';
 import MovieDetails from './components/MovieDetails';
 import './styles/Styles.css';
 import { SearchProvider } from './providers/SearchProvider';
-import Login from './components/Login';
+import Login from './pages/Login';
 import { AuthProvider } from './providers/AuthContext';
 import { FavoritesProvider } from './providers/FavoritesProvider';
 import Profile from './components/Profile';
