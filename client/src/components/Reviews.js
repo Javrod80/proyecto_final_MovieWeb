@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { useReviews } from "../providers/ReviewsProvider";
 import { useAuth } from "../providers/AuthContext";
+import EditReviewForm from "./EditReviewForm";
 
 const Reviews = ({ movieId }) => {
-    const { reviews, fetchReviews, addReview } = useReviews();
+    const { reviews, fetchReviews, addReview ,updateReview ,deleteReview} = useReviews();
     const [reviewText, setReviewText] = useState("");
     const { userId } = useAuth();
     const [rating, setRating] = useState(5);
+    const [editingReview, setEditingReview] = useState(null);
 
     useEffect(() => {
 
@@ -34,6 +36,19 @@ const Reviews = ({ movieId }) => {
         fetchReviews(movieId);
         setReviewText(""); 
     };
+    const handleEditReview = async (reviewId, newReviewData) => {
+        const response = await updateReview(reviewId, newReviewData);
+        if (response) {
+            fetchReviews(movieId);
+            setEditingReview(null);
+        }
+    };
+    const handleDeleteReview = async (reviewId) => {
+        const response = await deleteReview(reviewId, userId, movieId);
+        if (response) {
+            fetchReviews(movieId);
+        }
+    };
 
     // Función para renderizar las estrellas
     const renderStars = (rating) => {
@@ -56,12 +71,24 @@ const Reviews = ({ movieId }) => {
                     <div key={review._id}>
                         <p><strong>Review: </strong>{review.review}</p>
                         <p><strong>Puntuación: </strong>{renderStars(review.rating)}</p>
+                        {review.userId === userId && (
+                            <>
+                                <button onClick={() => setEditingReview(review)}>Editar</button>
+                                <button onClick={() => handleDeleteReview(review._id)}>Eliminar</button>
+                            </>
+                        )}
                     </div>
                 ))
             ) : (
                 <p>No hay reseñas aún.</p>
             )}
-
+            {editingReview && (
+                <EditReviewForm
+                    review={editingReview}
+                    onCancel={() => setEditingReview(null)}
+                    onSubmit={handleEditReview}
+                />
+            )}
             <form onSubmit={handleReviewSubmit}>
                 <select value={rating} onChange={(e) => setRating(Number(e.target.value))}>
                     <option value={1}>⭐ 1</option>

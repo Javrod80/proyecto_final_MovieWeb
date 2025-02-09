@@ -6,7 +6,10 @@ import favoritesController from '../controllers/favorites.controller.js';
 import getFavorites from '../controllers/getFavorites.controller.js';
 import watchHistoryController from '../controllers/watchHistory.controller.js';
 import reviewsController from '../controllers/reviews.controller.js';
-
+import getReviewsController from '../controllers/getReviews.controller.js';
+import deleteReviewsController from '../controllers/deleteReviews.controller.js';
+import updateReviewsController from '../controllers/updateReviews.controller.js';
+import verifyToken from '../utils/verifyToken.js';
 
 
 
@@ -35,10 +38,13 @@ router.get('/movieapp/v1/favorites/all-favorites', getFavorites.getFavorites); /
 router.get('/movieapp/v1/watched/watch-history/:user_id', watchHistoryController.getWatchHistory);
 router.post('/movieapp/v1/watched/add-watch-history', watchHistoryController.addWatchHistory);
 
-//Rutas para reseñas
-router.get('/movieapp/v1/reviews/:movieId', reviewsController.getReviews);
+//Rutas para insertar y obtener reseñas
+router.get('/movieapp/v1/reviews/:movieId', getReviewsController.getReviews);
 router.post('/movieapp/v1/reviews/add-review', reviewsController.insertReview);
 
+// Rutas para editar y borrar las reseñas
+router.delete('/movieapp/v1/reviews/delete-review/:reviewId',verifyToken , deleteReviewsController.deleteReview);
+router.put('/movieapp/v1/reviews/update-review/:reviewId', verifyToken ,updateReviewsController.updateReviews);
 
 
 export { router };

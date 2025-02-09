@@ -131,8 +131,4 @@ dist
 
 
 # Ignorar archivos sensibles
-.env
-.env.local
-.env.development
-.env.test
-.env.production
+
