@@ -10,6 +10,7 @@ import getReviewsController from '../controllers/getReviews.controller.js';
 import deleteReviewsController from '../controllers/deleteReviews.controller.js';
 import updateReviewsController from '../controllers/updateReviews.controller.js';
 import verifyToken from '../utils/verifyToken.js';
+import deleteFavoritesController from '../controllers/deleteFavorites.controller.js';
 
 
 
@@ -33,6 +34,10 @@ router.post('/movieapp/v1/favorites/add-favorite', favoritesController.addFavori
 
 // Ruta Obtener los favoritos del usuario
 router.get('/movieapp/v1/favorites/all-favorites', getFavorites.getFavorites); // Obtenemos los favoritos del usuario
+
+// Ruta para borrar favoritas
+router.delete('/movieapp/v1/reviews/delete-favorites/:favoriteId',verifyToken, deleteFavoritesController.deleteFavorites)
+
 
 // Ruta para watch history
 router.get('/movieapp/v1/watched/watch-history/:user_id', watchHistoryController.getWatchHistory);
