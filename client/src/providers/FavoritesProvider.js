@@ -78,8 +78,34 @@ export const FavoritesProvider = ({ children }) => {
         }
     };
 
+
+const deleteFavorite = async ( movieId) => {
+    console.log('movieId:', movieId);
+    try {
+        const response = await fetch(`http://localhost:5000/movieapp/v1/favorites/delete-favorites/${movieId}`, {
+            method: 'DELETE',
+            headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` },
+            
+        });
+
+        if (!response.ok) {
+            const responseData = await response.json();
+            throw new Error(responseData.message || 'Error al eliminar de favoritos');
+        }
+
+        toast.success('Película eliminada de favoritos');
+        setFavorites(prevFavorites => prevFavorites.filter(fav => fav.imdbID !== movieId));
+    } catch (err) {
+        console.error('❌ Error al eliminar de favoritos:', err);
+        toast.error(err.message || 'Ocurrió un error al eliminar de favoritos');    
+    }
+}
+
+
+
+
     return (
-        <FavoritesContext.Provider value={{ favorites, addToFavorites, fetchFavorites }}>
+        <FavoritesContext.Provider value={{ favorites, addToFavorites, fetchFavorites, deleteFavorite }}>
             {children}
         </FavoritesContext.Provider>
     );

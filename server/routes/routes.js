@@ -36,7 +36,7 @@ router.post('/movieapp/v1/favorites/add-favorite', favoritesController.addFavori
 router.get('/movieapp/v1/favorites/all-favorites', getFavorites.getFavorites); // Obtenemos los favoritos del usuario
 
 // Ruta para borrar favoritas
-router.delete('/movieapp/v1/reviews/delete-favorites/:favoriteId',verifyToken, deleteFavoritesController.deleteFavorites)
+router.delete('/movieapp/v1/favorites/delete-favorites/:movieId', verifyToken ,deleteFavoritesController.deleteFavorites)
 
 
 // Ruta para watch history

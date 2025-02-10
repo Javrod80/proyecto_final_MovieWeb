@@ -3,7 +3,8 @@ import { useFavorites } from "../providers/FavoritesProvider";
 import Reviews from "./Reviews";
 
 const Favorites = () => {
-    const { favorites, isLoading, fetchFavorites } = useFavorites();
+    const { favorites, isLoading, fetchFavorites,deleteFavorite } = useFavorites();
+  
 
     
     useEffect(() => {
@@ -24,9 +25,19 @@ const Favorites = () => {
                         <li key={movie.imdbID}>
                             <h3>{movie.Title}</h3>
                             <img src={movie.Poster} alt={movie.Title} width="100" />
+                           
+                            <button onClick={() => {
+                                console.log("Intentando eliminar:", movie);
+                                deleteFavorite(movie.imdbID);
+                            }}>
+                                Eliminar
+                            </button>
                             <Reviews movieId={movie.imdbID} /> {/* Enviar movieId a Reviews */}
+                            
                         </li>
                     ))}
+                       
+                    
                 </ul>
             )}
         </div>

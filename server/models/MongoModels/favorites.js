@@ -21,7 +21,7 @@ const crudMongoDB = {
 
     // Función para eliminar una película de favoritos
      deleteFavorite: async (userId, movieId) => {
-        return deleteFromCollection(collectionName, { userId, id: movieId });
+         return deleteFromCollection(collectionName, { userId, imdbID: movieId });
     },
 
     // Función para actualizar una película en favoritos (ejemplo)
