@@ -3,167 +3,23 @@ info:
   title: API de Direcciones
   version: 1.0.0
   description: API para gestionar películas favoritas
-
-
-
-paths:
-  /movieapp/v1/favorites/add-favorite:
-    post:
-      tags:
-        - Favorites
-      summary: Añadir a favoritos
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Movie'
-            examples:
-              ejemplo1:
-                summary: Ejemplo de película
-                value:
-                  userId: 3
-                  imdbID: "tt1234567"
-                  Title: "Ejemplo de Película"
-                  Poster: "https://image.tmdb.org/t/p/w500/example.jpg"
-                  Plot: "Esta es una descripción de ejemplo."
-                  Year: "2023"
-                  Rated: "PG-13"
-                  Released: "2023-05-01"
-                  Runtime: "120 min"
-                  Genre: "Acción, Drama"
-                  Director: "Director Ejemplo"
-                  Writer: "Escritor Ejemplo"
-                  Actors: "Actor 1, Actor 2"
-                  Language: "Español"
-                  Country: "México"
-                  Awards: "Ganador de 4 premios"
-      responses:
-        200:
-          description: Película añadida a favoritos
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Movie'
-              examples:
-                respuestaExitosa:
-                  summary: Respuesta exitosa
-                  value:
-                    imdbID: "tt1234567"
-                    Title: "Ejemplo de Película"
-                    Poster: "https://image.tmdb.org/t/p/w500/example.jpg"
-        400:
-          description: Error en la solicitud
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-              example:
-                errorCliente:
-                  summary: Error en el request
-                  value:
-                    message: "Faltan campos requeridos"
-                    error: "Bad Request"
-        401:
-          description: No autorizado
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-              example:
-                noAutorizado:
-                  summary: Usuario no autenticado
-                  value:
-                    message: "Token no válido"
-                    error: "Unauthorized"
-        500:
-          description: Error interno del servidor
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-              example:
-                errorInterno:
-                  summary: Fallo en el servidor
-                  value:
-                    message: "Error inesperado en el servidor"
-                    error: "Internal Server Error"
-
-  /movieapp/v1/favorites/all-favorites:
-    get:
-      tags:
-        - Favorites
-      summary: Obtener favoritos del usuario
-      parameters:
-        - name: userId
-          in: query
-          required: true
-          schema:
-            type: string
-          description: ID del usuario cuyos favoritos se quieren obtener
-      responses:
-        200:
-          description: Lista de favoritos
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Movie'
-              example:
-                listaFavoritos:
-                  summary: Ejemplo de respuesta
-                  value:
-                    - imdbID: "tt1234567"
-                      Title: "Ejemplo de Película"
-                      Poster: "https://image.tmdb.org/t/p/w500/example.jpg"
-                    - imdbID: "tt7654321"
-                      Title: "Otra Película"
-                      Poster: "https://image.tmdb.org/t/p/w500/another.jpg"
-        400:
-          description: Error en la solicitud
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-              example:
-                errorCliente:
-                  summary: Falta el userId
-                  value:
-                    message: "El parámetro userId es requerido"
-                    error: "Bad Request"
-        403:
-          description: Acceso prohibido
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-              examples:
-                accesoProhibido:
-                  summary: Usuario sin permisos
-                  value:
-                    message: "No tienes permiso para ver estos favoritos"
-                    error: "Forbidden"
-        500:
-          description: Error interno del servidor
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-              examples:
-                errorInterno:
-                  summary: Error inesperado
-                  value:
-                    message: "Error inesperado en el servidor"
-                    error: "Internal Server Error"
-
 components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
   schemas:
     Movie:
       type: object
+      required:
+        - userId
+        - imdbID
+        - Title
+        - Poster
       properties:
         userId:
-          type: string
+          type: integer
           description: ID del usuario que guarda la película
         imdbID:
           type: string
@@ -211,7 +67,6 @@ components:
         Awards:
           type: string
           description: Premios ganados
-
     Error:
       type: object
       properties:
@@ -221,23 +76,41 @@ components:
         error:
           type: string
           description: Tipo de error
-
-
-  /movieapp/v1/reviews/delete-favorites/:favoriteId:
-    delete:
+paths:
+  /movieapp/v1/favorites/add-favorite:
+    post:
       tags:
         - Favorites
-      summary: Eliminar favorito
-      parameters:
-        - name: favoriteId
-          in: path
-          required: true
-          schema:
-            type: string
-          description: ID del favorito a eliminar
+      summary: Añadir a favoritos
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Movie'
+            examples:
+              ejemplo1:
+                summary: Ejemplo de película
+                value:
+                  userId: 3
+                  imdbID: tt1234567
+                  Title: Ejemplo de Película
+                  Poster: 'https://image.tmdb.org/t/p/w500/example.jpg'
+                  Plot: Esta es una descripción de ejemplo.
+                  Year: '2023'
+                  Rated: PG-13
+                  Released: '2023-05-01'
+                  Runtime: 120 min
+                  Genre: 'Acción, Drama'
+                  Director: Director Ejemplo
+                  Writer: Escritor Ejemplo
+                  Actors: 'Actor 1, Actor 2'
+                  Language: Español
+                  Country: México
+                  Awards: Ganador de 4 premios
       responses:
-        200:
-          description: Favorito eliminado correctamente
+        '200':
+          description: Película añadida a favoritos
           content:
             application/json:
               schema:
@@ -246,22 +119,89 @@ components:
                 respuestaExitosa:
                   summary: Respuesta exitosa
                   value:
-                    imdbID: "tt1234567"
-                    Title: "Ejemplo de Película"
-                    Poster: "https://image.tmdb.org/t/p/w500/example.jpg"
-        400:
+                    imdbID: tt1234567
+                    Title: Ejemplo de Película
+                    Poster: 'https://image.tmdb.org/t/p/w500/example.jpg'
+        '400':
           description: Error en la solicitud
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-              example:
+              examples:
+                errorCliente:
+                  summary: Error en el request
+                  value:
+                    message: Faltan campos requeridos
+                    error: Bad Request
+        '401':
+          description: No autorizado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                noAutorizado:
+                  summary: Usuario no autenticado
+                  value:
+                    message: Token no válido
+                    error: Unauthorized
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                errorInterno:
+                  summary: Fallo en el servidor
+                  value:
+                    message: Error inesperado en el servidor
+                    error: Internal Server Error
+  /movieapp/v1/favorites/all-favorites:
+    get:
+      tags:
+        - Favorites
+      summary: Obtener favoritos del usuario
+      parameters:
+        - name: userId
+          in: query
+          required: true
+          schema:
+            type: string
+          description: ID del usuario cuyos favoritos se quieren obtener
+      responses:
+        '200':
+          description: Lista de favoritos
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Movie'
+              examples:
+                listaFavoritos:
+                  summary: Ejemplo de respuesta
+                  value:
+                    - imdbID: tt1234567
+                      Title: Ejemplo de Película
+                      Poster: 'https://image.tmdb.org/t/p/w500/example.jpg'
+                    - imdbID: tt7654321
+                      Title: Otra Película
+                      Poster: 'https://image.tmdb.org/t/p/w500/another.jpg'
+        '400':
+          description: Error en la solicitud
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
                 errorCliente:
                   summary: Falta el userId
                   value:
-                    message: "El parámetro userId es requerido"
-                    error: "Bad Request"
-        403:
+                    message: El parámetro userId es requerido
+                    error: Bad Request
+        '403':
           description: Acceso prohibido
           content:
             application/json:
@@ -271,9 +211,9 @@ components:
                 accesoProhibido:
                   summary: Usuario sin permisos
                   value:
-                    message: "No tienes permiso para ver estos favoritos"
-                    error: "Forbidden"
-        500:
+                    message: No tienes permiso para ver estos favoritos
+                    error: Forbidden
+        '500':
           description: Error interno del servidor
           content:
             application/json:
@@ -282,8 +222,70 @@ components:
               examples:
                 errorInterno:
                   summary: Error inesperado
-                  value:  
-                    message: "Error inesperado en el servidor"
-                    error: "Internal Server Error"  
-                    
-                            
+                  value:
+                    message: Error inesperado en el servidor
+                    error: Internal Server Error
+  '/movieapp/v1/favorites/delete-favorite/{imdbID}':
+    delete:
+      security:
+        - bearerAuth: []
+      tags:
+        - Favorites
+      summary: Eliminar favorito
+      parameters:
+        - name: imdbID
+          in: path
+          required: true
+          schema:
+            type: string
+          description: ID del favorito a eliminar
+      responses:
+        '200':
+          description: Favorito eliminado correctamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Movie'
+              examples:
+                respuestaExitosa:
+                  summary: Respuesta exitosa
+                  value:
+                    imdbID: tt1234567
+                    Title: Ejemplo de Película
+                    Poster: 'https://image.tmdb.org/t/p/w500/example.jpg'
+        '400':
+          description: Error en la solicitud
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                errorCliente:
+                  summary: Falta el userId
+                  value:
+                    message: El parámetro userId es requerido
+                    error: Bad Request
+        '403':
+          description: Acceso prohibido
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                accesoProhibido:
+                  summary: Usuario sin permisos
+                  value:
+                    message: No tienes permiso para ver estos favoritos
+                    error: Forbidden
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                errorInterno:
+                  summary: Error inesperado
+                  value:
+                    message: Error inesperado en el servidor
+                    error: Internal Server Error
