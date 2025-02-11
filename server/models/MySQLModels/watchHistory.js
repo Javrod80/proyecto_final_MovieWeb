@@ -14,6 +14,10 @@ const watchHistoryModel = {
     // Funcion para agregar una pelicula  al historial
     addWatchHistory: async (user_id, movie_id, title, poster) => {
         return await crudMySQL.createData(tableName, ['user_id', 'movie_id', 'title', 'poster', 'watched_at'], [user_id, movie_id, title, poster, new Date()]);
+    },
+    // Funcion para eliminar el historial
+    deleteWatchHistory: async (userId, movieId) => {
+        return await crudMySQL.deleteData(tableName, 'user_id', userId, 'movie_id', movieId);
     }
 };
 

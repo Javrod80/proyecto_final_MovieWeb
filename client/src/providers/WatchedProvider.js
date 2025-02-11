@@ -27,6 +27,7 @@ const WatchedProvider = ({ children }) => {
                 throw new Error('Error al obtener las películas vistas');
             }   
             const data = await response.json(); 
+         
             setWatched(data);
             setIsLoading(false);
         } catch (error) {
@@ -48,12 +49,13 @@ const WatchedProvider = ({ children }) => {
 /*
         console.log('Datos a enviar:', {
             user_id: userId,
-            movie_id: movie.imdbID,
+            movie_id: movie.imdbID, 
             title: movie.Title,
             poster: movie.Poster
         });
         */
         try {
+            
             const response = await fetch("http://localhost:5000/movieapp/v1/watched/add-watch-history", {
                 method: "POST",
                 headers: {
@@ -76,9 +78,42 @@ const WatchedProvider = ({ children }) => {
             console.error(error);
         }
     };
+    const deleteWatchHistoryUser = async( movieId )=>{
+        
+        if (!userId) {
+            console.error("Usuario no autenticado");
+            return;
+        }
+        if (!movieId) {
+            console.error("movieId no proporcionado");
+            return;
+        }
+
+        console.log("movieId recibido:", movieId);
+        try {
+           
+            const response = await fetch(`http://localhost:5000/movieapp/v1/watched/delete-watch-history/${userId}/${movieId}`, {
+                method: "DELETE",
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                    'Content-Type': 'application/json',
+                }
+               
+            });
+            if (!response.ok) {
+                throw new Error("Error al eliminar la historia de vistas");
+            }
+            fetchWatched();
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+     
+    
 
     return (
-        <WatchedContext.Provider value={{ watched, isLoading, fetchWatched, markAsWatched }}>
+        <WatchedContext.Provider value={{ watched, isLoading, fetchWatched, markAsWatched, deleteWatchHistoryUser }}>
             {children}
         </WatchedContext.Provider>
     );
