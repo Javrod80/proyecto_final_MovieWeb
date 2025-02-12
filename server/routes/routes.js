@@ -9,7 +9,7 @@ import reviewsController from '../controllers/reviews.controller.js';
 import getReviewsController from '../controllers/getReviews.controller.js';
 import deleteReviewsController from '../controllers/deleteReviews.controller.js';
 import updateReviewsController from '../controllers/updateReviews.controller.js';
-import verifyToken from '../utils/verifyToken.js';
+import verifyToken from '../utils/Token/verifyToken.js';
 import deleteFavoritesController from '../controllers/deleteFavorites.controller.js';
 import deleteHistoryController from '../controllers/deleteHistory.controller.js';
 
