@@ -23,25 +23,46 @@ const crudMongoDBReviews = {
 
     // Función para eliminar una reseña de una película
     deleteMovieReview: async (reviewId, userId) => {
-        const objectId = new ObjectId(reviewId);
-        return await deleteFromCollection(collectionName, { _id: objectId, userId });
+        try {
+            const objectId = new ObjectId(reviewId);
+            const result = await deleteFromCollection(collectionName, { _id: objectId, userId: userId });
+            return result;
+        } catch (error) {
+            console.error("Error al crear ObjectId:", error);
+            return null;
+        }
+        
     },
 
 
     // Función para actualizar una reseña de película
     updateMovieReview: async (reviewId, { rating, review }) => {
-        const objectId = new ObjectId(reviewId);
-        return await updateInCollection(collectionName, { _id: objectId }, { rating, review });
+        if (rating === null || review === null) {
+            throw new Error("No se pueden actualizar con valores nulos");
+        }
+        try {
+            const objectId = new ObjectId(reviewId);
+            return await updateInCollection(collectionName, { _id: objectId }, { rating, review });
+        } catch (error) {
+            console.error("Error al crear ObjectId:", error);
+            return null;
+        }
+       
     },
 
    
     getReviewById: async (id) => {
-        const objectId = new ObjectId(id);
-        return getDataFromCollection(collectionName, { _id: objectId });
-    },
-
-
-
+        try {
+            const objectId = new ObjectId(id);
+            return await getDataFromCollection(collectionName, { _id: objectId });
+        } catch (error) {
+            console.error("Error al crear ObjectId:", error);
+            return null;
+        }
+    }
+   
 };
+
+
 
 export default crudMongoDBReviews;
