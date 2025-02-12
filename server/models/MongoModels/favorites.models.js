@@ -1,7 +1,7 @@
-import { getDataFromCollection } from './genericCrud.js';
-import { insertIntoCollection } from './genericCrud.js';
-import { deleteFromCollection } from './genericCrud.js';
-import { updateInCollection } from './genericCrud.js';
+import { getDataFromCollection } from './genericMongo.models.js';
+import { insertIntoCollection } from './genericMongo.models.js';
+import { deleteFromCollection } from './genericMongo.models.js';
+import { updateInCollection } from './genericMongo.models.js';
 import dotenv from 'dotenv';
 dotenv.config();
 
@@ -10,7 +10,7 @@ const collectionName = process.env.COLL_FAV;
 const crudMongoDB = {
 
     // Función para agregar una película a favoritos
-     insertFavorites:async (userId, movie) => {
+    insertFavorites: async (userId, movie) => {
         return insertIntoCollection(collectionName, { userId, ...movie });
     },
 
@@ -20,8 +20,8 @@ const crudMongoDB = {
     },
 
     // Función para eliminar una película de favoritos
-     deleteFavorite: async (userId, movieId) => {
-         return deleteFromCollection(collectionName, { userId, imdbID: movieId });
+    deleteFavorite: async (userId, movieId) => {
+        return deleteFromCollection(collectionName, { userId, imdbID: movieId });
     },
 
     // Función para actualizar una película en favoritos (ejemplo)

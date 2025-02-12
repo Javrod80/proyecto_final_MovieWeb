@@ -1,4 +1,4 @@
-import { executeDbOperation } from './dbOperations.js';
+import { executeDbOperation } from './mongo.models.js';
 
 
 // Función general para obtener datos desde cualquier colección con un filtro dado.

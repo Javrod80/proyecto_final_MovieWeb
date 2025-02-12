@@ -1,4 +1,4 @@
-import crudMongoDB from "../models/MongoModels/favorites.js";
+import crudMongoDB from "../models/MongoModels/favorites.models.js";
 
 
 

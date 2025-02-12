@@ -1,5 +1,4 @@
-import crudMySQL from './genericMySQL.js';
-import { executeQuery } from './genericMySQL.js';
+import crudMySQL, { executeQuery } from './genericMySQL.models.js';
 import dotenv from 'dotenv';
 dotenv.config();
 

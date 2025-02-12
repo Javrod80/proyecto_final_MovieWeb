@@ -1,4 +1,4 @@
-import usersModel from '../models/MySQLModels/users.js';
+import usersModel from '../models/MySQLModels/users.models.js';
 import jwt from 'jsonwebtoken';
 
 const { sign } = jwt;

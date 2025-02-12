@@ -1,4 +1,4 @@
-import watchHistoryModel from "../models/MySQLModels/watchHistory.js";
+import watchHistoryModel from "../models/MySQLModels/watchHistory.models.js";
 
 
 export default {
