@@ -6,9 +6,10 @@ export default {
         const { rating, review: reviewText } = req.body; 
         const userId = req.user.id;
 
-        if (!reviewId || !rating || !reviewText || rating === null || reviewText === null || rating === "" || reviewText === "") {
+        if (!reviewId || !Number.isFinite(rating) || !reviewText?.trim()) {
             return res.status(400).json({ error: "Faltan datos requeridos" });
         }
+
 
         try {
             const reviewToUpdate = await crudMongoDBReviews.getReviewById(reviewId);
