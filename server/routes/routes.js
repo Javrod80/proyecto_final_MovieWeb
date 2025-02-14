@@ -12,6 +12,7 @@ import updateReviewsController from '../controllers/updateReviews.controller.js'
 import verifyToken from '../utils/Token/verifyToken.js';
 import deleteFavoritesController from '../controllers/deleteFavorites.controller.js';
 import deleteHistoryController from '../controllers/deleteHistory.controller.js';
+import updateUserController from '../controllers/updateUser.controller.js';
 
 
 
@@ -24,6 +25,10 @@ const router = Router();
 // Rutas del usuario
 router.post('/movieapp/v1/users/signup', userController.signupUser); // Registro
 router.post('/movieapp/v1/users/login', userController.loginUser);   // Inicio de sesión
+router.put('/movieapp/v1/users/update-user/:id', verifyToken ,updateUserController.updateUser); // Actualizar usuario
+
+
+
 
 // Ruta de búsqueda de películas
 router.get('/movieapp/v1/movies/search', searchMovieController.searchMovie); // Búsqueda de películas
