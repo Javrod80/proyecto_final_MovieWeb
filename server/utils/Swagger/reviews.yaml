@@ -1,177 +1,10 @@
 openapi: 3.0.0
 info:
-  title: API de Direcciones
+  title: API de Reseñas
   version: 1.0.0
   description: API para gestionar reseñas de películas
-
-paths:
-  /movieapp/v1/reviews/{movieId}:
-    get:
-      tags:
-        - Reviews
-      summary: Obtener reseñas de una película
-      parameters:
-        - name: movieId
-          in: path
-          required: true
-          description: ID de la película
-          schema:
-            type: string
-      responses:
-        '200':
-          description: Lista de reseñas obtenida correctamente
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  reviews:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/Review'
-        '400':
-          description: Error en la solicitud
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-              example:
-                message: "El parámetro movieId es requerido"
-                error: "Bad Request"
-        '500':
-          description: Error interno del servidor
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-              example:
-                message: "Error inesperado en el servidor"
-                error: "Internal Server Error"
-
-  /movieapp/v1/reviews/add-review:
-    post:
-      tags:
-        - Reviews
-      summary: Agregar una reseña a una película
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/ReviewInput'
-      responses:
-        '200':
-          description: Reseña agregada exitosamente
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Review'
-        '400':
-          description: Error en la solicitud
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-              example:
-                message: "Faltan datos requeridos"
-                error: "Bad Request"
-        '500':
-          description: Error interno del servidor
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-              example:
-                message: "Error inesperado en el servidor"
-                error: "Internal Server Error"
-
-
-  
-  /movieapp/v1/reviews/delete-review/{reviewId}:
-    delete:
-      tags:
-        - Reviews
-      summary: Eliminar una reseña      
-      parameters:
-        - name: reviewId
-          in: path
-          required: true
-          description: ID de la reseña
-          schema:
-            type: string
-      responses:
-        '200':
-          description: Reseña eliminada exitosamente
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Review'
-        '400':    
-          description: Error en la solicitud
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-              example:
-                message: "El parámetro reviewId es requerido"
-                error: "Bad Request"
-        '500':
-          description: Error interno del servidor
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-              example:  
-                message: "Error inesperado en el servidor"
-                error: "Internal Server Error"  
-
-/movieapp/v1/reviews/update-review/{reviewId}:
-    put:
-      tags:
-        - Reviews
-      summary: Actualizar una reseña
-      parameters:
-        - name: reviewId
-          in: path
-          required: true
-          description: ID de la reseña
-          schema:
-            type: string
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/ReviewInput'
-      responses:
-        '200':
-          description: Reseña actualizada exitosamente
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Review'
-        '400':
-          description: Error en la solicitud
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-              example:
-                message: "El parámetro reviewId es requerido"
-                error: "Bad Request"
-        '500':
-          description: Error interno del servidor
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-              example:
-                message: "Error inesperado en el servidor"
-                error: "Internal Server Error"
-
-           
 components:
-  schemas:  
+  schemas:
     ReviewInput:
       type: object
       required:
@@ -192,7 +25,6 @@ components:
         review:
           type: string
           description: Texto de la reseña
-
     Review:
       type: object
       properties:
@@ -207,17 +39,198 @@ components:
           description: ID de la película
         rating:
           type: number
-          description: Puntuación de la película
+          description: Puntuación de la película (1-10)
         review:
           type: string
           description: Texto de la reseña
-
     Error:
       type: object
       properties:
         message:
           type: string
-          description: Mensaje de error
+          description: Descripción del error
         error:
           type: string
           description: Tipo de error
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+paths:
+  /movieapp/v1/reviews/{movieId}:
+    get:
+      tags:
+        - Reviews
+      summary: Obtener reseñas de una película
+      parameters:
+        - name: movieId
+          in: path
+          required: true
+          description: ID de la película
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Review'
+        '400':
+          description: Error en la solicitud
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Reseñas no encontradas
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /movieapp/v1/reviews/add-review:
+    post:
+      tags:
+        - Reviews
+      summary: Agregar una reseña a una película
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReviewInput'
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Reseña agregada con éxito
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Review'
+        '400':
+          description: Error en la solicitud
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: No autorizado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /movieapp/v1/reviews/delete-review/{reviewId}:
+    delete:
+      tags:
+        - Reviews
+      summary: Eliminar una reseña
+      parameters:
+        - name: reviewId
+          in: path
+          required: true
+          description: ID de la reseña
+          schema:
+            type: string
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Reseña eliminada con éxito
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Review'
+        '400':
+          description: Error en la solicitud
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: No autorizado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Reseña no encontrada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /movieapp/v1/reviews/update-review/{reviewId}:
+    put:
+      tags:
+        - Reviews
+      summary: Actualizar una reseña
+      parameters:
+        - name: reviewId
+          in: path
+          required: true
+          description: ID de la reseña
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReviewInput'
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Reseña actualizada con éxito
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Review'
+        '400':
+          description: Error en la solicitud
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: No autorizado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Reseña no encontrada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'

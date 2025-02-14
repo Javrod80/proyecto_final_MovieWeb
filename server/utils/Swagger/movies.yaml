@@ -3,7 +3,6 @@ info:
   title: API de Estudiantes
   version: 1.0.0
 paths:
-
   /movieapp/v1/movies/search:
     get:
       tags:
@@ -23,7 +22,37 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/MoviesResponse'
-
+  /movieapp/v1/movies/{imdbID}:
+    get:
+      tags:
+        - Movies
+      summary: Obtener detalles de una película
+      parameters:
+        - name: imdbID
+          in: path
+          description: IMDb ID de la película
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Movie'
+        '404':
+          description: Pelicula no encontrada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
 components:
   schemas:
     MoviesResponse:
@@ -40,7 +69,6 @@ components:
           type: string  
         Error:
           type: string
-
     Movie:
       type: object
       properties:
@@ -59,39 +87,12 @@ components:
         Poster:
           type: string
           example: "https://m.media-amazon.com/images/M/MV5BMDFkYTc0MGEtZmNhMC00ZDIzLWFmNTEtODM1ZmRlYWMwMWFmXkEyXkFqcGdeQXVyMTMxODk2OTU@._V1_SX300.jpg"
-
-  /movieapp/v1/movies/:imdbID:
-    get:
-      tags:
-        - Movies
-      summary: Obtener detalles de una película
-      parameters:
-        - name: imdbID
-          in: path
-          description: IMDb ID de la filmera
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Movie'
-
-        '404':
-          description: Pelicula no encontrada
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-
-        '500':
-          description: Error interno del servidor
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'  
-                        
-    
+    Error:
+      type: object
+      properties:
+        message:
+          type: string
+          description: Mensaje de error
+        error:
+          type: string
+          description: Tipo de error

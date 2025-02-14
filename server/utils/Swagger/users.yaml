@@ -1,32 +1,51 @@
 openapi: 3.0.0
 info:
-  title: API de Direcciones
+  title: API de Usuarios
   version: 1.0.0
+  description: API para gestionar usuarios
+components:
+  schemas:
+    User:
+      type: object
+      required:
+        - username
+        - password
+      properties:
+        username:
+          type: string
+          description: Nombre de usuario
+        password:
+          type: string
+          description: Contraseña del usuario
+    Error:
+      type: object
+      properties:
+        message:
+          type: string
+          description: Descripción del error
+        error:
+          type: string
+          description: Tipo de error
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
 paths:
-
   /movieapp/v1/users/signup:
     post:
       tags:
         - Users
-      summary: Registra un nuevo usuario
+      summary: Registrar un nuevo usuario
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                user_name:
-                  type: string
-                user_lastnames:
-                  type: string
-                email:
-                  type: string
-                password:
-                  type: string
+              $ref: '#/components/schemas/User'
       responses:
-        200:
-          description: Usuario registrado exitosamente
+        '200':
+          description: Usuario registrado con éxito
           content:
             application/json:
               schema:
@@ -34,130 +53,57 @@ paths:
                 properties:
                   message:
                     type: string
-                  userId:
-                    type: string
-                example:
-                  message: Usuario registrado exitosamente
-                  userId: 1
-
-        201:
-          description: Usuario registrado exitosamente
+                    example: "Usuario registrado con éxito"
+        '400':
+          description: Error en la solicitud
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                  userId:
-                    type: string
-                example:
-                  message: Usuario registrado exitosamente
-                  userId: 1
-        400:
-          description: Todos los campos son obligatorios
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Error interno del servidor
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                example:
-                  message: Todos los campos son obligatorios
-
-        409:
-          description: El correo ya esta registrado
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                example:
-                  message: El correo ya esta registrado
-
-        500:
-          description: Error al registrar usuario 
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                example:
-                  message: Error al registrar usuario
+                $ref: '#/components/schemas/Error'
 
   /movieapp/v1/users/login:
     post:
       tags:
         - Users
-      summary: Inicia sesion
+      summary: Iniciar sesión de un usuario
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                email:
-                  type: string
-                password:
-                  type: string
+              $ref: '#/components/schemas/User'
       responses:
-        200:
-          description: Usuario registrado exitosamente
+        '200':
+          description: Inicio de sesión exitoso
           content:
             application/json:
               schema:
                 type: object
                 properties:
-                  message:
+                  token:
                     type: string
-                  userId:
-                    type: string
-                example:
-                  message: Usuario registrado exitosamente
-                  userId: 1 
-
-        400:
-          description: Todos los campos son obligatorios
+                    example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+        '400':
+          description: Error en la solicitud
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                example:
-                  message: Todos los campos son obligatorios  
-
-        404:
-          description: Usuario no encontrado o credenciales invalidas
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: No autorizado
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                example:
-                  message: Usuario no encontrado o credenciales invalidas
-
-        500:
-          description: Error al iniciar usuario 
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Error interno del servidor
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                example:
-                  message: Error al iniciar usuario 
-                  
-
-        
-   
+                $ref: '#/components/schemas/Error'
