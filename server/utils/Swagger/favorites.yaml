@@ -229,7 +229,7 @@ paths:
                   value:
                     message: Error inesperado en el servidor
                     error: Internal Server Error
-  /movieapp/v1/favorites/delete-favorite/{imdbID}:
+  /movieapp/v1/favorites/delete-favorites/{movieId}:
     delete:
       security:
         - BearerAuth: []
@@ -237,12 +237,12 @@ paths:
         - Favorites
       summary: Eliminar favorito
       parameters:
-        - name: imdbID
+        - name: movieId
           in: path
           required: true
           schema:
             type: string
-          description: ID del favorito a eliminar
+          description: ID de la pelicula a eliminar
       responses:
         '200':
           description: Favorito eliminado correctamente

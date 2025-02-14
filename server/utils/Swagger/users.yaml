@@ -8,12 +8,21 @@ components:
     User:
       type: object
       required:
-        - username
+        - user_name
+        - user_lastnames
+        - email
         - password
       properties:
-        username:
+        user_name:
           type: string
-          description: Nombre de usuario
+          description: Nombre del usuario
+        user_lastnames:
+          type: string
+          description: Apellido del usuario
+        email:
+          type: string
+          format: email
+          description: Correo electrónico del usuario
         password:
           type: string
           description: Contraseña del usuario
@@ -43,6 +52,14 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/User'
+            examples:
+              ejemploRegistro:
+                summary: Ejemplo de registro de usuario
+                value:
+                  user_name: "Juan"
+                  user_lastnames: "Pérez"
+                  email: "juan.perez@example.com"
+                  password: "password123"
       responses:
         '200':
           description: Usuario registrado con éxito
@@ -78,6 +95,12 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/User'
+            examples:
+              ejemploLogin:
+                summary: Ejemplo de inicio de sesión
+                value:
+                  email: "juan.perez@example.com"
+                  password: "password123"  
       responses:
         '200':
           description: Inicio de sesión exitoso
