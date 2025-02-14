@@ -1,6 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import peliculasImage from '../images/peliculas96.png';
+import ChangePassword from '../components/ChangePassword';
 
 
 const Profile = () => {
@@ -20,7 +21,7 @@ const goToWatched = () => {
                 <img src={peliculasImage} alt="Imagen de fondo" />
                 <button onClick={goToFavorites} className="btn secondary-btn">Ver Películas Favoritas</button>
                 <button onClick={goToWatched} className="btn secondary-btn">Ver Películas Vistas</button>
-
+                <ChangePassword />
             </div>
         </div>
     );

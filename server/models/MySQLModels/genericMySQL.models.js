@@ -43,7 +43,7 @@ const crudMySQL = {
     // Función para actualizar un registro
     updateData: async (table, updateColumns, values, filterColumn, filterValue) => {
         const query = `UPDATE ?? SET ${updateColumns.map(col => `?? = ?`).join(', ')} WHERE ?? = ?`;
-        const [result] = await executeQuery(query, [table, ...updateColumns.flatMap((col, i) => [col, values[i]]), filterColumn, filterValue]);
+        const result = await executeQuery(query, [table, ...updateColumns.flatMap((col, i) => [col, values[i]]), filterColumn, filterValue]);
         return result.affectedRows; // Retorna el número de filas afectadas
     },
 

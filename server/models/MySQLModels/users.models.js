@@ -10,9 +10,9 @@ const usersModel = {
         return await crudMySQL.createData(tableName, ['user_name', 'user_lastnames', 'email', 'password'], [user_name, user_lastnames, email, password]);
     },
     // Funcion para hacer login
-    loginUser: async (email, password) => {
-        const query = 'SELECT * FROM ?? WHERE email = ? AND password = ?';
-        return await executeQuery(query, [tableName, email, password]);
+    loginUser: async (email) => {
+        const query = 'SELECT * FROM ?? WHERE email = ? ';
+        return await executeQuery(query, [tableName, email]);
     },
     // Funcion para obtener todos los usuarios
     getAllUsers: async () => {
@@ -20,6 +20,9 @@ const usersModel = {
     },
     // Funcion para obtener un usuario por su ID
     updateUser: async (userId, updateFields) => {
+        if (!userId || !updateFields || Object.keys(updateFields).length === 0) {
+            throw new Error("Faltan datos para actualizar el usuario");
+        }
         const columns = Object.keys(updateFields);
         const values = Object.values(updateFields);
         return await crudMySQL.updateData(tableName, columns, values, 'id', userId);

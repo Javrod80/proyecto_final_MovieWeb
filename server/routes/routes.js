@@ -25,7 +25,7 @@ const router = Router();
 // Rutas del usuario
 router.post('/movieapp/v1/users/signup', userController.signupUser); // Registro
 router.post('/movieapp/v1/users/login', userController.loginUser);   // Inicio de sesión
-router.put('/movieapp/v1/users/update-user/:id', verifyToken ,updateUserController.updateUser); // Actualizar usuario
+router.put('/movieapp/v1/users/update-user/:userId', verifyToken ,updateUserController.updateUser); // Actualizar usuario
 
 
 

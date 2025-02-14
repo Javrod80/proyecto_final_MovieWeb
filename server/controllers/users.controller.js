@@ -1,6 +1,9 @@
 import usersModel from '../models/MySQLModels/users.models.js';
 import jwt from 'jsonwebtoken';
+import bcrypt from 'bcryptjs';
+import dotenv from 'dotenv';
 
+dotenv.config();
 const { sign } = jwt;
 
 const userController = {
@@ -14,7 +17,9 @@ const userController = {
         }
 
         try {
-            const userId = await usersModel.createUser(user_name, user_lastnames, email, password);
+            // Encriptar la contraseña
+            const hashedPassword = await bcrypt.hash(password, 10);
+            const userId = await usersModel.createUser(user_name, user_lastnames, email, hashedPassword);
             res.status(201).json({ message: 'Usuario registrado exitosamente', userId });
         } catch (error) {
             console.error('Error al registrar usuario:', error);
@@ -42,7 +47,13 @@ const userController = {
             }
 
             const user = users[0];
-            const token = sign({ id: user.id, email: user.email }, 'secretkey', { expiresIn: '1h' });
+            // Verificar la contraseña en la base de datos
+            const isMatch = await bcrypt.compare(password, user.password);
+            if (!isMatch) {
+                return res.status(401).json({ message: 'Usuario no encontrado o credenciales inválidas' });
+            }
+
+            const token = sign({ id: user.id, email: user.email }, process.env.SECRET_KEY, { expiresIn: '1h' });
             res.status(200).json({ message: 'Inicio de sesión exitoso', token, user });
         } catch (error) {
             console.error('Error al iniciar sesión:', error);

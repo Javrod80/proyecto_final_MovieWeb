@@ -23,7 +23,7 @@ const Login = () => {
             });
 
             const data = await response.json();
-            console.log('Response data:', data); // Verificar los datos de la respuesta
+         //   console.log('Response data:', data); 
 
             if (!response.ok) {
                 throw new Error(data.message || `Error en la solicitud: ${response.statusText}`);
@@ -32,9 +32,9 @@ const Login = () => {
             // Mostrar mensaje de éxito
             toast.success(data.message || "Operación exitosa");
 
-            console.log("Response data:", data);
-            console.log("User object:", data.user);
-            console.log("User ID:", data.user.id);
+          //  console.log("Response data:", data);
+          //  console.log("User object:", data.user);
+           // console.log("User ID:", data.user.id);
 
 
 
