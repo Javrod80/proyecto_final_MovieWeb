@@ -2,10 +2,14 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from "../providers/AuthContext";
 import { toast } from 'react-toastify';
+import useFetch from '../hook/useFetch'; 
 
 const Login = () => {
     const { login } = useAuth();
     const navigate = useNavigate();
+
+   
+    const { isLoading, error, data, fetchData } = useFetch();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -14,40 +18,24 @@ const Login = () => {
         const password = formData.get('password');
 
         try {
-            const response = await fetch("http://127.0.0.1:5000/movieapp/v1/users/login", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({ email, password }), // Enviar email y password
-            });
+            
+            await fetchData("http://127.0.0.1:5000/movieapp/v1/users/login", 'POST', { email, password });
 
-            const data = await response.json();
-         //   console.log('Response data:', data); 
+            
+            if (data && data.token) {
+               
+                toast.success(data.message || "Operación exitosa");
 
-            if (!response.ok) {
-                throw new Error(data.message || `Error en la solicitud: ${response.statusText}`);
+          
+                localStorage.setItem('token', data.token);
+                localStorage.setItem('userId', data.user?.id);
+             //   console.log("UserID guardado en localStorage:", localStorage.getItem('userId'));
+
+                login(data.user?.id); 
+
+                
+                navigate('/search');
             }
-
-            // Mostrar mensaje de éxito
-            toast.success(data.message || "Operación exitosa");
-
-          //  console.log("Response data:", data);
-          //  console.log("User object:", data.user);
-           // console.log("User ID:", data.user.id);
-
-
-
-
-            // Almacenar el token en localStorage
-            localStorage.setItem('token', data.token);
-            localStorage.setItem('userId', data.user?.id);
-            console.log("UserID guardado en localStorage:", localStorage.getItem('userId'));
-                     
-            login(data.user?.id); 
-
-            // Redirigir a la página de búsqueda después del login exitoso
-            navigate('/search');
         } catch (error) {
             console.error("Error:", error);
             alert(error.message || "Ocurrió un error");
@@ -85,12 +73,15 @@ const Login = () => {
                         <button
                             type="submit"
                             className="botonLog"
+                            disabled={isLoading} // Deshabilitar el botón mientras está cargando
                         >
-                            LOGIN
+                            {isLoading ? 'Cargando...' : 'LOGIN'}
                         </button>
                     </div>
                 </div>
             </form>
+
+            {error && <p >{error}</p>}
         </div>
     );
 };

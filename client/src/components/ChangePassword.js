@@ -1,11 +1,15 @@
 import React, { useState } from 'react';
 import { useAuth } from '../providers/AuthContext';
 import { toast } from 'react-toastify';
+import useFetch from '../hook/useFetch';
+
 
 const ChangePassword = () => {
     const { userId } = useAuth();
     const [password, setPassword] = useState('');
     const [showForm, setShowForm] = useState(false);
+
+    const { isLoading, error, data, fetchData } = useFetch();
 
     const handleChangePassword = async (e) => {
         e.preventDefault();
@@ -15,28 +19,33 @@ const ChangePassword = () => {
             return;
         }
 
+        const token = localStorage.getItem('token');
+        if (!token) {
+            toast.error('Token no disponible. Por favor, inicie sesión nuevamente.');
+            return;
+        }
         try {
-            const response = await fetch(`http://localhost:5000/movieapp/v1/users/update-user/${userId}`,  {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`,
-                },
-                body: JSON.stringify({ password }),
-            });
 
-            const data = await response.json();
-            if (response.ok) {
+            await fetchData(
+                `http://localhost:5000/movieapp/v1/users/update-user/${userId}`,
+                'PUT',
+                { password },
+                
+                    token
+                
+            );
+
+
+            if (data) {
                 toast.success('Contraseña actualizada con éxito.');
-                setPassword(''); 
-                setShowForm(false); 
+                setPassword('');
+                setShowForm(false);
             } else {
-                toast.error(data.message || 'Error al actualizar la contraseña.');
+                toast.error('Error al actualizar la contraseña.');
             }
-
         } catch (error) {
             console.error('Error:', error);
-            setMessage('Error al actualizar la contraseña');
+            toast.error('Error al actualizar la contraseña');
         }
     };
 
@@ -55,9 +64,13 @@ const ChangePassword = () => {
                         onChange={(e) => setPassword(e.target.value)}
                         required
                     />
-                    <button type="submit">Actualizar</button>
+                    <button type="submit" disabled={isLoading}>
+                        {isLoading ? 'Cargando...' : 'Actualizar'}
+                    </button>
                 </form>
             )}
+
+            {error && <p style={{ color: 'red' }}>{error}</p>} {/* Mostrar mensaje de error si hay alguno */}
         </div>
     );
 };
