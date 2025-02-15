@@ -1,52 +1,50 @@
-import React, { useState , useEffect } from "react";
-import { Link } from "react-router-dom";
+import React, {  useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { useSearch } from "../providers/SearchProvider";
-import { useNavigate } from "react-router-dom";
 import { useAuth } from "../providers/AuthContext";
 import { useWatched } from "../providers/WatchedProvider";
+import useFetch from "../hook/useFetch";
 
 const MoviesSearch = () => {
     const { movies, setMovies, title, setTitle } = useSearch();
-    const [error, setError] = useState("");
     const { isAuthenticated, logout } = useAuth();
+    const { markAsWatched, watched, fetchWatched } = useWatched();
     const navigate = useNavigate();
-    const {  markAsWatched, watched,fetchWatched} = useWatched();
-  
+
+    
+    const { isLoading, error, data, fetchData } = useFetch();
 
     // Obtener historial de películas vistas
     useEffect(() => {
         if (isAuthenticated) {
-            fetchWatched(); 
+            fetchWatched();
         }
     }, [fetchWatched, isAuthenticated]);
 
-
-
-    const handleSearch = async () => {
-        try {
-            const response = await fetch(`http://localhost:5000/movieapp/v1/movies/search?title=${title}`);
-            if (!response.ok) {
-                throw new Error("No se encontró la película");
-            }
-            const data = await response.json();
-            if (data.Response === "False") {
-                throw new Error("No se encontraron películas");
-            }
+    // Actualizar movies cuando data cambie
+    useEffect(() => {
+        if (data?.Search) {
             setMovies(data.Search);
-            setError("");
-            
-        } catch (err) {
-            setError(err.message);
+        } else {
             setMovies([]);
         }
+    }, [data, setMovies]);
+
+    // Buscar películas 
+    const handleSearch = async () => {
+        if (!title) return; 
+
+        await fetchData(`http://localhost:5000/movieapp/v1/movies/search?title=${title}`);
+
+        setTitle("");
     };
+
     const handleLogout = () => {
-        logout(); // Llama a la función logout
-        navigate("/"); // Redirige al usuario a la página de inicio después de cerrar sesión
+        logout();
+        navigate("/");
     };
-    const isWatched = (movieId) => {
-        return watched.some((movie) => movie.movie_id === movieId);
-    };
+
+    const isWatched = (movieId) => watched.some((movie) => movie.movie_id === movieId);
 
     return (
         <div className="search-container">
@@ -58,17 +56,19 @@ const MoviesSearch = () => {
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
             />
-            <button onClick={handleSearch}>Buscar</button>
+            <button onClick={handleSearch} disabled={isLoading}>
+                {isLoading ? "Buscando..." : "Buscar"}
+            </button>
+
             {error && <p>{error}</p>}
+
             {movies.length > 0 && !error ? (
                 <div className="movie-list">
                     {movies.map((movie, index) => (
                         <div key={index} className="movie-item">
                             <h2>{movie.Title}</h2>
                             <img src={movie.Poster} alt={movie.Title} style={{ width: "200px" }} />
-                            <Link to={`/movie/${movie.imdbID}`} >
-                                Ver detalles
-                            </Link>
+                            <Link to={`/movie/${movie.imdbID}`}>Ver detalles</Link>
                             <button onClick={() => markAsWatched(movie)}>
                                 {isWatched(movie.imdbID) ? (
                                     <img src="/images/ojo.jpg" alt="Visto" style={{ width: "30px" }} />
@@ -83,9 +83,6 @@ const MoviesSearch = () => {
                 !error && <p className="no-results">No se encontraron películas.</p>
             )}
 
-
-            {/* Mostrar mensaje si el usuario está autenticado */}
-
             {isAuthenticated && (
                 <div className="welcome">
                     <h3>Bienvenido</h3>
@@ -94,7 +91,6 @@ const MoviesSearch = () => {
                 </div>
             )}
         </div>
-
     );
 };
 

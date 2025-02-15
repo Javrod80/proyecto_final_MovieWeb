@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { toast } from 'react-toastify';
+import { toast } from "react-toastify";
+import useFetch from "../hook/useFetch";
 
 const SignupForm = () => {
     const [formData, setFormData] = useState({
@@ -10,6 +11,9 @@ const SignupForm = () => {
         password: ""
     });
 
+    const { isLoading, error, data, fetchData } = useFetch();
+    const navigate = useNavigate();
+
     const handleChange = (e) => {
         setFormData({
             ...formData,
@@ -17,41 +21,28 @@ const SignupForm = () => {
         });
     };
 
-    const navigate = useNavigate();
-
     const handleSubmit = async (e) => {
         e.preventDefault();
-
-        try {
-            const response = await fetch("http://localhost:5000/movieapp/v1/users/signup", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(formData),
-            });
-
-            const data = await response.json();
-
-            if (response.ok) {
-                toast.success("Usuario registrado con éxito 🎉");
-                setFormData({ user_name: "", user_lastname: "", email: "", password: "" });
-                setTimeout(() => {
-                    navigate("/login");
-                }, 2000);
-            } else {
-                toast.error(data.message || "Error al registrar usuario");
-            }
-        } catch (error) {
-            console.error("Error en el registro:", error);
-            toast.error("Error en la conexión con el servidor");
-        }
+        await fetchData("http://localhost:5000/movieapp/v1/users/signup", "POST", formData);
     };
+
+    
+    useEffect(() => {
+        if (error) {
+            toast.error(error);
+        }
+
+        if (data) {
+            toast.success("Usuario registrado con éxito 🎉");
+            setFormData({ user_name: "", user_lastnames: "", email: "", password: "" });
+            setTimeout(() => navigate("/login"), 2000);
+        }
+    }, [data, error, navigate]);
 
     return (
         <div>
             <form onSubmit={handleSubmit} method="POST">
-                <div className='divForm'>
+                <div className="divForm">
                     <div>
                         <label htmlFor="user_name">Nombre: </label>
                         <input
@@ -72,7 +63,7 @@ const SignupForm = () => {
                             id="user_lastname"
                             placeholder="Enter your last name"
                             name="user_lastnames"
-                            value={formData.user_lastname}
+                            value={formData.user_lastnames}
                             onChange={handleChange}
                             required
                         />
@@ -104,11 +95,15 @@ const SignupForm = () => {
                         />
                     </div>
 
-                    <div className='divBotones In'>
-                        <button type="submit" className="botonLog">
-                            REGISTRARSE
+                    {isLoading && <p>Cargando...</p>}
+
+                    <div className="divBotones In">
+                        <button type="submit" className="botonLog" disabled={isLoading}>
+                            {isLoading ? "Registrando..." : "REGISTRARSE"}
                         </button>
                     </div>
+
+                    {error && <p style={{ color: "red" }}>{error}</p>}
                 </div>
             </form>
         </div>

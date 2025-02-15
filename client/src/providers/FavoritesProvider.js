@@ -1,111 +1,59 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from "react";
 import { toast } from "react-toastify";
 import { useAuth } from "./AuthContext";
+import useFetch from "../hook/useFetch";
 
 const FavoritesContext = createContext();
 
-export const useFavorites = () => {
-    return useContext(FavoritesContext);
-};
+export const useFavorites = () => useContext(FavoritesContext);
 
 export const FavoritesProvider = ({ children }) => {
     const [favorites, setFavorites] = useState([]);
     const { userId } = useAuth();
+    const { isLoading, error, data, fetchData } = useFetch();
 
-    
-    const fetchFavorites = useCallback(async () => {
+    const fetchFavorites = useCallback(() => {
         if (!userId) return;
+        fetchData(`http://localhost:5000/movieapp/v1/favorites/all-favorites?userId=${userId}`);
+    }, [userId, fetchData]);
 
-        try {
-            const response = await fetch(`http://localhost:5000/movieapp/v1/favorites/all-favorites?userId=${userId}`, {
-                method: "GET",
-                headers: {
-                    "Cache-Control": "no-cache" // Evita respuestas en caché
-                }
-            });
+    useEffect(() => {
+        if (data) setFavorites(data);
+    }, [data]);
 
-            if (!response.ok) {
-                throw new Error("Error al obtener favoritos");
-            }
-
-            const data = await response.json();
-
-            // Actualiza el estado con los datos obtenidos
-            setFavorites(data);
-        } catch (err) {
-            console.error("❌ Error al obtener favoritos:", err);
-            toast.error("No se pudieron cargar los favoritos");
-        }
-    }, [userId]); // Dependencia de userId
-
-    // Cargar favoritos cuando el usuario inicia sesión
     useEffect(() => {
         fetchFavorites();
-    }, [fetchFavorites, userId]); 
+    }, [fetchFavorites]);
 
-    // Función para agregar a favoritos
     const addToFavorites = async (movie) => {
         if (!userId) {
             toast.error("Debes iniciar sesión para agregar favoritos");
             return;
         }
 
-        const bodyData = JSON.stringify({ userId, ...movie });
+        await fetchData("http://localhost:5000/movieapp/v1/favorites/add-favorite", "POST", { userId, ...movie });
 
-        try {
-            const response = await fetch("http://localhost:5000/movieapp/v1/favorites/add-favorite", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: bodyData,
-            });
-
-            if (!response.ok) {
-                const responseData = await response.json();
-                throw new Error(responseData.message || "Error al agregar a favoritos");
-            }
-
+        if (!error) {
             toast.success("Película agregada a favoritos");
-           
-
-            // Actualiza el estado con la nueva película
-            setFavorites(prevFavorites => [...prevFavorites, movie]);
-            fetchFavorites(); // Vuelve a cargar los favoritos
-        } catch (err) {
-            console.error("❌ Error al agregar a favoritos:", err);
-            toast.error(err.message || "Ocurrió un error al agregar a favoritos");
+            setFavorites((prevFavorites) => [...prevFavorites, movie]);
+        } else {
+            toast.error(error);
         }
     };
 
+    const deleteFavorite = async (movieId) => {
+        await fetchData(`http://localhost:5000/movieapp/v1/favorites/delete-favorites/${movieId}`, "DELETE", null, localStorage.getItem("token"));
 
-const deleteFavorite = async ( movieId) => {
-    console.log('movieId:', movieId);
-    try {
-        const response = await fetch(`http://localhost:5000/movieapp/v1/favorites/delete-favorites/${movieId}`, {
-            method: 'DELETE',
-            headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` },
-            
-        });
-
-        if (!response.ok) {
-            const responseData = await response.json();
-            throw new Error(responseData.message || 'Error al eliminar de favoritos');
+        if (!error) {
+            toast.success("Película eliminada de favoritos");
+            setFavorites((prevFavorites) => prevFavorites.filter((fav) => fav.imdbID !== movieId));
+        } else {
+            toast.error(error);
         }
-
-        toast.success('Película eliminada de favoritos');
-        setFavorites(prevFavorites => prevFavorites.filter(fav => fav.imdbID !== movieId));
-    } catch (err) {
-        console.error('❌ Error al eliminar de favoritos:', err);
-        toast.error(err.message || 'Ocurrió un error al eliminar de favoritos');    
-    }
-}
-
-
-
+    };
 
     return (
-        <FavoritesContext.Provider value={{ favorites, addToFavorites, fetchFavorites, deleteFavorite }}>
+        <FavoritesContext.Provider value={{ favorites, addToFavorites, fetchFavorites, deleteFavorite, isLoading }}>
             {children}
         </FavoritesContext.Provider>
     );

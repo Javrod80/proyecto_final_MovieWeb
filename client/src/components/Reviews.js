@@ -52,16 +52,9 @@ const Reviews = ({ movieId }) => {
 
     // Función para renderizar las estrellas
     const renderStars = (rating) => {
-        let stars = [];
-        for (let i = 0; i < 5; i++) {
-            if (i < rating) {
-                stars.push('★');
-            } else {
-                stars.push('☆');
-            }
-        }
-        return stars.join(''); 
-    }
+        return [...Array(5)].map((_, i) => (i < rating ? '★' : '☆')).join('');
+    };
+
 
     return (
         <div>

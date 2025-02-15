@@ -1,85 +1,60 @@
-import { createContext, useContext, useState, useEffect, useCallback } from "react";
-import { useAuth } from "./AuthContext";
-
+import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
+import { useAuth } from './AuthContext';
+import useFetch from '../hook/useFetch';
 
 const WatchedContext = createContext();
 
-
-export const useWatched = () => {
-    return useContext(WatchedContext);
-}
+export const useWatched = () => useContext(WatchedContext);
 
 const WatchedProvider = ({ children }) => {
     const [watched, setWatched] = useState([]);
-    const [isLoading, setIsLoading] = useState(true); 
+    const { isLoading, error, data, fetchData } = useFetch();
     const { userId } = useAuth();
 
+    // Función para obtener el historial de películas vistas
     const fetchWatched = useCallback(async () => {
-        try {
-            const response = await fetch(`http://localhost:5000/movieapp/v1/watched/watch-history/${userId}`, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                },                   
-            });
-
-            if (!response.ok) {
-                throw new Error('Error al obtener las películas vistas');
-            }   
-            const data = await response.json(); 
-         
-            setWatched(data);
-            setIsLoading(false);
-        } catch (error) {
-            console.error(error);
-        }
-    }, [userId]);
+        await fetchData(`http://localhost:5000/movieapp/v1/watched/watch-history/${userId}`);
+    }, [fetchData, userId]);
 
     useEffect(() => {
-        fetchWatched();
-    }, [fetchWatched]);
+        if (userId) {
+            fetchWatched();
+        }
+    }, [userId, fetchWatched]);
 
+    useEffect(() => {
+        if (data) {
+            setWatched(data);
+        }
+        if (error) {
+            console.error(error);
+        }
+    }, [data, error]);
 
+    // Función para marcar una película como vista
     const markAsWatched = async (movie) => {
         if (!userId) {
             console.error("Usuario no autenticado");
             return;
         }
 
-/*
-        console.log('Datos a enviar:', {
+        const body = {
             user_id: userId,
-            movie_id: movie.imdbID, 
+            movie_id: movie.imdbID,
             title: movie.Title,
-            poster: movie.Poster
-        });
-        */
-        try {
-            
-            const response = await fetch("http://localhost:5000/movieapp/v1/watched/add-watch-history", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    user_id : userId,
-                    movie_id: movie.imdbID,
-                    title: movie.Title,
-                    poster: movie.Poster,
-                }),
-            });
+            poster: movie.Poster,
+        };
 
-            if (!response.ok) {
-                throw new Error("Error al marcar la película como vista");
-            }
-
+        await fetchData("http://localhost:5000/movieapp/v1/watched/add-watch-history", 'POST', body);
+        if (!error) {
             fetchWatched();
-        } catch (error) {
-            console.error(error);
+        } else {
+            console.error("Error al marcar la película como vista:", error);
         }
     };
-    const deleteWatchHistoryUser = async( movieId )=>{
-        
+
+    // Función para eliminar el historial de vistas de una película
+    const deleteWatchHistoryUser = async (movieId) => {
         if (!userId) {
             console.error("Usuario no autenticado");
             return;
@@ -89,28 +64,13 @@ const WatchedProvider = ({ children }) => {
             return;
         }
 
-        console.log("movieId recibido:", movieId);
-        try {
-           
-            const response = await fetch(`http://localhost:5000/movieapp/v1/watched/delete-watch-history/${userId}/${movieId}`, {
-                method: "DELETE",
-                headers: {
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`,
-                    'Content-Type': 'application/json',
-                }
-               
-            });
-            if (!response.ok) {
-                throw new Error("Error al eliminar la historia de vistas");
-            }
+        await fetchData(`http://localhost:5000/movieapp/v1/watched/delete-watch-history/${userId}/${movieId}`, 'DELETE', null, localStorage.getItem('token'));
+        if (!error) {
             fetchWatched();
-        } catch (error) {
-            console.error(error);
+        } else {
+            console.error("Error al eliminar la historia de vistas:", error);
         }
-    }
-
-     
-    
+    };
 
     return (
         <WatchedContext.Provider value={{ watched, isLoading, fetchWatched, markAsWatched, deleteWatchHistoryUser }}>
@@ -118,4 +78,5 @@ const WatchedProvider = ({ children }) => {
         </WatchedContext.Provider>
     );
 };
+
 export default WatchedProvider;

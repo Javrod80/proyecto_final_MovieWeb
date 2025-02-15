@@ -5,7 +5,7 @@ const ReviewsContext = createContext();
 export const useReviews = () => useContext(ReviewsContext);
 
 const ReviewsProvider = ({ children }) => {
-    const [reviews, setReviews] = useState({}); 
+    const [reviews, setReviews] = useState({});
 
     // Función para obtener reseñas de una película específica
     const fetchReviews = useCallback(async (movieId) => {
@@ -16,7 +16,7 @@ const ReviewsProvider = ({ children }) => {
 
             setReviews(prevReviews => ({
                 ...prevReviews,
-                [movieId]: data // Guarda solo las reseñas de esta película
+                [movieId]: data 
             }));
         } catch (error) {
             console.error('Error al obtener las reseñas:', error);
@@ -31,7 +31,7 @@ const ReviewsProvider = ({ children }) => {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ userId, movieId, rating, review }),
             });
-            const result = await response.json(); 
+            const result = await response.json();
 
             if (result.insertedId) {
                 const newReview = { _id: result.insertedId, userId, movieId, rating, review };
@@ -53,14 +53,14 @@ const ReviewsProvider = ({ children }) => {
             return null;
         }
     };
-    const updateReview = async (reviewId,newReviewData) => {
+    const updateReview = async (reviewId, newReviewData) => {
         try {
             const token = localStorage.getItem('token');
             const response = await fetch(`http://localhost:5000/movieapp/v1/reviews/update-review/${reviewId}`, {
                 method: 'PUT',
-                headers: {  'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
-                body: JSON.stringify( newReviewData ),
-               
+                headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
+                body: JSON.stringify(newReviewData),
+
             });
             console.log(token)
             const result = await response.json();
