@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useCallback } from 'react';
+import useFetch from '../hook/useFetch';
 
 const ReviewsContext = createContext();
 
@@ -6,92 +7,56 @@ export const useReviews = () => useContext(ReviewsContext);
 
 const ReviewsProvider = ({ children }) => {
     const [reviews, setReviews] = useState({});
+    const { isLoading, error,  fetchData } = useFetch();
 
     // Función para obtener reseñas de una película específica
     const fetchReviews = useCallback(async (movieId) => {
-        try {
-            const response = await fetch(`http://localhost:5000/movieapp/v1/reviews/${movieId}`);
-            const data = await response.json();
-            //console.log("Reseñas obtenidas:", data);
-
+        const response = await fetchData(`http://localhost:5000/movieapp/v1/reviews/${movieId}`);
+     
+        if (response) {
             setReviews(prevReviews => ({
                 ...prevReviews,
-                [movieId]: data 
+                [movieId]: response
             }));
-        } catch (error) {
-            console.error('Error al obtener las reseñas:', error);
         }
-    }, []);
+    }, [fetchData]);
 
     // Función para agregar una nueva reseña
-    const addReview = async (userId, movieId, rating, review) => {
-        try {
-            const response = await fetch('http://localhost:5000/movieapp/v1/reviews/add-review', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ userId, movieId, rating, review }),
+    const addReview = useCallback(async (userId, movieId, rating, review) => {
+        const body = { userId, movieId, rating, review };
+        const response = await fetchData('http://localhost:5000/movieapp/v1/reviews/add-review', 'POST', body);
+     
+        if (response && response.insertedId) {
+            const newReview = { _id: response.insertedId, userId, movieId, rating, review };
+            setReviews(prevReviews => {
+                const updatedReviews = prevReviews[movieId] ? [...prevReviews[movieId], newReview] : [newReview];
+                return {
+                    ...prevReviews,
+                    [movieId]: updatedReviews
+                };
             });
-            const result = await response.json();
-
-            if (result.insertedId) {
-                const newReview = { _id: result.insertedId, userId, movieId, rating, review };
-
-                setReviews(prevReviews => {
-                    const updatedReviews = prevReviews[movieId] ? [...prevReviews[movieId], newReview] : [newReview];
-                    console.log("Reseñas actualizadas:", updatedReviews);
-                    return {
-                        ...prevReviews,
-                        [movieId]: updatedReviews
-                    };
-                });
-
-                return newReview; // Retorna la reseña agregada
-            }
-            return null;
-        } catch (error) {
-            console.error('Error al agregar la reseña:', error);
-            return null;
+            return newReview;
         }
-    };
-    const updateReview = async (reviewId, newReviewData) => {
-        try {
-            const token = localStorage.getItem('token');
-            const response = await fetch(`http://localhost:5000/movieapp/v1/reviews/update-review/${reviewId}`, {
-                method: 'PUT',
-                headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
-                body: JSON.stringify(newReviewData),
+        return null;
+    }, [fetchData]);
 
-            });
-            console.log(token)
-            const result = await response.json();
-            return result; // Retorna el resultado de la actualización
-        } catch (error) {
-            console.error('Error al actualizar la reseña:', error);
-            return null;
-        }
-    };
+    const updateReview = useCallback(async (reviewId, newReviewData) => {
+        const token = localStorage.getItem('token');
+        const response = await fetchData(`http://localhost:5000/movieapp/v1/reviews/update-review/${reviewId}`, 'PUT', newReviewData, token);
+        return response;
+    }, [fetchData]);
 
-    const deleteReview = async (reviewId, userId, movieId) => {
-        try {
-            const response = await fetch(`http://localhost:5000/movieapp/v1/reviews/delete-review/${reviewId}`, {
-                method: 'DELETE',
-                headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` },
-                body: JSON.stringify({ userId, movieId }),
-            });
-            if (!response.ok) {
-                throw new Error("Error al eliminar la reseña");
-            }
-
-            // Actualizar el estado después de eliminar la reseña
+    const deleteReview = useCallback(async (reviewId, userId, movieId) => {
+        const body = { userId, movieId };
+        const token = localStorage.getItem('token');
+        const response = await fetchData(`http://localhost:5000/movieapp/v1/reviews/delete-review/${reviewId}`, 'DELETE', body, token);
+        if (response) {
             fetchReviews(movieId);
-        } catch (error) {
-            console.error(error);
         }
-    };
-
+    }, [fetchData, fetchReviews]);
 
     return (
-        <ReviewsContext.Provider value={{ reviews, fetchReviews, addReview, updateReview, deleteReview }}>
+        <ReviewsContext.Provider value={{ reviews, fetchReviews, addReview, updateReview, deleteReview, isLoading, error }}>
             {children}
         </ReviewsContext.Provider>
     );

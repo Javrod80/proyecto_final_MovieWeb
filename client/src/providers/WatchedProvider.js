@@ -11,7 +11,6 @@ const WatchedProvider = ({ children }) => {
     const { isLoading, error, data, fetchData } = useFetch();
     const { userId } = useAuth();
 
-    // Función para obtener el historial de películas vistas
     const fetchWatched = useCallback(async () => {
         await fetchData(`http://localhost:5000/movieapp/v1/watched/watch-history/${userId}`);
     }, [fetchData, userId]);
@@ -31,7 +30,6 @@ const WatchedProvider = ({ children }) => {
         }
     }, [data, error]);
 
-    // Función para marcar una película como vista
     const markAsWatched = async (movie) => {
         if (!userId) {
             console.error("Usuario no autenticado");
@@ -53,7 +51,6 @@ const WatchedProvider = ({ children }) => {
         }
     };
 
-    // Función para eliminar el historial de vistas de una película
     const deleteWatchHistoryUser = async (movieId) => {
         if (!userId) {
             console.error("Usuario no autenticado");
