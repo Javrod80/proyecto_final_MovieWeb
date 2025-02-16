@@ -1,8 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useAuth } from '../providers/AuthContext';
 import { toast } from 'react-toastify';
 import useFetch from '../hook/useFetch';
-
 
 const ChangePassword = () => {
     const { userId } = useAuth();
@@ -24,30 +23,24 @@ const ChangePassword = () => {
             toast.error('Token no disponible. Por favor, inicie sesión nuevamente.');
             return;
         }
-        try {
 
-            await fetchData(
-                `http://localhost:5000/movieapp/v1/users/update-user/${userId}`,
-                'PUT',
-                { password },
-                
-                    token
-                
-            );
-
-
-            if (data) {
-                toast.success('Contraseña actualizada con éxito.');
-                setPassword('');
-                setShowForm(false);
-            } else {
-                toast.error('Error al actualizar la contraseña.');
-            }
-        } catch (error) {
-            console.error('Error:', error);
-            toast.error('Error al actualizar la contraseña');
-        }
+        await fetchData(
+            `http://localhost:5000/movieapp/v1/users/update-user/${userId}`,
+            'PUT',
+            { password },
+            token
+        );
     };
+
+    useEffect(() => {
+        if (data) {
+            toast.success('Contraseña actualizada con éxito.');
+            setPassword('');
+            setShowForm(false);
+        } else if (error) {
+            toast.error('Error al actualizar la contraseña.');
+        }
+    }, [data, error]);
 
     return (
         <div className="change-password">

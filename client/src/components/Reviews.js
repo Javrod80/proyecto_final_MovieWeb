@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useReviews } from "../providers/ReviewsProvider";
 import { useAuth } from "../providers/AuthContext";
 import EditReviewForm from "./EditReviewForm";
+import { toast } from "react-toastify";
 
 const Reviews = ({ movieId }) => {
     const { reviews, fetchReviews, addReview, updateReview, deleteReview, isLoading, error } = useReviews();
@@ -20,7 +21,7 @@ const Reviews = ({ movieId }) => {
         event.preventDefault();
 
         if (!userId) {
-            alert("Debes iniciar sesión para agregar una reseña.");
+            toast.error("Debes iniciar sesión para agregar una reseña.");
             return;
         }
         if (!reviewText.trim()) return; // Evitar reseñas vacías

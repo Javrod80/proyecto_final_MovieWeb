@@ -27,7 +27,7 @@ const Favorites = () => {
                             <img src={movie.Poster} alt={movie.Title} width="100" />
                            
                             <button onClick={() => {
-                                console.log("Intentando eliminar:", movie);
+                               // console.log("Intentando eliminar:", movie);
                                 deleteFavorite(movie.imdbID);
                             }}>
                                 Eliminar
