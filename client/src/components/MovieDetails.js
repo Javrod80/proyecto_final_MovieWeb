@@ -11,7 +11,7 @@ const MovieDetails = () => {
     const { fetchData: addToFavoritesFetch, error: addToFavoritesError } = useFetch(); 
 
     useEffect(() => {
-        fetchData(`http://localhost:5000/movieapp/v1/movies/${imdbID}`);
+        fetchData(`movies/${imdbID}`);
     }, [imdbID, fetchData]);
 
     const addToFavorites = async () => {
@@ -45,7 +45,7 @@ const MovieDetails = () => {
         };
 
         try {
-            await addToFavoritesFetch("http://localhost:5000/movieapp/v1/favorites/add-favorite", "POST", movieData);
+            await addToFavoritesFetch("favorites/add-favorite", "POST", movieData);
             if (!addToFavoritesError) {
                 toast.success("Película agregada a favoritos");
             } else {

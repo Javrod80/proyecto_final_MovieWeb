@@ -23,7 +23,7 @@ const SignupForm = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        await fetchData("http://localhost:5000/movieapp/v1/users/signup", "POST", formData);
+        await fetchData("users/signup", "POST", formData);
     };
 
     

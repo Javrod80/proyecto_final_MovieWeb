@@ -12,7 +12,7 @@ const WatchedProvider = ({ children }) => {
     const { userId } = useAuth();
 
     const fetchWatched = useCallback(async () => {
-        await fetchData(`http://localhost:5000/movieapp/v1/watched/watch-history/${userId}`);
+        await fetchData(`watched/watch-history/${userId}`);
     }, [fetchData, userId]);
 
     useEffect(() => {
@@ -43,7 +43,7 @@ const WatchedProvider = ({ children }) => {
             poster: movie.Poster,
         };
 
-        await fetchData("http://localhost:5000/movieapp/v1/watched/add-watch-history", 'POST', body);
+        await fetchData("watched/add-watch-history", 'POST', body);
         if (!error) {
             fetchWatched();
         } else {
@@ -61,7 +61,7 @@ const WatchedProvider = ({ children }) => {
             return;
         }
 
-        await fetchData(`http://localhost:5000/movieapp/v1/watched/delete-watch-history/${userId}/${movieId}`, 'DELETE', null, localStorage.getItem('token'));
+        await fetchData(`watched/delete-watch-history/${userId}/${movieId}`, 'DELETE', null, localStorage.getItem('token'));
         if (!error) {
             fetchWatched();
         } else {

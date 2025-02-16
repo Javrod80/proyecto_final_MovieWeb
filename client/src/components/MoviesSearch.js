@@ -34,7 +34,7 @@ const MoviesSearch = () => {
     const handleSearch = async () => {
         if (!title) return; 
 
-        await fetchData(`http://localhost:5000/movieapp/v1/movies/search?title=${title}`);
+        await fetchData(`movies/search?title=${title}`);
 
         setTitle("");
     };

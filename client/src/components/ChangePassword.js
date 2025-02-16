@@ -25,7 +25,7 @@ const ChangePassword = () => {
         }
 
         await fetchData(
-            `http://localhost:5000/movieapp/v1/users/update-user/${userId}`,
+            `users/update-user/${userId}`,
             'PUT',
             { password },
             token

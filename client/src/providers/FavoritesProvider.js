@@ -12,9 +12,12 @@ export const FavoritesProvider = ({ children }) => {
     const { userId } = useAuth();
     const { isLoading, error, data, fetchData } = useFetch();
 
+
+    
+
     const fetchFavorites = useCallback(() => {
         if (!userId) return;
-        fetchData(`http://localhost:5000/movieapp/v1/favorites/all-favorites?userId=${userId}`);
+        fetchData(`favorites/all-favorites?userId=${userId}`);
     }, [userId, fetchData]);
 
     useEffect(() => {
@@ -31,7 +34,7 @@ export const FavoritesProvider = ({ children }) => {
             return;
         }
 
-        await fetchData("http://localhost:5000/movieapp/v1/favorites/add-favorite", "POST", { userId, ...movie });
+        await fetchData("favorites/add-favorite", "POST", { userId, ...movie });
 
         if (!error) {
             toast.success("Película agregada a favoritos");
@@ -42,7 +45,7 @@ export const FavoritesProvider = ({ children }) => {
     };
 
     const deleteFavorite = async (movieId) => {
-        await fetchData(`http://localhost:5000/movieapp/v1/favorites/delete-favorites/${movieId}`, "DELETE", null, localStorage.getItem("token"));
+        await fetchData(`favorites/delete-favorites/${movieId}`, "DELETE", null, localStorage.getItem("token"));
 
         if (!error) {
             toast.success("Película eliminada de favoritos");

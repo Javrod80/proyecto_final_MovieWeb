@@ -16,7 +16,7 @@ const Login = () => {
         const email = formData.get("email");
         const password = formData.get("password");
 
-        await fetchData("http://127.0.0.1:5000/movieapp/v1/users/login", "POST", { email, password });
+        await fetchData("users/login", "POST", { email, password });
     };
 
     useEffect(() => {
