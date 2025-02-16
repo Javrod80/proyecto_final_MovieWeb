@@ -48,9 +48,9 @@ const crudMySQL = {
     },
 
     // Función para "eliminar" un registro 
-    deleteData: async (table, filterColumn1, filterValue1, filterColumn2, filterValue2) => {
-        const query = 'DELETE FROM ?? WHERE ?? = ? AND ?? = ?';
-        const result = await executeQuery(query, [table, filterColumn1, filterValue1, filterColumn2, filterValue2]);
+    deleteData: async (table, filterColumn, filterValue) => {
+        const query = 'DELETE FROM ?? WHERE ?? = ?';
+        const result = await executeQuery(query, [table, filterColumn, filterValue]);
         return result.affectedRows; // Retorna el número de filas afectadas
     }
   

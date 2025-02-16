@@ -2,6 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import peliculasImage from '../images/peliculas96.png';
 import ChangePassword from '../components/ChangePassword';
+import DeleteAccount from './DeleteAccount';
 
 
 const Profile = () => {
@@ -22,6 +23,8 @@ const goToWatched = () => {
                 <button onClick={goToFavorites} className="btn secondary-btn">Ver Películas Favoritas</button>
                 <button onClick={goToWatched} className="btn secondary-btn">Ver Películas Vistas</button>
                 <ChangePassword />
+                <DeleteAccount/>
+                
             </div>
         </div>
     );
