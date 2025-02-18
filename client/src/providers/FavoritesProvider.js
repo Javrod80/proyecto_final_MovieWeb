@@ -1,3 +1,5 @@
+// Proveedor del contexto favoritos
+
 import React, { createContext, useContext, useState, useEffect, useCallback } from "react";
 import { toast } from "react-toastify";
 import { useAuth } from "./AuthContext";
@@ -14,20 +16,21 @@ export const FavoritesProvider = ({ children }) => {
 
 
     
-
+    // Función para obtener favoritos
     const fetchFavorites = useCallback(() => {
         if (!userId) return;
         fetchData(`favorites/all-favorites?userId=${userId}`);
     }, [userId, fetchData]);
 
+    // Cargar favoritos
     useEffect(() => {
         if (data) setFavorites(data);
     }, [data]);
-
+    // Actualizar favoritos
     useEffect(() => {
         fetchFavorites();
     }, [fetchFavorites]);
-
+    // Agregar a favoritos
     const addToFavorites = async (movie) => {
         if (!userId) {
             toast.error("Debes iniciar sesión para agregar favoritos");
@@ -43,7 +46,7 @@ export const FavoritesProvider = ({ children }) => {
             toast.error(error);
         }
     };
-
+    // Eliminar de favoritos
     const deleteFavorite = async (movieId) => {
         await fetchData(`favorites/delete-favorites/${movieId}`, "DELETE", null, localStorage.getItem("token"));
 

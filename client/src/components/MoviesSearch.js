@@ -1,3 +1,5 @@
+// Componente para realizar la busqueda de pelúculas
+
 import React, {  useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useSearch } from "../providers/SearchProvider";
@@ -6,12 +8,15 @@ import { useWatched } from "../providers/WatchedProvider";
 import useFetch from "../hook/useFetch";
 
 const MoviesSearch = () => {
+    // Obtiene el historial de filmer vistas
     const { movies, setMovies, title, setTitle } = useSearch();
+    // Obtiene el contexto de autenticación
     const { isAuthenticated, logout } = useAuth();
+    // Obtiene el contexto de peliculas vistas
     const { markAsWatched, watched, fetchWatched } = useWatched();
     const navigate = useNavigate();
 
-    
+    // useFetch
     const { isLoading, error, data, fetchData } = useFetch();
 
     // Obtener historial de películas vistas
@@ -38,56 +43,99 @@ const MoviesSearch = () => {
 
         setTitle("");
     };
-
+    // Función para manejar el cierre de sesión
     const handleLogout = () => {
         logout();
         navigate("/");
     };
-
+    // Función para verificar si una película ha sido vista
     const isWatched = (movieId) => watched.some((movie) => movie.movie_id === movieId);
 
+    // Renderizar el componente
     return (
-        <div className="search-container">
-            <h1 className="title">Buscar Películas</h1>
-            <input
-                type="text"
-                className="input-buscar"
-                placeholder="Ingresa el título de la película"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-            />
-            <button onClick={handleSearch} disabled={isLoading}>
-                {isLoading ? "Buscando..." : "Buscar"}
-            </button>
+     
+        <div className="container mt-4">
+            <h1 className="text-center mb-4">Buscar Películas</h1>
 
-            {error && <p>{error}</p>}
-
-            {movies.length > 0 && !error ? (
-                <div className="movie-list">
-                    {movies.map((movie, index) => (
-                        <div key={index} className="movie-item">
-                            <h2>{movie.Title}</h2>
-                            <img src={movie.Poster} alt={movie.Title} style={{ width: "200px" }} />
-                            <Link to={`/movie/${movie.imdbID}`}>Ver detalles</Link>
-                            <button onClick={() => markAsWatched(movie)}>
-                                {isWatched(movie.imdbID) ? (
-                                    <img src="/images/ojo.jpg" alt="Visto" style={{ width: "30px" }} />
-                                ) : (
-                                    <img src="/images/ojo2.jpg" alt="Marcar como visto" style={{ width: "30px" }} />
-                                )}
+           
+            <div className="d-flex justify-content-center mb-4">
+                <div className="card p-4" style={{ maxWidth: '400px', width: '100%' }}>
+                    <div className="card-body">
+                        <h5 className="card-title text-center">Buscar por Título</h5>
+                        <div className="d-flex justify-content-between mb-3">
+                            <input
+                                type="text"
+                                className="form-control me-2"
+                                placeholder="Ingresa el título de la película"
+                                value={title}
+                                onChange={(e) => setTitle(e.target.value)}
+                            />
+                            <button className="btn btn-primary" onClick={handleSearch} disabled={isLoading}>
+                                {isLoading ? "Buscando..." : "Buscar"}
                             </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {error && <p className="text-danger text-center">{error}</p>}
+
+           {/* Sección de peliculas */}
+            {movies.length > 0 && !error ? (
+                <div className="row">
+                    {movies.map((movie, index) => (
+                        <div key={index} className="col-12 col-md-3 mb-4">
+                            <div className="card position-relative">
+                                <img src={movie.Poster} alt={movie.Title} className="card-img-top" style={{ height: "300px", objectFit: "cover" }} />
+                                <div className="card-body">
+                                    <h5 className="card-title">{movie.Title}</h5>
+                                    <Link to={`/movie/${movie.imdbID}`} className="btn btn-outline-primary w-100 mb-2">Ver detalles</Link>
+                                    <button
+                                        className={`btn ${isWatched(movie.imdbID) ? "btn-success" : "btn-outline-success"} w-100`}
+                                        onClick={() => markAsWatched(movie)}
+                                    >
+                                        {isWatched(movie.imdbID) ? (
+                                            <span className="bi bi-check-circle"></span>
+                                        ) : (
+                                            <span className="bi bi-eye"></span>
+                                        )}
+                                        {isWatched(movie.imdbID) ? " Visto" : " Marcar como Visto"}
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                     ))}
                 </div>
             ) : (
-                !error && <p className="no-results">No se encontraron películas.</p>
+               // Sección de mensaje si no se encontraron peliculas
+                !error && (
+                    <div className="text-center">
+                        <div className="card p-4 mx-auto" style={{ maxWidth: '400px', width: '100%' }}>
+                            <div className="card-body">
+                                <p className="text-center">No se encontraron películas.</p>
+                            </div>
+                        </div>
+                    </div>
+                )
             )}
 
+            {/* Sección de bienvenida y logout */}
             {isAuthenticated && (
-                <div className="welcome">
-                    <h3>Bienvenido</h3>
-                    <button className="welcome-btn" onClick={() => navigate("/profile")}>Ver Perfil</button>
-                    <button onClick={handleLogout} className="logout-btn">Cerrar Sesión</button>
+                <div className="container mt-5">
+                    <div className="card p-4" style={{
+                        maxWidth: '400px',
+                        width: '100%',
+                        position: 'absolute',
+                        top: '100px',
+                        right: '10px', 
+                        textAlign: 'center' 
+                    }}>
+                        <div className="card-body">
+                            <h3>Bienvenido</h3>
+                            <button className="btn btn-secondary" onClick={() => navigate("/profile")}>Ver Perfil</button>
+                            <button onClick={handleLogout} className="btn btn-danger ms-2">Cerrar Sesión</button>
+                        </div>
+                    </div>
                 </div>
             )}
         </div>

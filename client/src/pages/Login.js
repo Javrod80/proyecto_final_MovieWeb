@@ -1,3 +1,5 @@
+// Página de inicio de sesión
+
 import React, { useEffect , useState} from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../providers/AuthContext";
@@ -10,6 +12,7 @@ const Login = () => {
     const { isLoading, error, data, fetchData } = useFetch();
     const [hasLoggedIn, setHasLoggedIn] = useState(false);
 
+    // Manejar el envío del formulario
     const handleSubmit = async (e) => {
         e.preventDefault();
         const formData = new FormData(e.target);
@@ -23,41 +26,63 @@ const Login = () => {
         if (error) {
             toast.error(error);
         }
+        // Verificar si el token está disponible en el almacenamiento local
 
         if (data && data.token && !hasLoggedIn) {
             toast.success(data.message || "Operación exitosa");
 
             localStorage.setItem("token", data.token);
             localStorage.setItem("userId", data.user?.id);
-
+            // Actualizar el estado de autenticación
             login(data.user?.id);
             navigate("/search");
             setHasLoggedIn(true);
         }
     }, [data, error, navigate, login, hasLoggedIn]);
-
+    // Renderizar el formulario
     return (
-        <div>
-            <form onSubmit={handleSubmit} method="POST">
-                <div className="divForm">
-                    <div>
-                        <label htmlFor="email">Email: </label>
-                        <input type="email" id="email" placeholder="Enter your email" name="email" required />
-                    </div>
-                    <div>
-                        <label htmlFor="password">Password: </label>
-                        <input type="password" id="password" placeholder="Enter your password" name="password" required />
-                    </div>
+        <div className="container mt-5" style={{ paddingTop: '100px' }}> 
+            <div className="row justify-content-center">
+                <div className="col-md-4">
+                    <div className="card shadow-lg" style={{ borderRadius: '15px', backgroundColor: '#f8f9fa' }}>
+                        <div className="card-body">
+                            <h2 className="text-center mb-4">Iniciar sesión</h2>
+                            <form onSubmit={handleSubmit} method="POST">
+                                <div className="form-group mb-3">
+                                    <label htmlFor="email">Email:</label>
+                                    <input
+                                        type="email"
+                                        id="email"
+                                        className="form-control"
+                                        placeholder="Ingresa tu email"
+                                        name="email"
+                                        required
+                                    />
+                                </div>
+                                <div className="form-group mb-3">
+                                    <label htmlFor="password">Contraseña:</label>
+                                    <input
+                                        type="password"
+                                        id="password"
+                                        className="form-control"
+                                        placeholder="Ingresa tu contraseña"
+                                        name="password"
+                                        required
+                                    />
+                                </div>
 
-                    <div className="divBotones In">
-                        <button type="submit" className="botonLog" disabled={isLoading}>
-                            {isLoading ? "Cargando..." : "LOGIN"}
-                        </button>
+                                <div className="text-center mb-3">
+                                    <button type="submit" className="btn btn-primary" disabled={isLoading}>
+                                        {isLoading ? "Cargando..." : "Iniciar sesión"}
+                                    </button>
+                                </div>
+                            </form>
+
+                            {error && <div className="alert alert-danger mt-3">{error}</div>}
+                        </div>
                     </div>
                 </div>
-            </form>
-
-            {error && <p>{error}</p>}
+            </div>
         </div>
     );
 };

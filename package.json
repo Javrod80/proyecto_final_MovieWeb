@@ -3,6 +3,7 @@
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11"
   },
   "dependencies": {
-    "bcryptjs": "^3.0.0"
+    "bcryptjs": "^3.0.0",
+    "bootstrap": "^5.3.3"
   }
 }

@@ -1,3 +1,4 @@
+// Proveedor del contexto de busqueda
 import React, { createContext, useState, useContext } from "react";
 
 const SearchContext = createContext();

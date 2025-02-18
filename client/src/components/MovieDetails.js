@@ -1,3 +1,5 @@
+//Componente para visualizar los detalles de una pelicula
+
 import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useAuth } from "../providers/AuthContext";
@@ -5,15 +7,19 @@ import { toast } from "react-toastify";
 import useFetch from "../hook/useFetch";
 
 const MovieDetails = () => {
+    // Obtener el imdbID de la URL
     const { imdbID } = useParams();
     const { isAuthenticated, userId } = useAuth();
+    //useFetch para la solicitud
     const { isLoading, error, data: movie, fetchData } = useFetch();
+    //useFetch para agregar a favoritos
     const { fetchData: addToFavoritesFetch, error: addToFavoritesError } = useFetch(); 
 
     useEffect(() => {
         fetchData(`movies/${imdbID}`);
     }, [imdbID, fetchData]);
 
+    // Función para agregar a favoritos
     const addToFavorites = async () => {
         if (!isAuthenticated) {
             toast.error("Debes estar logueado para agregar a favoritos");
@@ -24,7 +30,7 @@ const MovieDetails = () => {
             toast.error("Error: No se pudo obtener el ID del usuario");
             return;
         }
-
+        // Crear el objeto con los datos de la película
         const movieData = {
             userId,
             imdbID: movie.imdbID,
@@ -43,7 +49,7 @@ const MovieDetails = () => {
             Country: movie.Country,
             Awards: movie.Awards,
         };
-
+        // Agregar a favoritos
         try {
             await addToFavoritesFetch("favorites/add-favorite", "POST", movieData);
             if (!addToFavoritesError) {
@@ -55,40 +61,54 @@ const MovieDetails = () => {
             toast.error(err.message || "Ocurrió un error al agregar a favoritos");
         }
     };
-
+    // Renderizar el componente
     return (
-        <div className="movie-details-container">
-            <h1>Detalles de la Película</h1>
-            {error && <p>{error}</p>}
+        <div className="container mt-3">
+            <h1 className="text-center mb-4 ">Detalles de la Película</h1>
+            {error && <div className="alert alert-danger">{error}</div>}
             {isLoading ? (
-                <p>Cargando detalles...</p>
+                <div className="text-center">Cargando detalles...</div>
             ) : movie ? (
-                <div className="movie-card">
-                    <h2>{movie.Title}</h2>
-                    <img src={movie.Poster} alt={movie.Title} />
-                    <div className="movie-details-group">
-                        {[
-                            { label: "Sinopsis", value: movie.Plot },
-                            { label: "Año", value: movie.Year },
-                            { label: "Clasificación", value: movie.Rated },
-                            { label: "Fecha de estreno", value: movie.Released },
-                            { label: "Duración", value: movie.Runtime },
-                            { label: "Género", value: movie.Genre },
-                            { label: "Director", value: movie.Director },
-                            { label: "Actores", value: movie.Actors },
-                            { label: "Idioma", value: movie.Language },
-                            { label: "País", value: movie.Country },
-                            { label: "Premios", value: movie.Awards },
-                        ].map(({ label, value }) => (
-                            <div className="movie-detail-card" key={label}>
-                                <h3>{label}</h3>
-                                <p><strong>{value}</strong></p>
+                <div className="card">
+                    <div className="row g-0">
+                        <div className="col-md-4">
+                            <img src={movie.Poster} alt={movie.Title} className="img-fluid rounded-start" />
+                        </div>
+                        <div className="col-md-8">
+                            <div className="card-body">
+                                <h2 className="card-title">{movie.Title}</h2>
+                                <div className="mb-3">
+                                    <strong>Sinopsis:</strong>
+                                    <p>{movie.Plot}</p>
+                                </div>
+                                <div className="row">
+                                    {[
+                                        { label: "Año", value: movie.Year },
+                                        { label: "Clasificación", value: movie.Rated },
+                                        { label: "Fecha de estreno", value: movie.Released },
+                                        { label: "Duración", value: movie.Runtime },
+                                        { label: "Género", value: movie.Genre },
+                                        { label: "Director", value: movie.Director },
+                                        { label: "Actores", value: movie.Actors },
+                                        { label: "Idioma", value: movie.Language },
+                                        { label: "País", value: movie.Country },
+                                        { label: "Premios", value: movie.Awards },
+                                    ].map(({ label, value }) => (
+                                        <div className="col-12 col-md-6 mb-2" key={label}>
+                                            <strong>{label}:</strong>
+                                            <p>{value}</p>
+                                        </div>
+                                    ))}
+                                </div>
+                                <button
+                                    className="btn btn-outline-danger"
+                                    onClick={addToFavorites}
+                                >
+                                    ❤️ Agregar a Favoritos
+                                </button>
                             </div>
-                        ))}
+                        </div>
                     </div>
-                    <button className="favorite-button" onClick={addToFavorites}>
-                        ❤️ Agregar a Favoritos
-                    </button>
                 </div>
             ) : null}
         </div>

@@ -1,5 +1,5 @@
-// Realizado por Pilar el día 18/12. Componente de Header.
 import React from "react";
+import '../styles/Header.css'; 
 
 export default function Header() {
     return (

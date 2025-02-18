@@ -1,3 +1,4 @@
+// Formulario para cambiar la contraseña
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../providers/AuthContext';
 import { toast } from 'react-toastify';
@@ -17,13 +18,13 @@ const ChangePassword = () => {
             toast.error('La contraseña no puede estar vacía.');
             return;
         }
-
+        // Verificar si hay un token en el almacenamiento local
         const token = localStorage.getItem('token');
         if (!token) {
             toast.error('Token no disponible. Por favor, inicie sesión nuevamente.');
             return;
         }
-
+        // Llamar a la API para cambiar la contraseña
         await fetchData(
             `users/update-user/${userId}`,
             'PUT',
@@ -31,6 +32,7 @@ const ChangePassword = () => {
             token
         );
     };
+    // Manejar la actualización de la contraseña
 
     useEffect(() => {
         if (data) {
@@ -41,29 +43,35 @@ const ChangePassword = () => {
             toast.error('Error al actualizar la contraseña.');
         }
     }, [data, error]);
-
+    // Renderizar el formulario
     return (
-        <div className="change-password">
-            <button onClick={() => setShowForm(!showForm)}>
-                {showForm ? 'Cancelar' : 'Cambiar Contraseña'}
+        <div className="container mt-3">
+            <button
+                className="btn btn-primary btn-sm"  // Botón más pequeño
+                onClick={() => setShowForm(!showForm)}
+            >
+                {showForm ? "Cancelar" : "Cambiar Contraseña"}
             </button>
 
             {showForm && (
-                <form onSubmit={handleChangePassword}>
-                    <label>Nueva Contraseña:</label>
-                    <input
-                        type="password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        required
-                    />
-                    <button type="submit" disabled={isLoading}>
-                        {isLoading ? 'Cargando...' : 'Actualizar'}
+                <form className="mt-2 p-3 border rounded shadow-sm" onSubmit={handleChangePassword}>
+                    <div className="mb-2">
+                        <label className="form-label fs-6">Nueva Contraseña:</label>
+                        <input
+                            type="password"
+                            className="form-control form-control-sm"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            required
+                        />
+                    </div>
+                    <button type="submit" className="btn btn-success btn-sm" disabled={isLoading}>
+                        {isLoading ? "Cargando..." : "Actualizar"}
                     </button>
                 </form>
             )}
 
-            {error && <p style={{ color: 'red' }}>{error}</p>} {/* Mostrar mensaje de error si hay alguno */}
+            {error && <div className="alert alert-danger mt-2" style={{ fontSize: '0.9rem' }}>{error}</div>}
         </div>
     );
 };

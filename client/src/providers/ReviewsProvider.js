@@ -1,3 +1,4 @@
+// Proveedor del contexto reseñas
 import React, { createContext, useContext, useState, useCallback } from 'react';
 import useFetch from '../hook/useFetch';
 
@@ -39,13 +40,13 @@ const ReviewsProvider = ({ children }) => {
         }
         return null;
     }, [fetchData]);
-
+    // Función para actualizar una reseña
     const updateReview = useCallback(async (reviewId, newReviewData) => {
         const token = localStorage.getItem('token');
         const response = await fetchData(`reviews/update-review/${reviewId}`, 'PUT', newReviewData, token);
         return response;
     }, [fetchData]);
-
+    // Función para eliminar una reseña
     const deleteReview = useCallback(async (reviewId, userId, movieId) => {
         const body = { userId, movieId };
         const token = localStorage.getItem('token');
