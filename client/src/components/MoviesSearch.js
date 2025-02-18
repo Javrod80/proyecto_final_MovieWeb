@@ -11,12 +11,14 @@
  * )
  */
 
-import React, {  useEffect } from "react";
+import React, {  useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useSearch } from "../providers/SearchProvider";
 import { useAuth } from "../providers/AuthContext";
 import { useWatched } from "../providers/WatchedProvider";
 import useFetch from "../hook/useFetch";
+import usuario100 from '../images/usuario100.png';
+
 
 const MoviesSearch = () => {
     /**
@@ -41,6 +43,7 @@ const MoviesSearch = () => {
       * @type {Object}
       */
     const { isLoading, error, data, fetchData } = useFetch();
+    const [isCardExpanded, setIsCardExpanded] = useState(true);
 
     /**
       * Efecto que obtiene el historial de películas vistas cuando el usuario está autenticado.
@@ -157,19 +160,38 @@ const MoviesSearch = () => {
 
             {/* Sección de bienvenida y logout */}
             {isAuthenticated && (
-                <div className="container mt-5">
+                <div className="position-fixed" style={{
+                    top: '120px', 
+                    right: '10px', 
+                    zIndex: 10
+                }}>
                     <div className="card p-4" style={{
                         maxWidth: '400px',
                         width: '100%',
-                        position: 'absolute',
-                        top: '100px',
-                        right: '10px', 
-                        textAlign: 'center' 
+                        transition: 'all 0.3s ease',
+                        height: isCardExpanded ? 'auto' : '80px', 
                     }}>
-                        <div className="card-body">
-                            <h3>Bienvenido</h3>
-                            <button className="btn btn-secondary" onClick={() => navigate("/profile")}>Ver Perfil</button>
-                            <button onClick={handleLogout} className="btn btn-danger ms-2">Cerrar Sesión</button>
+                        <div className="card-body text-center">
+                            <h3>{isCardExpanded ? "Bienvenido" : "Ver Perfil"}</h3>
+                            {isCardExpanded && (
+                                <>
+                                    <img src={usuario100} alt="Foto de Perfil" className="img-fluid rounded-circle mb-3" style={{ width: '100px', height: '100px' }} />
+                                    <div>
+                                        <button className="btn btn-secondary mb-2 w-100" onClick={() => navigate("/profile")}>Ver Perfil</button>
+                                        <button onClick={handleLogout} className="btn btn-danger w-100">Cerrar Sesión</button>
+                                    </div>
+                                </>
+                            )}
+                            <button
+                                onClick={() => setIsCardExpanded(!isCardExpanded)}
+                                className="btn btn-link mt-3 w-100 text-decoration-none"
+                                style={{
+                                    color: '#000',
+                                    fontWeight: 'bold'
+                                }}
+                            >
+                                {isCardExpanded ? "Ver menos" : "Ver más"}
+                            </button>
                         </div>
                     </div>
                 </div>
