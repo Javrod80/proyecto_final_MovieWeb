@@ -1,12 +1,28 @@
-// Componente para visualizar las peliculas vistas
+/**
+ * Componente para visualizar las películas vistas.
+ * 
+ * Este componente permite a los usuarios ver las películas que han marcado como vistas. 
+ * Muestra una lista de películas con sus posters y permite eliminar el historial de vistas.
+ * 
+ * @component
+ * @example
+ * return (
+ *   <MovieWatched />
+ * )
+ */
 import React, { useEffect } from "react";
 import { useWatched } from "../providers/WatchedProvider";
 
 const MovieWatched = () => {
-    // Obtiene el contexto de peliculas vistas
+    /**
+    * Obtiene el contexto de películas vistas.
+    * @type {Object}
+    */
     const { watched, isLoading, fetchWatched, deleteWatchHistoryUser } = useWatched();
 
-
+    /**
+        * Efecto que obtiene las películas vistas cuando el componente se monta.
+        */
     useEffect(() => {
         fetchWatched();
     }, [fetchWatched]);

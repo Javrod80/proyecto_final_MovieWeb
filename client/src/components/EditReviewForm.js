@@ -1,4 +1,12 @@
-// Formulario para editar las reseñas
+/**
+ * Formulario para editar las reseñas.
+ * 
+ * @component
+ * @param {Object} props - Propiedades del componente.
+ * @param {Object} props.review - Objeto de la reseña a editar.
+ * @param {Function} props.onCancel - Función para cancelar la edición.
+ * @param {Function} props.onSubmit - Función para enviar la reseña editada.
+ */
 
 import React, { useState } from 'react';
 
@@ -6,11 +14,18 @@ import React, { useState } from 'react';
 
 const EditReviewForm = ({ review, onCancel,onSubmit }) => {
 
-    // Estados para los campos del formulario
+    /**
+      * Estado para la nueva calificación.
+      * @type {[number, Function]}
+      */
     const [newRating, setNewRating] = useState(review.rating);
     const [newReview, setNewReview] = useState(review.review);
 
-    // Función para manejar el envío del formulario
+    /**
+   * Maneja el envío del formulario.
+   * 
+   * @param {React.FormEvent} e - Evento del formulario.
+   */
     const handleSubmit = async (e) => {
         e.preventDefault();
         const newReviewData = { review: newReview, rating: newRating };

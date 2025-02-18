@@ -1,10 +1,19 @@
-//Componente para visualizar los detalles de una pelicula
+/**
+ * Componente MovieDetails
+ * 
+ * Muestra los detalles de una película obtenida por su `imdbID` desde la API.
+ * Permite a los usuarios autenticados agregar la película a su lista de favoritos.
+ *
+ * @component
+ * @returns {JSX.Element} Renderiza los detalles de la película y un botón para agregarla a favoritos.
+ */
 
 import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useAuth } from "../providers/AuthContext";
 import { toast } from "react-toastify";
 import useFetch from "../hook/useFetch";
+
 
 const MovieDetails = () => {
     // Obtener el imdbID de la URL
@@ -15,11 +24,16 @@ const MovieDetails = () => {
     //useFetch para agregar a favoritos
     const { fetchData: addToFavoritesFetch, error: addToFavoritesError } = useFetch(); 
 
+    /**
+    * Llama a la API para obtener los detalles de la película cuando cambia el `imdbID`.
+    */
     useEffect(() => {
         fetchData(`movies/${imdbID}`);
     }, [imdbID, fetchData]);
 
-    // Función para agregar a favoritos
+    /**
+    * Agrega la película a la lista de favoritos del usuario autenticado.
+    */
     const addToFavorites = async () => {
         if (!isAuthenticated) {
             toast.error("Debes estar logueado para agregar a favoritos");

@@ -1,11 +1,27 @@
-// Formulario para registrar un nuevo usuario
+/**
+ * Componente para el registro de un nuevo usuario.
+ * Este formulario permite a un usuario registrar su cuenta proporcionando su nombre, apellido, email y contraseña.
+ *
+ * @component
+ * @example
+ * return (
+ *   <SignupForm />
+ * );
+ */
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import useFetch from "../hook/useFetch";
 
 const SignupForm = () => {
-    // Datos del formulario
+    /**
+    * Datos del formulario que incluyen nombre, apellido, email y contraseña.
+    * @type {Object}
+    * @property {string} user_name - Nombre del usuario.
+    * @property {string} user_lastnames - Apellido del usuario.
+    * @property {string} email - Correo electrónico del usuario.
+    * @property {string} password - Contraseña del usuario.
+    */
     const [formData, setFormData] = useState({
         user_name: "",
         user_lastnames: "",
@@ -15,20 +31,34 @@ const SignupForm = () => {
 
     const { isLoading, error, data, fetchData } = useFetch();
     const navigate = useNavigate();
-    // Manejar los cambios en el formulario
+    /**
+     * Maneja los cambios en los campos del formulario.
+     * Actualiza el estado `formData` con los nuevos valores.
+     * 
+     * @param {Object} e - El evento del formulario.
+     * @param {string} e.target.name - Nombre del campo que cambió.
+     * @param {string} e.target.value - Valor del campo que cambió.
+     */
     const handleChange = (e) => {
         setFormData({
             ...formData,
             [e.target.name]: e.target.value
         });
     };
-    // Enviar el formulario
+    /**
+    * Maneja el envío del formulario.
+    * Realiza una petición POST al endpoint de registro de usuario y muestra un mensaje de éxito o error.
+    * 
+    * @param {Object} e - El evento de envío del formulario.
+    */
     const handleSubmit = async (e) => {
         e.preventDefault();
         await fetchData("users/signup", "POST", formData);
     };
-
-    // Manejar los cambios en el formulario
+    /**
+       * Efecto secundario para manejar los datos y errores de la respuesta de la API.
+       * Si la respuesta es exitosa, muestra un mensaje de éxito y redirige al usuario a la página de login.
+       */
     useEffect(() => {
         if (error) {
             toast.error(error);
@@ -40,7 +70,13 @@ const SignupForm = () => {
             setTimeout(() => navigate("/login"), 2000);
         }
     }, [data, error, navigate]);
-    // Renderizar el formulario
+    /**
+    * Renderiza el formulario de registro.
+    * Muestra un formulario con campos para nombre, apellido, email y contraseña.
+    * También maneja el estado de carga y los mensajes de error.
+    *
+    * @returns {JSX.Element} Formulario de registro de usuario.
+    */
     return (
         <div className="container mt-12"> 
             <div className="row justify-content-center">

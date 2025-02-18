@@ -1,14 +1,23 @@
-// Componente donde se renderiza las pelicualas favoritas
+/**
+ * Componente que muestra las películas favoritas del usuario.
+ * Utiliza el contexto `FavoritesProvider` para obtener y gestionar la lista de películas favoritas.
+ */
 
 import React, { useEffect } from "react";
 import { useFavorites } from "../providers/FavoritesProvider";
 import Reviews from "./Reviews";
 
+/**
+ * Componente para mostrar la lista de películas favoritas del usuario.
+ * @returns {JSX.Element} El componente de películas favoritas.
+ */
 const Favorites = () => {
     // Traemos las peliculas favoritas
     const { favorites, isLoading, fetchFavorites,deleteFavorite } = useFavorites();
   
-
+    /**
+      * Efecto que se ejecuta al montar el componente para obtener las películas favoritas.
+      */
    
     useEffect(() => {
         fetchFavorites();
@@ -43,6 +52,7 @@ const Favorites = () => {
                                         Eliminar
                                     </button>
                                 </div>
+                                {/* Componente para manejar reseñas de la película */}
                                 <Reviews movieId={movie.imdbID} />
                             </div>
                         </div>

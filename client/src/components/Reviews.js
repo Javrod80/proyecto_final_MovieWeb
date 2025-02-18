@@ -1,4 +1,18 @@
-// Componente para visualizar las reseñas
+/**
+ * Componente para visualizar, agregar, editar y eliminar reseñas de una película.
+ * 
+ * Este componente muestra una lista de reseñas de una película, permitiendo al usuario agregar nuevas reseñas, 
+ * editar las reseñas que ha hecho previamente y eliminar sus reseñas. También muestra las reseñas de otros usuarios 
+ * y su puntuación en estrellas.
+ * 
+ * @component
+ * @param {Object} props - Propiedades del componente.
+ * @param {string} props.movieId - El ID de la película para la cual se gestionan las reseñas.
+ * @example
+ * return (
+ *   <Reviews movieId="12345" />
+ * )
+ */
 import React, { useState, useEffect } from "react";
 import { useReviews } from "../providers/ReviewsProvider";
 import { useAuth } from "../providers/AuthContext";
@@ -6,13 +20,31 @@ import EditReviewForm from "./EditReviewForm";
 import { toast } from "react-toastify";
 
 const Reviews = ({ movieId }) => {
-    // Acceder a las funciones y datos del contexto
+    /**
+     * Accede a las funciones y datos del contexto de reseñas.
+     * @type {Object}
+     */
     const { reviews, fetchReviews, addReview, updateReview, deleteReview, isLoading, error } = useReviews();
+    /**
+   * Estado para el texto de la reseña.
+   * @type {string}
+   */
     const [reviewText, setReviewText] = useState("");
+    /**
+    * Accede al ID del usuario desde el contexto de autenticación.
+    * @type {string}
+    */
     const { userId } = useAuth();
-    // Estado para la puntuación
+    /**
+    * Estado para la puntuación de la reseña.
+    * @type {number}
+    */
     const [rating, setRating] = useState(5);
-    // Estado para editar una reseña
+
+    /**
+     * Estado para controlar la reseña que se está editando.
+     * @type {Object|null}
+     */
     const [editingReview, setEditingReview] = useState(null);
 
     useEffect(() => {
@@ -21,7 +53,12 @@ const Reviews = ({ movieId }) => {
         }
     }, [movieId, fetchReviews]);
 
-    // Función para agregar una reseña
+    /**
+    * Maneja el envío de una nueva reseña.
+    * 
+    * @param {Object} event - El evento de envío del formulario.
+    * @returns {void}
+    */
     const handleReviewSubmit = async (event) => {
         event.preventDefault();
 
@@ -37,7 +74,13 @@ const Reviews = ({ movieId }) => {
         fetchReviews(movieId)
         
     };
-    // Función para editar una reseña
+    /**
+     * Maneja la edición de una reseña existente.
+     * 
+     * @param {string} reviewId - El ID de la reseña a editar.
+     * @param {Object} newReviewData - Los nuevos datos de la reseña.
+     * @returns {void}
+     */
     const handleEditReview = async (reviewId, newReviewData) => {
         const response = await updateReview(reviewId, newReviewData);
         if (response) {
@@ -45,7 +88,13 @@ const Reviews = ({ movieId }) => {
             setEditingReview(null);
         }
     };
-    // Función para eliminar una reseña
+
+    /**
+     * Maneja la eliminación de una reseña.
+     * 
+     * @param {string} reviewId - El ID de la reseña a eliminar.
+     * @returns {void}
+     */
     const handleDeleteReview = async (reviewId) => {
         const response = await deleteReview(reviewId, userId, movieId);
         if (response) {
@@ -53,7 +102,12 @@ const Reviews = ({ movieId }) => {
         }
     };
 
-    // Función para renderizar las estrellas
+    /**
+      * Renderiza las estrellas en función de la puntuación.
+      * 
+      * @param {number} rating - La puntuación de la reseña.
+      * @returns {string} Una cadena con las estrellas correspondientes.
+      */
     const renderStars = (rating) => {
         return [...Array(5)].map((_, i) => (i < rating ? '★' : '☆')).join('');
     };

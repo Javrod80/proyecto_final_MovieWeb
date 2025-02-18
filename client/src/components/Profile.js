@@ -1,4 +1,16 @@
-// Componente para el perfil del usuario
+/**
+ * Componente para mostrar el perfil del usuario.
+ * 
+ * Este componente permite a los usuarios ver su perfil, incluyendo enlaces a sus películas favoritas y vistas,
+ * cambiar su contraseña y eliminar su cuenta. Los usuarios pueden acceder a sus favoritos y películas vistas 
+ * a través de botones de navegación, y también tienen la opción de cambiar su contraseña o eliminar su cuenta.
+ * 
+ * @component
+ * @example
+ * return (
+ *   <Profile />
+ * )
+ */
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import peliculasImage from '../images/peliculas96.png';
@@ -7,14 +19,26 @@ import DeleteAccount from './DeleteAccount';
 
 
 const Profile = () => {
+    /**
+     * Hook de navegación para cambiar de página.
+     * @type {Function}
+     */
     const navigate = useNavigate();
 
+    /**
+     * Función para navegar a la página de favoritos.
+     * @returns {void}
+     */
     
     const goToFavorites = () => {
-        navigate('/favorites'); // Navegar a la página de favoritos
+        navigate('/favorites'); 
     };
+    /**
+    * Función para navegar a la página de vistas.
+    * @returns {void}
+    */
 const goToWatched = () => {
-    navigate('/watched'); // Navegar a la página de vistas
+    navigate('/watched'); 
 };
     // Renderizar el perfil del usuario
     return (

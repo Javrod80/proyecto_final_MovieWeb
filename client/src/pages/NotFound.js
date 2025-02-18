@@ -1,4 +1,15 @@
-// Página no encontrada
+/**
+ * Componente de la página de error 404.
+ * 
+ * Este componente se muestra cuando el usuario intenta acceder a una página que no existe en la aplicación.
+ * Muestra un mensaje de error y un botón para regresar a la página de inicio.
+ * 
+ * @component
+ * @example
+ * return <NotFound />;
+ * 
+ * @returns {JSX.Element} Renderiza la página de error 404 con un mensaje de error y un botón de retorno al inicio.
+ */
 
 import React from "react";
 

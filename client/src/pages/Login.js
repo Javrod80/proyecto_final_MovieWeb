@@ -1,4 +1,15 @@
-// Página de inicio de sesión
+/**
+ * Componente de la página de inicio de sesión.
+ * 
+ * Permite a los usuarios iniciar sesión en la aplicación. Solicita un correo electrónico y una contraseña, 
+ * y si las credenciales son correctas, guarda un token en el almacenamiento local y redirige al usuario a la página de búsqueda.
+ * 
+ * @component
+ * @example
+ * return <Login />;
+ * 
+ * @returns {JSX.Element} Renderiza la interfaz de inicio de sesión con campos para ingresar email y contraseña.
+ */
 
 import React, { useEffect , useState} from "react";
 import { useNavigate } from "react-router-dom";
@@ -6,6 +17,13 @@ import { useAuth } from "../providers/AuthContext";
 import { toast } from "react-toastify";
 import useFetch from "../hook/useFetch";
 
+/**
+    * Función que maneja el envío del formulario de inicio de sesión.
+    * Realiza una solicitud para autenticar al usuario con las credenciales proporcionadas.
+    * 
+    * @param {React.FormEvent} e - El evento de envío del formulario.
+    * @returns {void}
+    */
 const Login = () => {
     const { login } = useAuth();
     const navigate = useNavigate();

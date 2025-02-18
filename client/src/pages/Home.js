@@ -1,4 +1,16 @@
-// Página de inicio
+/**
+ * Componente de la página de inicio de la aplicación Movie Finder.
+ * 
+ * Muestra un mensaje de bienvenida, una breve descripción del propósito de la aplicación
+ * y dos botones para redirigir al usuario a las páginas de inicio de sesión o registro.
+ * 
+ * @component
+ * @example
+ * return <Home />;
+ * 
+ * @returns {JSX.Element} Renderiza la interfaz de la página de inicio con dos botones
+ * para iniciar sesión o registrarse.
+ */
 
 import React from "react";
 import { useNavigate } from "react-router-dom"; 
@@ -8,10 +20,21 @@ const Home = () => {
     const navigate = useNavigate(); 
 
 
-// FunciónES para navegar a la página de inicio Y a la de registro
+    /**
+        * Función para navegar a la página de inicio de sesión.
+        * Redirige al usuario a la ruta '/login'.
+        * 
+        * @returns {void}
+        */
     const gotoLogin = () => {
         navigate('/login'); 
     };
+    /**
+   * Función para navegar a la página de registro.
+   * Redirige al usuario a la ruta '/register'.
+   * 
+   * @returns {void}
+   */
     const gotoRegister = () => {
         navigate('/register'); 
     }

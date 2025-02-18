@@ -1,16 +1,28 @@
-// Formulario para cambiar la contraseña
+/**
+ * Formulario para cambiar la contraseña del usuario.
+ * Utiliza el contexto de autenticación para obtener el ID del usuario y un hook personalizado para realizar la petición a la API.
+ */
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../providers/AuthContext';
 import { toast } from 'react-toastify';
 import useFetch from '../hook/useFetch';
 
+
+/**
+ * Componente para cambiar la contraseña del usuario autenticado.
+ * @returns {JSX.Element} El formulario para actualizar la contraseña.
+ */
 const ChangePassword = () => {
-    const { userId } = useAuth();
-    const [password, setPassword] = useState('');
-    const [showForm, setShowForm] = useState(false);
+    const { userId } = useAuth();// Obtiene el ID del usuario desde el contexto de autenticación
+    const [password, setPassword] = useState(''); // Estado para almacenar la nueva contraseña
+    const [showForm, setShowForm] = useState(false); // Estado para controlar la visibilidad del formulario
 
-    const { isLoading, error, data, fetchData } = useFetch();
+    const { isLoading, error, data, fetchData } = useFetch(); // Hook personalizado para manejar la petición a la API
 
+    /**
+   * Maneja el evento de cambio de contraseña.
+   * @param {React.FormEvent} e - Evento del formulario.
+   */
     const handleChangePassword = async (e) => {
         e.preventDefault();
 
@@ -32,7 +44,9 @@ const ChangePassword = () => {
             token
         );
     };
-    // Manejar la actualización de la contraseña
+    /**
+    * Efecto que maneja la respuesta de la API tras la actualización de la contraseña.
+    */
 
     useEffect(() => {
         if (data) {
@@ -46,8 +60,9 @@ const ChangePassword = () => {
     // Renderizar el formulario
     return (
         <div className="container mt-3">
+            {/* Botón para mostrar u ocultar el formulario */}
             <button
-                className="btn btn-primary btn-sm"  // Botón más pequeño
+                className="btn btn-primary btn-sm"  
                 onClick={() => setShowForm(!showForm)}
             >
                 {showForm ? "Cancelar" : "Cambiar Contraseña"}

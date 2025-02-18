@@ -1,4 +1,15 @@
-// Componente para realizar la busqueda de pelúculas
+/**
+ * Componente para realizar la búsqueda de películas.
+ * 
+ * Permite a los usuarios buscar películas por título y ver detalles de cada película. 
+ * También permite marcar películas como vistas si el usuario ha iniciado sesión.
+ * 
+ * @component
+ * @example
+ * return (
+ *   <MoviesSearch />
+ * )
+ */
 
 import React, {  useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
@@ -8,25 +19,41 @@ import { useWatched } from "../providers/WatchedProvider";
 import useFetch from "../hook/useFetch";
 
 const MoviesSearch = () => {
-    // Obtiene el historial de filmer vistas
+    /**
+     * Obtiene el historial de películas vistas del contexto de búsqueda.
+     * @type {Object}
+     */
     const { movies, setMovies, title, setTitle } = useSearch();
-    // Obtiene el contexto de autenticación
+    /**
+   * Obtiene el contexto de autenticación.
+   * @type {Object}
+   */
     const { isAuthenticated, logout } = useAuth();
-    // Obtiene el contexto de peliculas vistas
+    /**
+      * Obtiene el contexto de películas vistas.
+      * @type {Object}
+      */
     const { markAsWatched, watched, fetchWatched } = useWatched();
     const navigate = useNavigate();
 
-    // useFetch
+    /**
+      * Hook personalizado para realizar la búsqueda de películas desde la API.
+      * @type {Object}
+      */
     const { isLoading, error, data, fetchData } = useFetch();
 
-    // Obtener historial de películas vistas
+    /**
+      * Efecto que obtiene el historial de películas vistas cuando el usuario está autenticado.
+      */
     useEffect(() => {
         if (isAuthenticated) {
             fetchWatched();
         }
     }, [fetchWatched, isAuthenticated]);
 
-    // Actualizar movies cuando data cambie
+    /**
+      * Efecto que actualiza el estado de las películas cuando la respuesta de la búsqueda cambia.
+      */
     useEffect(() => {
         if (data?.Search) {
             setMovies(data.Search);
@@ -35,7 +62,10 @@ const MoviesSearch = () => {
         }
     }, [data, setMovies]);
 
-    // Buscar películas 
+    /**
+     * Realiza la búsqueda de películas por título.
+     * Llama al hook `fetchData` para obtener las películas de la API.
+     */
     const handleSearch = async () => {
         if (!title) return; 
 
@@ -43,12 +73,18 @@ const MoviesSearch = () => {
 
         setTitle("");
     };
-    // Función para manejar el cierre de sesión
+    /**
+      * Maneja el cierre de sesión, limpiando el estado de autenticación.
+      */
     const handleLogout = () => {
         logout();
         navigate("/");
     };
-    // Función para verificar si una película ha sido vista
+    /**
+    * Verifica si una película ya ha sido marcada como vista.
+    * @param {string} movieId - El identificador único de la película.
+    * @returns {boolean} `true` si la película ha sido vista, `false` si no.
+    */
     const isWatched = (movieId) => watched.some((movie) => movie.movie_id === movieId);
 
     // Renderizar el componente

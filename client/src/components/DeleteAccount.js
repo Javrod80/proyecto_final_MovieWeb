@@ -1,18 +1,30 @@
-// Formulario para eliminar la cuenta
+/**
+ * Componente para eliminar la cuenta de usuario.
+ * Muestra un botón para iniciar la eliminación y una confirmación antes de proceder.
+ */
 import React, { useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../providers/AuthContext";
 import { toast } from "react-toastify";
 import useFetch from "../hook/useFetch";
 
+/**
+ * Componente funcional para manejar la eliminación de la cuenta de usuario.
+ * @returns {JSX.Element} Formulario de eliminación de cuenta.
+ */
 const DeleteAccount = () => {
-    // Obtener el userId
+    /** @type {string} userId - ID del usuario autenticado. */
     const { userId } = useAuth();
     const navigate = useNavigate();
     const { fetchData } = useFetch();
     const [showConfirmation, setShowConfirmation] = useState(false);
 
-    // Manejar la eliminación de la cuenta
+    /**
+      * Maneja la eliminación de la cuenta del usuario.
+      * Realiza una petición a la API para eliminar la cuenta y redirige al login si tiene éxito.
+      * @async
+      * @function
+      */
     const handleDeleteUser = async () => {
         try {
             if (!userId) {

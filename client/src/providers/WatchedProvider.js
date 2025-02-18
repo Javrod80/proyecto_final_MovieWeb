@@ -1,12 +1,59 @@
-// Proveedor del contexto de historial de pelúculas vistas
+/**
+ * Proveedor del contexto de historial de películas vistas para gestionar el historial de películas
+ * que un usuario ha visto en la aplicación.
+ * 
+ * Este proveedor permite acceder y gestionar el historial de películas vistas de los usuarios,
+ * así como marcar nuevas películas como vistas y eliminar películas del historial.
+ * 
+ * @component
+ * @example
+ * 
+ * <WatchedProvider>
+ *   <App />
+ * </WatchedProvider>
+ * 
+ * @param {Object} props - Props que se pasan al componente.
+ * @param {JSX.Element} props.children - Los componentes hijos que estarán envueltos por el proveedor de historial de vistas.
+ * 
+ * @returns {JSX.Element} El proveedor de contexto que envuelve los componentes hijos.
+ */
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { useAuth } from './AuthContext';
 import useFetch from '../hook/useFetch';
 
 const WatchedContext = createContext();
-
+/**
+ * Hook personalizado para acceder al contexto de historial de películas vistas.
+ * 
+ * Este hook proporciona acceso al historial de películas vistas y las funciones para gestionarlo,
+ * como marcar una película como vista y eliminarla del historial.
+ * 
+ * @returns {Object} El contexto de historial de películas vistas con el estado y las funciones necesarias.
+ * @property {Array} watched - El historial de películas vistas por el usuario.
+ * @property {Function} fetchWatched - Función para obtener el historial de películas vistas.
+ * @property {Function} markAsWatched - Función para marcar una película como vista.
+ * @property {Function} deleteWatchHistoryUser - Función para eliminar una película del historial de vistas.
+ * @property {boolean} isLoading - Estado de carga para indicar si se están obteniendo los datos del historial.
+ */
 export const useWatched = () => useContext(WatchedContext);
-
+/**
+ * Proveedor que maneja el estado del historial de películas vistas en la aplicación.
+ * 
+ * Este proveedor permite compartir el estado del historial de películas vistas en todo el árbol de componentes,
+ * así como las funciones para agregar o eliminar películas del historial de vistas.
+ * 
+ * @component
+ * @example
+ * 
+ * <WatchedProvider>
+ *   <App />
+ * </WatchedProvider>
+ * 
+ * @param {Object} props - Props que se pasan al componente.
+ * @param {JSX.Element} props.children - Los componentes hijos que estarán envueltos por el proveedor de historial de vistas.
+ * 
+ * @returns {JSX.Element} El proveedor de contexto de historial de películas vistas que envuelve los componentes hijos.
+ */
 const WatchedProvider = ({ children }) => {
     const [watched, setWatched] = useState([]);
     const { isLoading, error, data, fetchData } = useFetch();
