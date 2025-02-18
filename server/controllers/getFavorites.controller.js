@@ -2,6 +2,15 @@ import crudMongoDb from "../models/MongoModels/favorites.models.js";
 
 
 export default {
+    /**
+     * Obtiene los favoritos de un usuario de la base de datos.
+     * @async
+     * @function getFavorites
+     * @param {import("express").Request} req - Objeto de solicitud de Express, que contiene el `userId` en los parámetros de la consulta.
+     * @param {import("express").Response} res - Objeto de respuesta de Express, que enviará la respuesta con los favoritos del usuario o un mensaje de error.
+     * @returns {Promise<void>} Responde con la lista de favoritos del usuario si la operación tiene éxito, o un mensaje de error si algo falla.
+     * @throws {Error} Lanza un error si hay un problema al obtener los favoritos desde la base de datos.
+     */
     getFavorites: async (req, res) => {
         const { userId } = req.query;
         const userIdNumber = Number(userId);  // Convierte a número para evitar errores en la consulta en MongoDB

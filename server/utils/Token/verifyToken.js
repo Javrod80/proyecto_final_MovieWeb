@@ -1,6 +1,15 @@
 import tokenUtils from './tokenUtils.js';
 
 const verifyToken = (req, res, next) => {
+    /**
+ * Middleware para verificar la validez del token JWT en las solicitudes.
+ * 
+ * @param {Object} req - El objeto de solicitud de Express. Se agrega un token decodificado a `req.user` si el token es válido.
+ * @param {Object} res - El objeto de respuesta de Express. Se envía un código de estado 403 si el token no es válido o está ausente.
+ * @param {Function} next - La función de siguiente middleware que se ejecuta si el token es válido.
+ * @returns {void} No devuelve valor, solo modifica el objeto `req` y, si el token es válido, llama a `next()`.
+ * @throws {Error} Si no se proporciona un token o si el token es inválido, responde con un código de estado 403.
+ */
     const bearerHeader = req.headers['authorization'];
 
     if (typeof bearerHeader !== 'undefined') {

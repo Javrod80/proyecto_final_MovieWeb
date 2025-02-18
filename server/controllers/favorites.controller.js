@@ -4,6 +4,15 @@ import crudMongoDB from "../models/MongoModels/favorites.models.js";
 
 
 export default {
+    /**
+     * Agrega una película a los favoritos del usuario.
+     * @async
+     * @function addFavorites
+     * @param {import("express").Request} req - Objeto de solicitud de Express, que contiene el `userId` y los detalles de la película en el cuerpo de la solicitud.
+     * @param {import("express").Response} res - Objeto de respuesta de Express, que envía una respuesta de éxito o error.
+     * @returns {Promise<void>} Responde con un mensaje de éxito y el resultado de la operación, o un mensaje de error si algo falla.
+     * @throws {Error} Lanza un error si ocurre un problema al agregar la película a favoritos.
+     */
     addFavorites: async (req, res) => {
        // console.log("Cuerpo de la petición:", req.body); 
 

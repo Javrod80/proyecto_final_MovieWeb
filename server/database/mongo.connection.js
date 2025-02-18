@@ -8,6 +8,14 @@ const client = new MongoClient(url);
 
 
 export default {
+  /**
+ * Establece la conexión a la base de datos MongoDB.
+ * @async
+ * @function connectToMongo
+ * @returns {Promise<MongoClient>} Devuelve el cliente de MongoDB si la conexión se establece correctamente.
+ * @throws {Error} Lanza un error si no se puede conectar a la base de datos.
+ */
+
   connectToMongo: async () => {
     try {
       // Realizar un ping para verificar si la conexión está activa
@@ -20,7 +28,13 @@ export default {
       throw error; 
     }
   },
-
+  /**
+     * Cierra la conexión con la base de datos MongoDB.
+     * @async
+     * @function closeClient
+     * @returns {Promise<void>} Devuelve un mensaje de éxito si la conexión se cierra correctamente, o un mensaje si la conexión ya está cerrada.
+     * @throws {Error} Lanza un error si ocurre un problema al cerrar la conexión.
+     */
   closeClient: async () => {
     try {
       if (client.topology && client.topology.isConnected()) {

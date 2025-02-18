@@ -1,6 +1,14 @@
 import crudMongoDBReviews from "../models/MongoModels/favorites.models.js";
 
 export default {
+    /**
+     * Elimina una película de los favoritos de un usuario.
+     * @async
+     * @function deleteFavorites
+     * @param {import("express").Request} req - Objeto de solicitud de Express.
+     * @param {import("express").Response} res - Objeto de respuesta de Express.
+     * @returns {Promise<void>} Responde con un mensaje de éxito o un error.
+     */
 
     deleteFavorites: async (req, res) => {
         const { movieId } = req.params;
