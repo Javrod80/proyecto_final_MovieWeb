@@ -161,15 +161,16 @@ const MoviesSearch = () => {
             {/* Sección de bienvenida y logout */}
             {isAuthenticated && (
                 <div className="position-fixed" style={{
-                    top: '120px', 
-                    right: '10px', 
+                    top: '120px',
+                    right: '10px',
                     zIndex: 10
                 }}>
                     <div className="card p-4" style={{
                         maxWidth: '400px',
                         width: '100%',
                         transition: 'all 0.3s ease',
-                        height: isCardExpanded ? 'auto' : '80px', 
+                        overflow: '100px',
+                        height: isCardExpanded ? 'auto' : '150px',
                     }}>
                         <div className="card-body text-center">
                             <h3>{isCardExpanded ? "Bienvenido" : "Ver Perfil"}</h3>
@@ -182,13 +183,10 @@ const MoviesSearch = () => {
                                     </div>
                                 </>
                             )}
+                            {/* Botón para expandir/replegar */}
                             <button
                                 onClick={() => setIsCardExpanded(!isCardExpanded)}
-                                className="btn btn-link mt-3 w-100 text-decoration-none"
-                                style={{
-                                    color: '#000',
-                                    fontWeight: 'bold'
-                                }}
+                                className="btn btn-outline-secondary w-100 mt-3"
                             >
                                 {isCardExpanded ? "Ver menos" : "Ver más"}
                             </button>
@@ -198,6 +196,7 @@ const MoviesSearch = () => {
             )}
         </div>
     );
+
 };
 
 export default MoviesSearch;
