@@ -32,6 +32,8 @@ const ReviewsContext = createContext();
  * @property {boolean} isLoading - Estado de carga para saber si se están recuperando las reseñas.
  * @property {string} error - Error que puede ocurrir al realizar las operaciones de reseñas.
  */
+
+
 export const useReviews = () => useContext(ReviewsContext);
 /**
  * Proveedor que maneja el estado de las reseñas de películas en la aplicación.
@@ -51,6 +53,7 @@ export const useReviews = () => useContext(ReviewsContext);
  * 
  * @returns {JSX.Element} El proveedor de contexto de reseñas que envuelve los componentes hijos.
  */
+
 const ReviewsProvider = ({ children }) => {
     const [reviews, setReviews] = useState({});
     const { isLoading, error, fetchData } = useFetch();
