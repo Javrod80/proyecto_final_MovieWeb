@@ -41,6 +41,7 @@ const EditReviewForm = ({ review, onCancel,onSubmit }) => {
                     <div className="mb-3">
                         <label className="form-label fw-bold">Reseña:</label>
                         <textarea
+                        id="reviewText"
                             className="form-control form-control-lg text-center"
                             value={newReview}
                             onChange={(e) => setNewReview(e.target.value)}
