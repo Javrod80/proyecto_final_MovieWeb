@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: components/MovieDetails.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: components/MovieDetails.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * Componente MovieDetails
+ * 
+ * Muestra los detalles de una película obtenida por su `imdbID` desde la API.
+ * Permite a los usuarios autenticados agregar la película a su lista de favoritos.
+ *
+ * @component
+ * @returns {JSX.Element} Renderiza los detalles de la película y un botón para agregarla a favoritos.
+ */
+
+import React, { useEffect } from "react";
+import { useParams } from "react-router-dom";
+import { useAuth } from "../providers/AuthContext";
+import { toast } from "react-toastify";
+import useFetch from "../hook/useFetch";
+
+
+const MovieDetails = () => {
+    // Obtener el imdbID de la URL
+    const { imdbID } = useParams();
+    const { isAuthenticated, userId } = useAuth();
+    //useFetch para la solicitud
+    const { isLoading, error, data: movie, fetchData } = useFetch();
+    //useFetch para agregar a favoritos
+    const { fetchData: addToFavoritesFetch, error: addToFavoritesError } = useFetch(); 
+
+    /**
+    * Llama a la API para obtener los detalles de la película cuando cambia el `imdbID`.
+    */
+    useEffect(() => {
+        fetchData(`movies/${imdbID}`);
+    }, [imdbID, fetchData]);
+
+    /**
+    * Agrega la película a la lista de favoritos del usuario autenticado.
+    */
+    const addToFavorites = async () => {
+        if (!isAuthenticated) {
+            toast.error("Debes estar logueado para agregar a favoritos");
+            return;
+        }
+
+        if (!userId) {
+            toast.error("Error: No se pudo obtener el ID del usuario");
+            return;
+        }
+        // Crear el objeto con los datos de la película
+        const movieData = {
+            userId,
+            imdbID: movie.imdbID,
+            Title: movie.Title,
+            Poster: movie.Poster,
+            Plot: movie.Plot,
+            Year: movie.Year,
+            Rated: movie.Rated,
+            Released: movie.Released,
+            Runtime: movie.Runtime,
+            Genre: movie.Genre,
+            Director: movie.Director,
+            Writer: movie.Writer,
+            Actors: movie.Actors,
+            Language: movie.Language,
+            Country: movie.Country,
+            Awards: movie.Awards,
+        };
+        // Agregar a favoritos
+        try {
+            await addToFavoritesFetch("favorites/add-favorite", "POST", movieData);
+            if (!addToFavoritesError) {
+                toast.success("Película agregada a favoritos");
+            } else {
+                throw new Error(addToFavoritesError);
+            }
+        } catch (err) {
+            toast.error(err.message || "Ocurrió un error al agregar a favoritos");
+        }
+    };
+    // Renderizar el componente
+    return (
+        &lt;div className="container mt-3">
+            &lt;h1 className="text-center mb-4 ">Detalles de la Película&lt;/h1>
+            {error &amp;&amp; &lt;div className="alert alert-danger">{error}&lt;/div>}
+            {isLoading ? (
+                &lt;div className="text-center">Cargando detalles...&lt;/div>
+            ) : movie ? (
+                &lt;div className="card">
+                    &lt;div className="row g-0">
+                        &lt;div className="col-md-4">
+                            &lt;img src={movie.Poster} alt={movie.Title} className="img-fluid rounded-start" />
+                        &lt;/div>
+                        &lt;div className="col-md-8">
+                            &lt;div className="card-body">
+                                &lt;h2 className="card-title">{movie.Title}&lt;/h2>
+                                &lt;div className="mb-3">
+                                    &lt;strong>Sinopsis:&lt;/strong>
+                                    &lt;p>{movie.Plot}&lt;/p>
+                                &lt;/div>
+                                &lt;div className="row">
+                                    {[
+                                        { label: "Año", value: movie.Year },
+                                        { label: "Clasificación", value: movie.Rated },
+                                        { label: "Fecha de estreno", value: movie.Released },
+                                        { label: "Duración", value: movie.Runtime },
+                                        { label: "Género", value: movie.Genre },
+                                        { label: "Director", value: movie.Director },
+                                        { label: "Actores", value: movie.Actors },
+                                        { label: "Idioma", value: movie.Language },
+                                        { label: "País", value: movie.Country },
+                                        { label: "Premios", value: movie.Awards },
+                                    ].map(({ label, value }) => (
+                                        &lt;div className="col-12 col-md-6 mb-2" key={label}>
+                                            &lt;strong>{label}:&lt;/strong>
+                                            &lt;p>{value}&lt;/p>
+                                        &lt;/div>
+                                    ))}
+                                &lt;/div>
+                                &lt;button
+                                    className="btn btn-outline-danger"
+                                    onClick={addToFavorites}
+                                >
+                                    ❤️ Agregar a Favoritos
+                                &lt;/button>
+                            &lt;/div>
+                        &lt;/div>
+                    &lt;/div>
+                &lt;/div>
+            ) : null}
+        &lt;/div>
+    );
+};
+
+export default MovieDetails;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#AuthProvider">AuthProvider</a></li><li><a href="global.html#ChangePassword">ChangePassword</a></li><li><a href="global.html#DeleteAccount">DeleteAccount</a></li><li><a href="global.html#Favorites">Favorites</a></li><li><a href="global.html#FavoritesProvider">FavoritesProvider</a></li><li><a href="global.html#Login">Login</a></li><li><a href="global.html#ReviewsProvider">ReviewsProvider</a></li><li><a href="global.html#SearchProvider">SearchProvider</a></li><li><a href="global.html#WatchedProvider">WatchedProvider</a></li><li><a href="global.html#useAuth">useAuth</a></li><li><a href="global.html#useFavorites">useFavorites</a></li><li><a href="global.html#useReviews">useReviews</a></li><li><a href="global.html#useWatched">useWatched</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.4</a> on Mon Feb 24 2025 17:51:04 GMT+0100 (hora estándar de Europa central)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

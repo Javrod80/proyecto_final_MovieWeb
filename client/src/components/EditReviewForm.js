@@ -16,9 +16,15 @@ const EditReviewForm = ({ review, onCancel,onSubmit }) => {
 
     /**
       * Estado para la nueva calificación.
-      * @type {[number, Function]}
+      * @type {Array<number | Function>}
       */
     const [newRating, setNewRating] = useState(review.rating);
+
+    /** 
+     * @type {Array<string | Function>}
+     * 
+     */    
+     
     const [newReview, setNewReview] = useState(review.review);
 
     /**

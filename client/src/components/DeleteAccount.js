@@ -13,7 +13,9 @@ import useFetch from "../hook/useFetch";
  * @returns {JSX.Element} Formulario de eliminación de cuenta.
  */
 const DeleteAccount = () => {
-    /** @type {string} userId - ID del usuario autenticado. */
+    /** 
+     * @type {string}
+     */
     const { userId } = useAuth();
     const navigate = useNavigate();
     const { fetchData } = useFetch();
