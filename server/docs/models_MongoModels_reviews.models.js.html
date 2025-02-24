@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: models/MongoModels/reviews.models.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: models/MongoModels/reviews.models.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import { getDataFromCollection } from './genericMongo.models.js';
+import { insertIntoCollection } from './genericMongo.models.js';
+import { deleteFromCollection } from './genericMongo.models.js';
+import { updateInCollection } from './genericMongo.models.js';
+import { ObjectId } from 'bson';
+import dotenv from 'dotenv';
+
+dotenv.config();
+
+const collectionName = process.env.COLL_REV;
+
+const crudMongoDBReviews = {
+
+    /**
+  * Función específica para obtener reseñas de una película.
+  * @async
+  * @function getMovieReviews
+  * @param {string} movieId - El ID de la película.
+  * @returns {Promise&lt;Array>} Devuelve una promesa con las reseñas de la película.
+  */
+
+    // Función específica para obtener reseñas de una película
+    getMovieReviews: async (movieId) => {
+        return getDataFromCollection(collectionName, { movieId });
+    },
+
+    /**
+     * Función para agregar una reseña de película.
+     * @async
+     * @function addMovieReview
+     * @param {string} userId - El ID del usuario que realiza la reseña.
+     * @param {string} movieId - El ID de la película.
+     * @param {number} rating - La calificación de la película.
+     * @param {string} review - El texto de la reseña.
+     * @returns {Promise&lt;Object>} Devuelve una promesa con el resultado de la inserción de la reseña.
+     */
+    // Función para agregar una reseña de película
+    addMovieReview: async (userId, movieId, rating, review) => {
+        return insertIntoCollection(collectionName, { userId, movieId, rating, review });
+    },
+
+    /**
+    * Función para eliminar una reseña de una película.
+    * @async
+    * @function deleteMovieReview
+    * @param {string} reviewId - El ID de la reseña a eliminar.
+    * @param {string} userId - El ID del usuario que realizó la reseña.
+    * @returns {Promise&lt;Object|null>} Devuelve el resultado de la eliminación de la reseña o null si ocurrió un error.
+    */
+    // Función para eliminar una reseña de una película
+    deleteMovieReview: async (reviewId, userId) => {
+        try {
+            const objectId = new ObjectId(reviewId);
+            const result = await deleteFromCollection(collectionName, { _id: objectId, userId: userId });
+            return result;
+        } catch (error) {
+            console.error("Error al crear ObjectId:", error);
+            return null;
+        }
+        
+    },
+
+    /**
+         * Función para actualizar una reseña de película.
+         * @async
+         * @function updateMovieReview
+         * @param {string} reviewId - El ID de la reseña a actualizar.
+         * @param {Object} reviewData - Los nuevos datos de la reseña.
+         * @param {number} reviewData.rating - La nueva calificación de la película.
+         * @param {string} reviewData.review - El nuevo texto de la reseña.
+         * @returns {Promise&lt;Object|null>} Devuelve el resultado de la actualización o null si ocurrió un error.
+         * @throws {Error} Lanza un error si los datos son nulos.
+         */
+    // Función para actualizar una reseña de película
+    updateMovieReview: async (reviewId, { rating, review }) => {
+        if (rating === null || review === null) {
+            throw new Error("No se pueden actualizar con valores nulos");
+        }
+        try {
+            const objectId = new ObjectId(reviewId);
+            return await updateInCollection(collectionName, { _id: objectId }, { rating, review });
+        } catch (error) {
+            console.error("Error al crear ObjectId:", error);
+            return null;
+        }
+       
+    },
+
+    /**
+     * Función para obtener una reseña por su ID.
+     * @async
+     * @function getReviewById
+     * @param {string} id - El ID de la reseña.
+     * @returns {Promise&lt;Object|null>} Devuelve la reseña encontrada o null si ocurre un error.
+     */
+   
+    getReviewById: async (id) => {
+        try {
+            const objectId = new ObjectId(id);
+            return await getDataFromCollection(collectionName, { _id: objectId });
+        } catch (error) {
+            console.error("Error al crear ObjectId:", error);
+            return null;
+        }
+    }
+   
+};
+
+
+
+export default crudMongoDBReviews;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-router.html">router</a></li></ul><h3>Namespaces</h3><ul><li><a href="crudMySQL.html">crudMySQL</a></li><li><a href="usersModel.html">usersModel</a></li><li><a href="watchHistoryModel.html">watchHistoryModel</a></li></ul><h3>Global</h3><ul><li><a href="global.html#addMovieReview">addMovieReview</a></li><li><a href="global.html#addWatchHistory">addWatchHistory</a></li><li><a href="global.html#closeClient">closeClient</a></li><li><a href="global.html#connectToMongo">connectToMongo</a></li><li><a href="global.html#createData">createData</a></li><li><a href="global.html#createUser">createUser</a></li><li><a href="global.html#deleteData">deleteData</a></li><li><a href="global.html#deleteFavorite">deleteFavorite</a></li><li><a href="global.html#deleteFromCollection">deleteFromCollection</a></li><li><a href="global.html#deleteMovieReview">deleteMovieReview</a></li><li><a href="global.html#deleteUser">deleteUser</a></li><li><a href="global.html#deleteWatchHistory">deleteWatchHistory</a></li><li><a href="global.html#executeDbOperation">executeDbOperation</a></li><li><a href="global.html#executeQuery">executeQuery</a></li><li><a href="global.html#getAllUsers">getAllUsers</a></li><li><a href="global.html#getClient">getClient</a></li><li><a href="global.html#getData">getData</a></li><li><a href="global.html#getDataFromCollection">getDataFromCollection</a></li><li><a href="global.html#getFavorites">getFavorites</a></li><li><a href="global.html#getMovieReviews">getMovieReviews</a></li><li><a href="global.html#getReviewById">getReviewById</a></li><li><a href="global.html#getWatchHistory">getWatchHistory</a></li><li><a href="global.html#insertFavorites">insertFavorites</a></li><li><a href="global.html#insertIntoCollection">insertIntoCollection</a></li><li><a href="global.html#loginUser">loginUser</a></li><li><a href="global.html#mySQLConnection">mySQLConnection</a></li><li><a href="global.html#sleep">sleep</a></li><li><a href="global.html#testLogin">testLogin</a></li><li><a href="global.html#updateData">updateData</a></li><li><a href="global.html#updateFavorite">updateFavorite</a></li><li><a href="global.html#updateInCollection">updateInCollection</a></li><li><a href="global.html#updateMovieReview">updateMovieReview</a></li><li><a href="global.html#updateUser">updateUser</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.4</a> on Mon Feb 24 2025 17:35:49 GMT+0100 (hora estándar de Europa central)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

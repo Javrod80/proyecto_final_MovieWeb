@@ -4,10 +4,10 @@ import usersModel from '../models/MySQLModels/users.models.js';
 export default {
     /**
    * Actualiza la contraseña de un usuario en la base de datos.
-   * @async
-   * @function updateUser
-   * @param {import("express").Request} req - Objeto de solicitud de Express que contiene los parámetros para la actualización del usuario, como el `userId` y la nueva contraseña.
-   * @param {import("express").Response} res - Objeto de respuesta de Express que se utiliza para enviar el resultado de la actualización o un error al cliente.
+   * 
+   * 
+   * @param {Request} req - Objeto de solicitud de Express que contiene los parámetros para la actualización del usuario, como el `userId` y la nueva contraseña.
+   * @param {Response} res - Objeto de respuesta de Express que se utiliza para enviar el resultado de la actualización o un error al cliente.
    * @returns {Promise<void>} Responde con un mensaje de éxito si la contraseña se actualiza correctamente o un mensaje de error si algo falla.
    * @throws {Error} Lanza un error si ocurre algún problema durante la actualización del usuario en la base de datos.
    */

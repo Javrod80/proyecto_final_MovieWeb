@@ -5,10 +5,10 @@ import watchHistoryModel from "../models/MySQLModels/watchHistory.models.js";
 export default {
     /**
     * Obtiene el historial de películas vistas por un usuario.
-    * @async
-    * @function getWatchHistory
-    * @param {import("express").Request} req - Objeto de solicitud de Express que contiene el `user_id` del usuario.
-    * @param {import("express").Response} res - Objeto de respuesta de Express utilizado para devolver el historial de películas o un mensaje de error.
+    * 
+    * 
+    * @param {Request} req - Objeto de solicitud de Express que contiene el `user_id` del usuario.
+    * @param {Response} res - Objeto de respuesta de Express utilizado para devolver el historial de películas o un mensaje de error.
     * @returns {Promise<void>} Devuelve el historial de películas vistas por el usuario si la consulta es exitosa, o un mensaje de error si falla.
     * @throws {Error} Lanza un error si hay problemas al obtener el historial desde la base de datos.
     */
@@ -30,8 +30,8 @@ export default {
      * Agrega una película al historial de un usuario.
      * @async
      * @function addWatchHistory
-     * @param {import("express").Request} req - Objeto de solicitud de Express que contiene los datos de la película (`user_id`, `movie_id`, `title`, `poster`) a agregar al historial.
-     * @param {import("express").Response} res - Objeto de respuesta de Express utilizado para devolver un mensaje de éxito o error.
+     * @param {Request} req - Objeto de solicitud de Express que contiene los datos de la película (`user_id`, `movie_id`, `title`, `poster`) a agregar al historial.
+     * @param {Response} res - Objeto de respuesta de Express utilizado para devolver un mensaje de éxito o error.
      * @returns {Promise<void>} Devuelve un mensaje de éxito si la película se agrega correctamente al historial, o un mensaje de error si ocurre un problema.
      * @throws {Error} Lanza un error si ocurre un problema al agregar la película al historial de la base de datos.
      */

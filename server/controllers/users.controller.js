@@ -9,10 +9,10 @@ const { sign } = jwt;
 const userController = {
     /**
      * Registra un nuevo usuario en el sistema.
-     * @async
-     * @function signupUser
-     * @param {import("express").Request} req - Objeto de solicitud de Express que contiene los datos del usuario a registrar (nombre, apellidos, correo y contraseña).
-     * @param {import("express").Response} res - Objeto de respuesta de Express que se utiliza para enviar una respuesta al cliente, indicando si el registro fue exitoso o hubo un error.
+     * 
+     * 
+     * @param {Request} req - Objeto de solicitud de Express que contiene los datos del usuario a registrar (nombre, apellidos, correo y contraseña).
+     * @param {Response} res - Objeto de respuesta de Express que se utiliza para enviar una respuesta al cliente, indicando si el registro fue exitoso o hubo un error.
      * @returns {Promise<void>} Responde con un mensaje de éxito si el usuario es registrado correctamente o un mensaje de error si algo falla.
      * @throws {Error} Lanza un error si ocurre un problema durante el proceso de registro (por ejemplo, usuario ya existe).
      */
@@ -43,8 +43,8 @@ const userController = {
         * Inicia sesión de un usuario en el sistema.
         * @async
         * @function loginUser
-        * @param {import("express").Request} req - Objeto de solicitud de Express que contiene las credenciales del usuario (correo y contraseña).
-        * @param {import("express").Response} res - Objeto de respuesta de Express utilizado para enviar una respuesta con el token de acceso si el inicio de sesión es exitoso, o un error en caso contrario.
+        * @param {Request} req - Objeto de solicitud de Express que contiene las credenciales del usuario (correo y contraseña).
+        * @param {Response} res - Objeto de respuesta de Express utilizado para enviar una respuesta con el token de acceso si el inicio de sesión es exitoso, o un error en caso contrario.
         * @returns {Promise<void>} Responde con un token JWT si las credenciales son correctas, o un mensaje de error si las credenciales son incorrectas.
         * @throws {Error} Lanza un error si ocurre un problema durante el inicio de sesión (por ejemplo, usuario no encontrado).
         */

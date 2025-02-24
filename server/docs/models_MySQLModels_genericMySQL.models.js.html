@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: models/MySQLModels/genericMySQL.models.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: models/MySQLModels/genericMySQL.models.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import sql from '../../database/mysql.connection.js';
+
+const connection = await sql.mySQLConnection();
+
+/* --------- Función General para Ejecutar Consultas -----------*/
+/**
+ * Función general para ejecutar consultas SQL.
+ * @async
+ * @function executeQuery
+ * @param {string} query - La consulta SQL que se va a ejecutar.
+ * @param {Array} values - Los valores que se van a utilizar en la consulta.
+ * @returns {Promise&lt;Object>} Devuelve el resultado de la consulta.
+ * @throws {Error} Lanza un error si la consulta falla.
+ */
+export const executeQuery = async (query, values) => {
+    try {
+        const [result] = await connection.query(query, values);
+        return result;
+    } catch (error) {
+        console.error("Error en la consulta:", error);
+        throw error;
+    }
+};
+
+/* --------- Funciones CRUD Generales -----------*/
+/**
+ * Objeto con funciones CRUD para interactuar con una base de datos MySQL.
+ * @namespace crudMySQL
+ */
+const crudMySQL = {
+    
+    /**
+    * Función para hacer login con múltiples condiciones.
+    * @async
+    * @function loginUser
+    * @param {Array} values - Un array con los valores que se usarán en la consulta (usuario, contraseña, y condiciones adicionales).
+    * @returns {Promise&lt;Object>} Devuelve el resultado de la consulta con los datos del usuario.
+    */
+    loginUser: async (values) => {
+        const query = `
+        SELECT ?? 
+        FROM ?? 
+        WHERE ?? = ? AND ?? = ? AND (?? = ? OR ?? = ?)
+        `;
+        const result = await executeQuery(query, values);
+        return result;
+    },
+    /**
+     * Función para crear un nuevo registro en una tabla.
+     * @async
+     * @function createData
+     * @param {string} table - El nombre de la tabla en la que se insertará el nuevo registro.
+     * @param {Array} columns - Las columnas en las que se insertarán los valores.
+     * @param {Array} values - Los valores a insertar en la tabla.
+     * @returns {Promise&lt;number>} Devuelve el ID del registro insertado.
+     */
+
+    // Función para crear un nuevo registro
+    createData: async (table, columns, values) => {
+        const query = `INSERT INTO ?? (${columns.join(', ')}) VALUES (${columns.map(() => '?').join(', ')})`;
+        const result = await executeQuery(query, [table, ...values]);
+        return result.insertId; // Retorna el ID del registro insertado
+    },
+
+    /**
+     * Función para obtener todos los registros de una tabla.
+     * @async
+     * @function getData
+     * @param {string} table - El nombre de la tabla de la que se obtendrán los registros.
+     * @returns {Promise&lt;Array>} Devuelve una promesa con los registros obtenidos de la tabla.
+     */
+    // Función para obtener todos los registros de una tabla
+    getData: async (table) => {
+        const query = 'SELECT * FROM ??';
+        const [result] = await executeQuery(query, [table]);
+        return result;
+    },
+
+    /**
+    * Función para actualizar un registro en una tabla.
+    * @async
+    * @function updateData
+    * @param {string} table - El nombre de la tabla en la que se actualizarán los registros.
+    * @param {Array} updateColumns - Las columnas que se van a actualizar.
+    * @param {Array} values - Los nuevos valores para las columnas que se actualizan.
+    * @param {string} filterColumn - La columna que se usa como filtro para encontrar el registro.
+    * @param {string|number} filterValue - El valor que se usa como filtro para encontrar el registro.
+    * @returns {Promise&lt;number>} Devuelve el número de filas afectadas por la actualización.
+    */
+    // Función para actualizar un registro
+    updateData: async (table, updateColumns, values, filterColumn, filterValue) => {
+        const query = `UPDATE ?? SET ${updateColumns.map(col => `?? = ?`).join(', ')} WHERE ?? = ?`;
+        const result = await executeQuery(query, [table, ...updateColumns.flatMap((col, i) => [col, values[i]]), filterColumn, filterValue]);
+        return result.affectedRows; // Retorna el número de filas afectadas
+    },
+
+    /**
+    * Función para eliminar un registro de una tabla.
+    * @async
+    * @function deleteData
+    * @param {string} table - El nombre de la tabla de la que se eliminará el registro.
+    * @param {string} filterColumn - La columna que se usa como filtro para encontrar el registro.
+    * @param {string|number} filterValue - El valor que se usa como filtro para encontrar el registro.
+    * @returns {Promise&lt;number>} Devuelve el número de filas afectadas por la eliminación.
+    */
+    // Función para "eliminar" un registro 
+    deleteData: async (table, filterColumn, filterValue) => {
+        const query = 'DELETE FROM ?? WHERE ?? = ?';
+        const result = await executeQuery(query, [table, filterColumn, filterValue]);
+        return result.affectedRows; // Retorna el número de filas afectadas
+    }
+  
+};
+
+export default crudMySQL;</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-router.html">router</a></li></ul><h3>Namespaces</h3><ul><li><a href="crudMySQL.html">crudMySQL</a></li><li><a href="usersModel.html">usersModel</a></li><li><a href="watchHistoryModel.html">watchHistoryModel</a></li></ul><h3>Global</h3><ul><li><a href="global.html#addMovieReview">addMovieReview</a></li><li><a href="global.html#addWatchHistory">addWatchHistory</a></li><li><a href="global.html#closeClient">closeClient</a></li><li><a href="global.html#connectToMongo">connectToMongo</a></li><li><a href="global.html#createData">createData</a></li><li><a href="global.html#createUser">createUser</a></li><li><a href="global.html#deleteData">deleteData</a></li><li><a href="global.html#deleteFavorite">deleteFavorite</a></li><li><a href="global.html#deleteFromCollection">deleteFromCollection</a></li><li><a href="global.html#deleteMovieReview">deleteMovieReview</a></li><li><a href="global.html#deleteUser">deleteUser</a></li><li><a href="global.html#deleteWatchHistory">deleteWatchHistory</a></li><li><a href="global.html#executeDbOperation">executeDbOperation</a></li><li><a href="global.html#executeQuery">executeQuery</a></li><li><a href="global.html#getAllUsers">getAllUsers</a></li><li><a href="global.html#getClient">getClient</a></li><li><a href="global.html#getData">getData</a></li><li><a href="global.html#getDataFromCollection">getDataFromCollection</a></li><li><a href="global.html#getFavorites">getFavorites</a></li><li><a href="global.html#getMovieReviews">getMovieReviews</a></li><li><a href="global.html#getReviewById">getReviewById</a></li><li><a href="global.html#getWatchHistory">getWatchHistory</a></li><li><a href="global.html#insertFavorites">insertFavorites</a></li><li><a href="global.html#insertIntoCollection">insertIntoCollection</a></li><li><a href="global.html#loginUser">loginUser</a></li><li><a href="global.html#mySQLConnection">mySQLConnection</a></li><li><a href="global.html#sleep">sleep</a></li><li><a href="global.html#testLogin">testLogin</a></li><li><a href="global.html#updateData">updateData</a></li><li><a href="global.html#updateFavorite">updateFavorite</a></li><li><a href="global.html#updateInCollection">updateInCollection</a></li><li><a href="global.html#updateMovieReview">updateMovieReview</a></li><li><a href="global.html#updateUser">updateUser</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.4</a> on Mon Feb 24 2025 17:35:49 GMT+0100 (hora estándar de Europa central)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

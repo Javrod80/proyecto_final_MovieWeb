@@ -5,10 +5,10 @@ export default {
 
     /**
     * Elimina una película del historial de visualización de un usuario.
-    * @async
-    * @function deleteWatchHistoryUser
-    * @param {import("express").Request} req - Objeto de solicitud de Express.
-    * @param {import("express").Response} res - Objeto de respuesta de Express.
+    * 
+    * 
+    * @param {Request} req - Objeto de solicitud de Express.
+    * @param {Response} res - Objeto de respuesta de Express.
     * @returns {Promise<void>} Responde con un mensaje de éxito o un error.
     */
     deleteWatchHistoryUser: async (req, res) => {

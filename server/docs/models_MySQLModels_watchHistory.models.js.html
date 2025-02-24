@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: models/MySQLModels/watchHistory.models.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: models/MySQLModels/watchHistory.models.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import crudMySQL,{ executeQuery } from './genericMySQL.models.js';
+import dotenv from 'dotenv';
+dotenv.config();
+
+const tableName = process.env.TAB_SECOND;
+
+/**
+ * Modelo de operaciones CRUD para el historial de películas vistas en la base de datos MySQL.
+ * @namespace watchHistoryModel
+ */
+const watchHistoryModel = {
+    /**
+     * Función para obtener el historial de películas vistas de un usuario.
+     * @async
+     * @function getWatchHistory
+     * @param {number|string} user_id - El ID del usuario para el que se quiere obtener el historial.
+     * @returns {Promise&lt;Array>} Devuelve un array con los registros del historial de películas vistas.
+     */
+    // Funcion para obtener el historial de peliculas vistas
+    getWatchHistory: async (user_id) => {
+        const query = `SELECT * FROM ?? WHERE user_id = ?`;
+        return await executeQuery(query, [tableName, user_id]);
+    },
+
+    /**
+     * Función para agregar una película al historial de un usuario.
+     * @async
+     * @function addWatchHistory
+     * @param {number|string} user_id - El ID del usuario al que se le agregará la película al historial.
+     * @param {number|string} movie_id - El ID de la película que se va a agregar al historial.
+     * @param {string} title - El título de la película.
+     * @param {string} poster - La URL del cartel de la película.
+     * @returns {Promise&lt;number>} Devuelve el ID del registro recién creado en el historial.
+     */
+    // Funcion para agregar una pelicula  al historial
+    addWatchHistory: async (user_id, movie_id, title, poster) => {
+        return await crudMySQL.createData(tableName, ['user_id', 'movie_id', 'title', 'poster', 'watched_at'], [user_id, movie_id, title, poster, new Date()]);
+    },
+
+    /**
+    * Función para eliminar una película del historial de un usuario.
+    * @async
+    * @function deleteWatchHistory
+    * @param {number|string} userId - El ID del usuario de cuyo historial se eliminará la película.
+    * @param {number|string} movieId - El ID de la película que se eliminará del historial.
+    * @returns {Promise&lt;number>} Devuelve el número de filas afectadas por la eliminación.
+    */
+    // Funcion para eliminar el historial
+    deleteWatchHistory: async (userId, movieId) => {
+        return await crudMySQL.deleteData(tableName, 'user_id', userId, 'movie_id', movieId);
+    }
+};
+
+export default watchHistoryModel;</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-router.html">router</a></li></ul><h3>Namespaces</h3><ul><li><a href="crudMySQL.html">crudMySQL</a></li><li><a href="usersModel.html">usersModel</a></li><li><a href="watchHistoryModel.html">watchHistoryModel</a></li></ul><h3>Global</h3><ul><li><a href="global.html#addMovieReview">addMovieReview</a></li><li><a href="global.html#addWatchHistory">addWatchHistory</a></li><li><a href="global.html#closeClient">closeClient</a></li><li><a href="global.html#connectToMongo">connectToMongo</a></li><li><a href="global.html#createData">createData</a></li><li><a href="global.html#createUser">createUser</a></li><li><a href="global.html#deleteData">deleteData</a></li><li><a href="global.html#deleteFavorite">deleteFavorite</a></li><li><a href="global.html#deleteFromCollection">deleteFromCollection</a></li><li><a href="global.html#deleteMovieReview">deleteMovieReview</a></li><li><a href="global.html#deleteUser">deleteUser</a></li><li><a href="global.html#deleteWatchHistory">deleteWatchHistory</a></li><li><a href="global.html#executeDbOperation">executeDbOperation</a></li><li><a href="global.html#executeQuery">executeQuery</a></li><li><a href="global.html#getAllUsers">getAllUsers</a></li><li><a href="global.html#getClient">getClient</a></li><li><a href="global.html#getData">getData</a></li><li><a href="global.html#getDataFromCollection">getDataFromCollection</a></li><li><a href="global.html#getFavorites">getFavorites</a></li><li><a href="global.html#getMovieReviews">getMovieReviews</a></li><li><a href="global.html#getReviewById">getReviewById</a></li><li><a href="global.html#getWatchHistory">getWatchHistory</a></li><li><a href="global.html#insertFavorites">insertFavorites</a></li><li><a href="global.html#insertIntoCollection">insertIntoCollection</a></li><li><a href="global.html#loginUser">loginUser</a></li><li><a href="global.html#mySQLConnection">mySQLConnection</a></li><li><a href="global.html#sleep">sleep</a></li><li><a href="global.html#testLogin">testLogin</a></li><li><a href="global.html#updateData">updateData</a></li><li><a href="global.html#updateFavorite">updateFavorite</a></li><li><a href="global.html#updateInCollection">updateInCollection</a></li><li><a href="global.html#updateMovieReview">updateMovieReview</a></li><li><a href="global.html#updateUser">updateUser</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.4</a> on Mon Feb 24 2025 17:35:49 GMT+0100 (hora estándar de Europa central)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

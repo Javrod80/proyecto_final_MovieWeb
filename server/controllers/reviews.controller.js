@@ -3,10 +3,10 @@ import crudMongoDBReviews from "../models/MongoModels/reviews.models.js";
 export default {
     /**
         * Inserta una nueva reseña para una película.
-        * @async
-        * @function insertReview
-        * @param {import("express").Request} req - Objeto de solicitud de Express, que contiene los datos necesarios en el cuerpo de la solicitud (`userId`, `movieId`, `rating`, `review`).
-        * @param {import("express").Response} res - Objeto de respuesta de Express, que envía un mensaje de éxito o error al cliente.
+        * 
+        * 
+        * @param {Request} req - Objeto de solicitud de Express, que contiene los datos necesarios en el cuerpo de la solicitud (`userId`, `movieId`, `rating`, `review`).
+        * @param {Response} res - Objeto de respuesta de Express, que envía un mensaje de éxito o error al cliente.
         * @returns {Promise<void>} Responde con un mensaje de éxito y la reseña insertada si la operación es exitosa, o un mensaje de error si algo falla.
         * @throws {Error} Lanza un error si hay un problema al insertar la reseña en la base de datos.
         */

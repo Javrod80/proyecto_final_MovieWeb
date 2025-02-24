@@ -5,10 +5,10 @@ import fetch from 'node-fetch';
 export default {
     /**
      * Obtiene los detalles de una película a partir de su `imdbID` usando la API OMDB.
-     * @async
-     * @function getMovieDetails
-     * @param {import("express").Request} req - Objeto de solicitud de Express, que contiene el `imdbID` en los parámetros de la ruta.
-     * @param {import("express").Response} res - Objeto de respuesta de Express, que enviará los detalles de la película o el error de la operación.
+     * 
+     * 
+     * @param {Request} req - Objeto de solicitud de Express, que contiene el `imdbID` en los parámetros de la ruta.
+     * @param {Response} res - Objeto de respuesta de Express, que enviará los detalles de la película o el error de la operación.
      * @returns {Promise<void>} Responde con los detalles de la película o un error si no se encuentra la película o hay un problema con la API.
      * @throws {Error} Lanza un error si la respuesta de la API no es correcta o si ocurre algún problema al obtener los detalles.
      */

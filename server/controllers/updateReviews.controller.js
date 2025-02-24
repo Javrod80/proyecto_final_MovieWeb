@@ -4,10 +4,10 @@ export default {
 
     /**
      * Actualiza una reseña de película en la base de datos.
-     * @async
-     * @function updateReviews
-     * @param {import("express").Request} req - Objeto de solicitud de Express que contiene los parámetros de la reseña a actualizar, como el ID de la reseña y los nuevos datos de la reseña.
-     * @param {import("express").Response} res - Objeto de respuesta de Express que se utiliza para enviar los resultados de la actualización o un error al cliente.
+     * 
+     * 
+     * @param {Request} req - Objeto de solicitud de Express que contiene los parámetros de la reseña a actualizar, como el ID de la reseña y los nuevos datos de la reseña.
+     * @param {Response} res - Objeto de respuesta de Express que se utiliza para enviar los resultados de la actualización o un error al cliente.
      * @returns {Promise<void>} Responde con un mensaje de éxito si la reseña se actualiza correctamente, o un mensaje de error en caso de que no se pueda actualizar.
      * @throws {Error} Lanza un error si hay un problema con la consulta a la base de datos o si los datos son incorrectos.
      */

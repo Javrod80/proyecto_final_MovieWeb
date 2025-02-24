@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: controllers/updateReviews.controller.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: controllers/updateReviews.controller.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import crudMongoDBReviews from "../models/MongoModels/reviews.models.js";
+
+export default {
+
+    /**
+     * Actualiza una reseña de película en la base de datos.
+     * 
+     * 
+     * @param {Request} req - Objeto de solicitud de Express que contiene los parámetros de la reseña a actualizar, como el ID de la reseña y los nuevos datos de la reseña.
+     * @param {Response} res - Objeto de respuesta de Express que se utiliza para enviar los resultados de la actualización o un error al cliente.
+     * @returns {Promise&lt;void>} Responde con un mensaje de éxito si la reseña se actualiza correctamente, o un mensaje de error en caso de que no se pueda actualizar.
+     * @throws {Error} Lanza un error si hay un problema con la consulta a la base de datos o si los datos son incorrectos.
+     */
+    updateReviews: async (req, res) => {
+        const { reviewId } = req.params;
+        const { rating, review: reviewText } = req.body; 
+        const userId = req.user.id;
+
+        if (!reviewId || !Number.isFinite(rating) || !reviewText?.trim()) {
+            return res.status(400).json({ error: "Faltan datos requeridos" });
+        }
+
+
+        try {
+            const reviewToUpdate = await crudMongoDBReviews.getReviewById(reviewId);
+
+            if (!reviewToUpdate || reviewToUpdate.length === 0) {
+                return res.status(404).json({ error: "Reseña no encontrada" });
+            }
+
+            const review = reviewToUpdate[0]; 
+
+            if (Number(review.userId) !== Number(userId)) {
+                return res.status(403).json({ error: "No tienes permisos para actualizar esta reseña" });
+            }
+
+            const updatedReview = await crudMongoDBReviews.updateMovieReview(reviewId, { rating, review: reviewText }); 
+
+            if (updatedReview &amp;&amp; updatedReview.modifiedCount > 0) { 
+                return res.status(200).json({ message: "Reseña actualizada exitosamente", review: updatedReview });
+            } else {
+                return res.status(404).json({ error: "No se pudo actualizar la reseña (podría no existir o no haber cambios)" });
+            }
+
+        } catch (error) {
+            console.error('Error al actualizar la reseña:', error);
+            return res.status(500).json({ error: "Error interno del servidor" });
+        }
+    }
+};</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-router.html">router</a></li></ul><h3>Namespaces</h3><ul><li><a href="crudMySQL.html">crudMySQL</a></li><li><a href="usersModel.html">usersModel</a></li><li><a href="watchHistoryModel.html">watchHistoryModel</a></li></ul><h3>Global</h3><ul><li><a href="global.html#addMovieReview">addMovieReview</a></li><li><a href="global.html#addWatchHistory">addWatchHistory</a></li><li><a href="global.html#closeClient">closeClient</a></li><li><a href="global.html#connectToMongo">connectToMongo</a></li><li><a href="global.html#createData">createData</a></li><li><a href="global.html#createUser">createUser</a></li><li><a href="global.html#deleteData">deleteData</a></li><li><a href="global.html#deleteFavorite">deleteFavorite</a></li><li><a href="global.html#deleteFromCollection">deleteFromCollection</a></li><li><a href="global.html#deleteMovieReview">deleteMovieReview</a></li><li><a href="global.html#deleteUser">deleteUser</a></li><li><a href="global.html#deleteWatchHistory">deleteWatchHistory</a></li><li><a href="global.html#executeDbOperation">executeDbOperation</a></li><li><a href="global.html#executeQuery">executeQuery</a></li><li><a href="global.html#getAllUsers">getAllUsers</a></li><li><a href="global.html#getClient">getClient</a></li><li><a href="global.html#getData">getData</a></li><li><a href="global.html#getDataFromCollection">getDataFromCollection</a></li><li><a href="global.html#getFavorites">getFavorites</a></li><li><a href="global.html#getMovieReviews">getMovieReviews</a></li><li><a href="global.html#getReviewById">getReviewById</a></li><li><a href="global.html#getWatchHistory">getWatchHistory</a></li><li><a href="global.html#insertFavorites">insertFavorites</a></li><li><a href="global.html#insertIntoCollection">insertIntoCollection</a></li><li><a href="global.html#loginUser">loginUser</a></li><li><a href="global.html#mySQLConnection">mySQLConnection</a></li><li><a href="global.html#sleep">sleep</a></li><li><a href="global.html#testLogin">testLogin</a></li><li><a href="global.html#updateData">updateData</a></li><li><a href="global.html#updateFavorite">updateFavorite</a></li><li><a href="global.html#updateInCollection">updateInCollection</a></li><li><a href="global.html#updateMovieReview">updateMovieReview</a></li><li><a href="global.html#updateUser">updateUser</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.4</a> on Mon Feb 24 2025 17:35:49 GMT+0100 (hora estándar de Europa central)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
