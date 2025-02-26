@@ -216,4 +216,109 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
                 
+  /movieapp/v1/users/reset-password:
+    post:
+      tags:
+        - Users
+      summary: Enviar correo para restablecer contraseña a un usuario
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - userId
+              properties:
+                userId:
+                  type: string
+                  description: Identificador del usuario
+                email:
+                  type: string
+                  format: email
+                  description: Correo electrónico del usuario  
+            examples:
+              ejemploRestablecimiento:
+                summary: Ejemplo de restablecimiento de contraseña
+                value:
+                  userId: "5"
+                  email: "mailitodeprueba25@gmail.com"
+      responses:
+        '200':
+          description: Contraseña restablecida con éxito
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Contraseña restablecida con éxito"
+        '400':
+          description: Error en la solicitud
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
 
+  /movieapp/v1/users/new-password:
+    put:
+      tags:
+        - Users
+      summary: Restablecer contraseña de un usuario
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - email
+                - password
+              properties:
+                email:
+                  type: string
+                  format: email
+                  description: Correo electrónico del usuario
+                password:
+                  type: string
+                  description: Nueva contraseña del usuario
+            examples:
+              ejemploRestablecimiento:
+                summary: Ejemplo de restablecimiento de contraseña
+                value:
+                  email: "mailitodeprueba25@gmail.com"
+                  password: "Password123"  
+      responses:
+        '200':
+          description: Contraseña restablecida con éxito
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Contraseña restablecida con éxito"
+        '400':
+          description: Error en la solicitud
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
