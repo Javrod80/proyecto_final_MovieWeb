@@ -14,8 +14,8 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import peliculasImage from '../images/peliculas96.png';
-import ChangePassword from '../components/ChangePassword';
 import DeleteAccount from './DeleteAccount';
+import ResetPassword from './ResetPassword';
 
 
 const Profile = () => {
@@ -68,7 +68,7 @@ const goToWatched = () => {
                     </div>
                     {/*Botón para cambiar la contraseña*/} 
                     <div className="mt-3"> 
-                        <ChangePassword />
+                        <ResetPassword />
                     </div>
                     {/*Botón para eliminar la cuenta*/}
                     <div className="mt-2"> 

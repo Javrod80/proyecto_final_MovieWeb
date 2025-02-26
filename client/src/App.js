@@ -19,6 +19,7 @@ import MovieWatched from './components/MovieWatched';
 import Reviews from './components/Reviews';
 import { ReviewsProvider } from './providers/ReviewsProvider';
 import PrivateRoute from './components/PrivateRoute';
+import ChangePassword from './components/ChangePassword';
 
 function App() {
   return (
@@ -35,6 +36,7 @@ function App() {
                     <Route path="/" element={<Home />} />
                     <Route path="/login" element={<Login />} />
                     <Route path="/register" element={<SignupForm />} />
+                    <Route path="/reset-password" element={<ChangePassword />} />
 
                     {/* 🔹 Las rutas protegidas dentro de PrivateRoute */}
                     <Route element={<PrivateRoute />}>
@@ -44,8 +46,9 @@ function App() {
                       <Route path="/profile" element={<Profile />} />
                       <Route path="/watched" element={<MovieWatched />} />
                       <Route path="/reviews" element={<Reviews />} />
+                     
                     </Route>
-
+                    
                     <Route path="*" element={<h1>Not Found</h1>} />
                   </Routes>
                 </div>

@@ -78,7 +78,12 @@ const usersModel = {
     // Funcion para eliminar un usuario
     deleteUser: async (userId) => {
         return await crudMySQL.deleteData(tableName, 'id', userId);
-    }
+    },
+    getUserById: async (userId) => {
+        const query = 'SELECT * FROM ?? WHERE id = ?';
+        return await executeQuery(query, [tableName, userId]);
+    },
+
 };
 
 export default usersModel;

@@ -10,7 +10,7 @@ const verifyToken = (req, res, next) => {
  * @returns {void} No devuelve valor, solo modifica el objeto `req` y, si el token es válido, llama a `next()`.
  * @throws {Error} Si no se proporciona un token o si el token es inválido, responde con un código de estado 403.
  */
-    const bearerHeader = req.headers['authorization'];
+    const bearerHeader = req.headers['Authorization'];
 
     if (typeof bearerHeader !== 'undefined') {
         // Extraer el token de la cabecera Authorization
@@ -22,19 +22,19 @@ const verifyToken = (req, res, next) => {
         // Decodificar el token y verificar si es válido
         const decoded = tokenUtils.decodeToken(req.token);
         if (!decoded) {
-            console.error('Token no válido o ha expirado'); 
+            console.error('Token no válido o ha expirado');
             return res.status(403).json({ message: 'Token no válido o expirado' });
         }
 
         // Si el token es válido, almacenar los datos decodificados en req.user
         req.user = decoded;
-      //  console.log('Token decodificado:', req.user); 
+        //  console.log('Token decodificado:', req.user); 
 
-        
+
         next();
     } else {
-        console.error('No se proporcionó token'); 
-        res.sendStatus(403); 
+        console.error('No se proporcionó token');
+        res.sendStatus(403);
     }
 };
 

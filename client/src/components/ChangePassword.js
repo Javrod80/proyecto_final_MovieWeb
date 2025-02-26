@@ -1,52 +1,55 @@
-/**
- * Formulario para cambiar la contraseña del usuario.
- * Utiliza el contexto de autenticación para obtener el ID del usuario y un hook personalizado para realizar la petición a la API.
- */
 import React, { useState, useEffect } from 'react';
-import { useAuth } from '../providers/AuthContext';
+import { useSearchParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import useFetch from '../hook/useFetch';
 
-
-/**
- * Componente para cambiar la contraseña del usuario autenticado.
- * @returns {JSX.Element} El formulario para actualizar la contraseña.
- */
 const ChangePassword = () => {
-    const { userId } = useAuth();// Obtiene el ID del usuario desde el contexto de autenticación
-    const [password, setPassword] = useState(''); // Estado para almacenar la nueva contraseña
-    const [showForm, setShowForm] = useState(false); // Estado para controlar la visibilidad del formulario
+    const [searchParams] = useSearchParams();
+    const token = searchParams.get('token');
+    const [password, setPassword] = useState('');
+    const [showForm, setShowForm] = useState(true);
+    const { isLoading, error, data, fetchData } = useFetch();
 
-    const { isLoading, error, data, fetchData } = useFetch(); // Hook personalizado para manejar la petición a la API
+    const validatePassword = (password) => {
+        if (password.length < 8) {
+            return "La contraseña debe tener al menos 8 caracteres.";
+        }
+        if (!/[A-Z]/.test(password)) {
+            return "La contraseña debe contener al menos una letra mayúscula.";
+        }
+        if (!/[0-9]/.test(password)) {
+            return "La contraseña debe contener al menos un número.";
+        }
+        return null;
+    };
 
-    /**
-   * Maneja el evento de cambio de contraseña.
-   * @param {React.FormEvent} e - Evento del formulario.
-   */
     const handleChangePassword = async (e) => {
         e.preventDefault();
 
-        if (!password) {
-            toast.error('La contraseña no puede estar vacía.');
+        const validationError = validatePassword(password);
+        if (validationError) {
+            toast.error(validationError);
             return;
         }
-        // Verificar si hay un token en el almacenamiento local
-        const token = localStorage.getItem('token');
+        console.log('Token recibido en frontend:', token);
         if (!token) {
-            toast.error('Token no disponible. Por favor, inicie sesión nuevamente.');
+            toast.error('Token no válido o expirado.');
             return;
         }
-        // Llamar a la API para cambiar la contraseña
+
         await fetchData(
-            `users/update-user/${userId}`,
+            `users/new-password`,
             'PUT',
             { password },
-            token
+            {
+                headers: {
+                    
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                }
+            }
         );
     };
-    /**
-    * Efecto que maneja la respuesta de la API tras la actualización de la contraseña.
-    */
 
     useEffect(() => {
         if (data) {
@@ -54,24 +57,17 @@ const ChangePassword = () => {
             setPassword('');
             setShowForm(false);
         } else if (error) {
-            toast.error('Error al actualizar la contraseña.');
+            toast.error(error.message || 'Error al actualizar la contraseña.');
         }
     }, [data, error]);
-    // Renderizar el formulario
-    return (
-        <div className="container mt-3">
-            {/* Botón para mostrar u ocultar el formulario */}
-            <button
-                className="btn btn-primary btn-sm"  
-                onClick={() => setShowForm(!showForm)}
-            >
-                {showForm ? "Cancelar" : "Cambiar Contraseña"}
-            </button>
 
-            {showForm && (
-                <form className="mt-2 p-3 border rounded shadow-sm" onSubmit={handleChangePassword}>
+    return (
+        <div className="container d-flex justify-content-center align-items-center" style={{ minHeight: '80vh' }}>
+            {showForm ? (
+                <form className="w-50 p-3 border rounded shadow-sm bg-light" onSubmit={handleChangePassword}>
+                    <h5 className="text-center mb-3">Cambiar Contraseña</h5>
                     <div className="mb-2">
-                        <label className="form-label fs-6">Nueva Contraseña:</label>
+                        <label className="form-label small">Nueva Contraseña:</label>
                         <input
                             type="password"
                             className="form-control form-control-sm"
@@ -80,13 +76,17 @@ const ChangePassword = () => {
                             required
                         />
                     </div>
-                    <button type="submit" className="btn btn-success btn-sm" disabled={isLoading}>
-                        {isLoading ? "Cargando..." : "Actualizar"}
-                    </button>
+                    <div className="d-flex justify-content-center">
+                        <button type="submit" className="btn btn-success btn-sm w-100" disabled={isLoading}>
+                            {isLoading ? "Cargando..." : "Actualizar"}
+                        </button>
+                    </div>
                 </form>
+            ) : (
+                <p className="text-success text-center">Tu contraseña ha sido cambiada con éxito.</p>
             )}
 
-            {error && <div className="alert alert-danger mt-2" style={{ fontSize: '0.9rem' }}>{error}</div>}
+            {error && <div className="alert alert-danger mt-2 text-center small">{error.message}</div>}
         </div>
     );
 };

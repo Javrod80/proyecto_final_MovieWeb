@@ -1,0 +1,50 @@
+import React, { useState } from 'react';
+import { useAuth } from '../providers/AuthContext';
+import { toast } from 'react-toastify';
+import useFetch from '../hook/useFetch';
+
+const ResetPassword = () => {
+    const { userId } = useAuth();
+    const { isLoading, error, fetchData } = useFetch();
+    const [loading, setLoading] = useState(false);
+
+    const handleRequestReset = async () => {
+        
+        if (!userId ) {
+            toast.error('No se encontró un usuario válido.');
+            return;
+        }
+
+        const token = localStorage.getItem('token');
+        if (!token) {
+            toast.error('Token no disponible. Por favor, inicia sesión nuevamente.');
+            return;
+        }
+
+        setLoading(true);
+        try {
+            const response = await fetchData('users/reset-password', 'POST', {  userId }, token);
+
+            if (response) {
+                toast.success('Se ha enviado un correo con el enlace para restablecer tu contraseña.');
+            }
+        } catch (error) {
+            toast.error(error.message);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    return (
+        <div className="container mt-3">
+            <h4>Cambiar Contraseña</h4>
+            <p>Se enviará un correo con un enlace para restablecer tu contraseña.</p>
+            {error && <p className="text-danger">{error}</p>}
+            <button className="btn btn-primary" onClick={handleRequestReset} disabled={loading || isLoading}>
+                {loading || isLoading ? 'Enviando...' : 'Enviar Correo de Restablecimiento'}
+            </button>
+        </div>
+    );
+};
+
+export default ResetPassword;

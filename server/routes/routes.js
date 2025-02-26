@@ -14,6 +14,7 @@ import deleteFavoritesController from '../controllers/deleteFavorites.controller
 import deleteHistoryController from '../controllers/deleteHistory.controller.js';
 import updateUserController from '../controllers/updateUser.controller.js';
 import deleteUserController from '../controllers/deleteUser.controller.js';
+import resetPasswordController from '../controllers/resetPassword.controller.js';
 
 
 
@@ -66,6 +67,19 @@ router.put('/movieapp/v1/users/update-user/:userId', verifyToken ,updateUserCont
  * @param {Object} res - El objeto de la respuesta.
  */
 router.delete('/movieapp/v1/users/delete-user/:userId', verifyToken ,deleteUserController.deleteUser); // Eliminar usuario
+
+
+/**
+ * Ruta para restablecer la contraseña de un usuario.
+ * @name PUT /movieapp/v1/users/reset-password
+ * @function
+ * @memberof module:router
+ * @param {string} token - El token JWT recibido en la URL.
+ * @param {Object} req - El objeto de la solicitud.
+ * @param {Object} res - El objeto de la respuesta.
+ */
+router.post('/movieapp/v1/users/reset-password', verifyToken, resetPasswordController.requestPasswordReset); // Restablecer contraseña
+router.put('/movieapp/v1/users/new-password',verifyToken, resetPasswordController.resetPassword); // Restablecer contraseña
 
 
 

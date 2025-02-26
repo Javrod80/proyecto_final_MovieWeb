@@ -14,13 +14,14 @@ const tokenUtils = {
    */
     signJwt: (tokenFrom) => {
         return new Promise((resolve, reject) => {
-            jwt.sign(tokenFrom, SECRET_KEY, { expiresIn: '10000' }, (err, token) => {
+           
+            jwt.sign(tokenFrom, SECRET_KEY, { expiresIn: '4h' }, (err, token) => {
                 if (err) {
                     reject({ error: 'El usuario y/o contraseña no válido' });
                 } else {
                     resolve({
                         message: '---- Usuario logueado correctamente ------',
-                        token: 'Bearer ' + token
+                         token
                     });
                 }
             });

@@ -32,3 +32,10 @@ body {
 .card {
     position: relative;
 }
+
+/* Estilos para el change password */
+
+.change-password-container {
+    margin-top: 200px;
+    
+}
