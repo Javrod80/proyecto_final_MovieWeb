@@ -15,6 +15,8 @@ import deleteHistoryController from '../controllers/deleteHistory.controller.js'
 import updateUserController from '../controllers/updateUser.controller.js';
 import deleteUserController from '../controllers/deleteUser.controller.js';
 import resetPasswordController from '../controllers/resetPassword.controller.js';
+import adminController from '../controllers/admin.controller.js';
+;
 
 
 
@@ -213,6 +215,45 @@ router.delete('/movieapp/v1/reviews/delete-review/:reviewId',verifyToken , delet
  * @param {Object} res - El objeto de la respuesta.
  */
 router.put('/movieapp/v1/reviews/update-review/:reviewId', verifyToken ,updateReviewsController.updateReviews);// Actualizamos una reseña
+
+
+// Rutas del administrador
+/**
+ * Ruta para obtener todos los usuarios.
+ * @name GET /movieapp/v1/users/all-users
+ * @function
+ * @memberof module:router
+ * @param {Object} req - El objeto de la solicitud.
+ * @param {Object} res - El objeto de la respuesta.
+ */
+//router.get('/movieapp/v1/users/all-users', adminController); // Obtenemos todos los usuarios
+/**
+ * Ruta para obtener todas las películas vistas.
+ * @name GET /movieapp/v1/movies/all-movies
+ * @function
+ * @memberof module:router
+ * @param {Object} req - El objeto de la solicitud.
+ * @param {Object} res - El objeto de la respuesta.
+ */
+//router.get('/movieapp/v1/movies/all-movies', adminController);//todas las peliculas vistas
+/**
+ * Ruta para obtener todas las reseñas.
+ * @name GET /movieapp/v1/reviews/all-reviews
+ * @function
+ * @memberof module:router
+ * @param {Object} req - El objeto de la solicitud.
+ */
+//router.get('/movieapp/v1/reviews/all-reviews', adminController);//todas las reseñas
+/**
+ * Ruta para obtener todas las peliculas favoritas.
+ * @name GET /movieapp/v1/favorites/all-favorites
+ * @function
+ * @memberof module:router
+ * @param {Object} req - El objeto de la solicitud.
+ * @param {Object} res - El objeto de la respuesta.
+ */
+//router.get('/movieapp/v1/favorites/all-favorites', adminController);//todas las peliculas favoritas
+
 
 
 export { router };

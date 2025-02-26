@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useSearchParams } from 'react-router-dom';
+//import { useSearchParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import useFetch from '../hook/useFetch';
 import { useNavigate } from 'react-router-dom';
@@ -62,7 +62,7 @@ const ChangePassword = () => {
         } else if (error) {
             toast.error(error.message || 'Error al actualizar la contraseña.');
         }
-    }, [data, error]);
+    }, [data, error, navigate]);
 
     return (
         <div className="container d-flex justify-content-center align-items-center" style={{ minHeight: '80vh' }}>

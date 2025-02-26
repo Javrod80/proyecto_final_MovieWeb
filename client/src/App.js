@@ -20,6 +20,7 @@ import Reviews from './components/Reviews';
 import { ReviewsProvider } from './providers/ReviewsProvider';
 import PrivateRoute from './components/PrivateRoute';
 import ChangePassword from './components/ChangePassword';
+import AdminDashboard from './pages/AdminDashboard';
 
 function App() {
   return (
@@ -46,6 +47,7 @@ function App() {
                       <Route path="/profile" element={<Profile />} />
                       <Route path="/watched" element={<MovieWatched />} />
                       <Route path="/reviews" element={<Reviews />} />
+                      <Route path="/admin-dashboard" element={<AdminDashboard />} />
                      
                     </Route>
                     

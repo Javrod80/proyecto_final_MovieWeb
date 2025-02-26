@@ -18,8 +18,8 @@ const userController = {
      */
     // Registro de un nuevo usuario
     signupUser: async (req, res) => {
-       // console.log("Datos recibidos:", req.body);
-        const { user_name, user_lastnames, email, password } = req.body;
+        // console.log("Datos recibidos:", req.body);
+        const { user_name, user_lastnames, email, password, rol } = req.body;
 
         if (!user_name || !user_lastnames || !email || !password) {
             return res.status(400).json({ message: 'Todos los campos son obligatorios' });
@@ -28,7 +28,9 @@ const userController = {
         try {
             // Encriptar la contraseña
             const hashedPassword = await bcrypt.hash(password, 10);
-            const userId = await usersModel.createUser(user_name, user_lastnames, email, hashedPassword);
+            const userRol = rol || 'usuario';
+
+            const userId = await usersModel.createUser(user_name, user_lastnames, email, hashedPassword , userRol);
             res.status(201).json({ message: 'Usuario registrado exitosamente', userId });
         } catch (error) {
             console.error('Error al registrar usuario:', error);
@@ -70,7 +72,7 @@ const userController = {
                 return res.status(401).json({ message: 'Usuario no encontrado o credenciales inválidas' });
             }
 
-            const token = sign({ id: user.id, email: user.email }, process.env.SECRET_KEY, { expiresIn: '1h' });
+            const token = sign({ id: user.id, email: user.email, rol: user.rol }, process.env.SECRET_KEY, { expiresIn: '1h' });
             res.status(200).json({ message: 'Inicio de sesión exitoso', token, user });
         } catch (error) {
             console.error('Error al iniciar sesión:', error);

@@ -21,8 +21,8 @@ const usersModel = {
      * @returns {Promise<number>} Devuelve el ID del usuario recién creado.
      */
     // Funcion para registrar un nuevo usuario
-    createUser: async (user_name, user_lastnames, email, password) => {
-        return await crudMySQL.createData(tableName, ['user_name', 'user_lastnames', 'email', 'password'], [user_name, user_lastnames, email, password]);
+    createUser: async (user_name, user_lastnames, email, password, rol = 'usuario') => {
+        return await crudMySQL.createData(tableName, ['user_name', 'user_lastnames', 'email', 'password', 'rol'], [user_name, user_lastnames, email, password, rol]);
     },
 
     /**

@@ -72,7 +72,7 @@ const crudMySQL = {
     // Función para obtener todos los registros de una tabla
     getData: async (table) => {
         const query = 'SELECT * FROM ??';
-        const [result] = await executeQuery(query, [table]);
+        const result = await executeQuery(query, [table]);
         return result;
     },
 

@@ -16,6 +16,9 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../providers/AuthContext";
 import { toast } from "react-toastify";
 import useFetch from "../hook/useFetch";
+import { jwtDecode } from 'jwt-decode';
+
+
 
 /**
     * Función que maneja el envío del formulario de inicio de sesión.
@@ -51,9 +54,19 @@ const Login = () => {
 
             localStorage.setItem("token", data.token);
             localStorage.setItem("userId", data.user?.id);
+
+            const decodedToken = jwtDecode(data.token);
+            const userRole = decodedToken.rol;
+
+
             // Actualizar el estado de autenticación
             login(data.user?.id);
+           // Redirigir según el rol del usuario
+           if (userRole === "admin") {
+            navigate("/admin-dashboard");
+        } else {
             navigate("/search");
+        }
             setHasLoggedIn(true);
         }
     }, [data, error, navigate, login, hasLoggedIn]);
