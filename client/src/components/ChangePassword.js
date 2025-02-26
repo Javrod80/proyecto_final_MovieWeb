@@ -2,13 +2,17 @@ import React, { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import useFetch from '../hook/useFetch';
+import { useNavigate } from 'react-router-dom';
 
 const ChangePassword = () => {
-    const [searchParams] = useSearchParams();
-    const token = searchParams.get('token');
+  //  const [searchParams] = useSearchParams();
+   // const token = searchParams.get('token');
     const [password, setPassword] = useState('');
     const [showForm, setShowForm] = useState(true);
     const { isLoading, error, data, fetchData } = useFetch();
+    const navigate = useNavigate();
+
+    const token = localStorage.getItem('token');
 
     const validatePassword = (password) => {
         if (password.length < 8) {
@@ -31,7 +35,7 @@ const ChangePassword = () => {
             toast.error(validationError);
             return;
         }
-        console.log('Token recibido en frontend:', token);
+      //  console.log(' tipo de Token recibido en frontend:', typeof token);
         if (!token) {
             toast.error('Token no válido o expirado.');
             return;
@@ -41,13 +45,9 @@ const ChangePassword = () => {
             `users/new-password`,
             'PUT',
             { password },
-            {
-                headers: {
-                    
-                    'Authorization': `Bearer ${token}`,
-                    'Content-Type': 'application/json',
-                }
-            }
+            
+            token
+            
         );
     };
 
@@ -56,6 +56,9 @@ const ChangePassword = () => {
             toast.success('Contraseña actualizada con éxito.');
             setPassword('');
             setShowForm(false);
+            setTimeout(() => {
+                navigate('/login');
+            }, 2000);
         } else if (error) {
             toast.error(error.message || 'Error al actualizar la contraseña.');
         }

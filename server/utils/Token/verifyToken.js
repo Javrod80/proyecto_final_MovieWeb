@@ -10,7 +10,10 @@ const verifyToken = (req, res, next) => {
  * @returns {void} No devuelve valor, solo modifica el objeto `req` y, si el token es válido, llama a `next()`.
  * @throws {Error} Si no se proporciona un token o si el token es inválido, responde con un código de estado 403.
  */
-    const bearerHeader = req.headers['Authorization'];
+
+   // console.log('Verificando token..., req.headers:', req.headers);
+    const bearerHeader = req.headers['authorization'];
+   // console.log('Authorization Header:', bearerHeader);
 
     if (typeof bearerHeader !== 'undefined') {
         // Extraer el token de la cabecera Authorization
@@ -33,7 +36,7 @@ const verifyToken = (req, res, next) => {
 
         next();
     } else {
-        console.error('No se proporcionó token');
+        console.error('No se proporcionó token ');
         res.sendStatus(403);
     }
 };

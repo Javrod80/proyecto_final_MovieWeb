@@ -1,5 +1,4 @@
 import bcrypt from 'bcryptjs';
-import tokenUtils from '../utils/Token/tokenUtils.js';
 import usersModel from '../models/MySQLModels/users.models.js';
 import { sendMailResetPassword } from '../utils/nodemailer.js';
 
@@ -43,29 +42,25 @@ export default {
      * @throws {Error} Lanza un error si ocurre algún problema.
      */
     resetPassword: async (req, res) => {
-        const {  newPassword } = req.body;
-        const token = req.headers['authorization'];
-        
+        const { password } = req.body;
 
-        if (!token || !newPassword) {
-            return res.status(400).json({ message: 'Token y nueva contraseña son obligatorios' });
+    
+        if (!password) {
+            return res.status(400).json({ message: 'Nueva contraseña es obligatoria' });
         }
-
+    
         try {
-            const decodedToken = tokenUtils.decodeToken(token);
-            if (!decodedToken) {
-                return res.status(401).json({ message: 'Token inválido' });
-            }
-
-            const userId = decodedToken.id; 
-            const hashedPassword = await bcrypt.hash(newPassword, 10); 
-
-            await usersModel.updateUser(userId, { password: hashedPassword }); 
-
+            const userId = req.user.id; 
+            const hashedPassword = await bcrypt.hash(password, 10);
+    
+            await usersModel.updateUser(userId, { password: hashedPassword });
+    
             res.status(200).json({ message: 'Contraseña restablecida exitosamente' });
         } catch (error) {
             console.error('Error al restablecer la contraseña:', error);
-            res.status(500).json({ message: 'Error al restablecer la contraseña', error }); 
+            res.status(500).json({ message: 'Error al restablecer la contraseña', error });
         }
-}
+    }
+    
+
 };
