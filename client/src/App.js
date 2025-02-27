@@ -20,7 +20,7 @@ import Reviews from './components/Reviews';
 import { ReviewsProvider } from './providers/ReviewsProvider';
 import PrivateRoute from './components/PrivateRoute';
 import ChangePassword from './components/ChangePassword';
-import AdminDashboard from './pages/AdminDashboard';
+import AdminDashboard from './adminPages/AdminDashboard';
 
 function App() {
   return (

@@ -11,7 +11,7 @@ let client;
  * @function getClient
  * @returns {Promise<MongoClient>} Devuelve una promesa con el cliente MongoDB.
  */
-const getClient = async () => {
+export const getClient = async () => {
     if (!client) {
         client = await mongoConnection.connectToMongo();  
     }

@@ -16,7 +16,7 @@ import updateUserController from '../controllers/updateUser.controller.js';
 import deleteUserController from '../controllers/deleteUser.controller.js';
 import resetPasswordController from '../controllers/resetPassword.controller.js';
 import adminController from '../controllers/admin.controller.js';
-;
+
 
 
 
@@ -220,39 +220,39 @@ router.put('/movieapp/v1/reviews/update-review/:reviewId', verifyToken ,updateRe
 // Rutas del administrador
 /**
  * Ruta para obtener todos los usuarios.
- * @name GET /movieapp/v1/users/all-users
+ * @name GET /movieapp/v1/admin/all-data-users
  * @function
  * @memberof module:router
  * @param {Object} req - El objeto de la solicitud.
  * @param {Object} res - El objeto de la respuesta.
  */
-//router.get('/movieapp/v1/users/all-users', adminController); // Obtenemos todos los usuarios
+//router.get('/movieapp/v1/admin/users/all-data-users', adminController); // Obtenemos todos los usuarios
 /**
  * Ruta para obtener todas las películas vistas.
- * @name GET /movieapp/v1/movies/all-movies
+ * @name GET /movieapp/v1/admin/all-movies-watched
  * @function
  * @memberof module:router
  * @param {Object} req - El objeto de la solicitud.
  * @param {Object} res - El objeto de la respuesta.
  */
-//router.get('/movieapp/v1/movies/all-movies', adminController);//todas las peliculas vistas
+//router.get('/movieapp/v1/admin/all-movies-watched', adminController);//todas las peliculas vistas
 /**
  * Ruta para obtener todas las reseñas.
- * @name GET /movieapp/v1/reviews/all-reviews
+ * @name GET /movieapp/v1/admin/get-all-reviews
  * @function
  * @memberof module:router
  * @param {Object} req - El objeto de la solicitud.
  */
-//router.get('/movieapp/v1/reviews/all-reviews', adminController);//todas las reseñas
+router.get('/movieapp/v1/admin/get-all-reviews', adminController.getAllReviews);//todas las reseñas
 /**
  * Ruta para obtener todas las peliculas favoritas.
- * @name GET /movieapp/v1/favorites/all-favorites
+ * @name GET /movieapp/v1/admin/all-favorites
  * @function
  * @memberof module:router
  * @param {Object} req - El objeto de la solicitud.
  * @param {Object} res - El objeto de la respuesta.
  */
-//router.get('/movieapp/v1/favorites/all-favorites', adminController);//todas las peliculas favoritas
+router.get('/movieapp/v1/admin/get-all-favorites', adminController.getAllFavorites);//todas las peliculas favoritas
 
 
 
