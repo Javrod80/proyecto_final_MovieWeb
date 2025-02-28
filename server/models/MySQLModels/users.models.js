@@ -59,13 +59,13 @@ const usersModel = {
      * @throws {Error} Lanza un error si falta el ID o los datos para actualizar.
      */
     // Funcion para obtener un usuario por su ID
-    updateUser: async (userId, updateFields) => {
-        if (!userId || !updateFields || Object.keys(updateFields).length === 0) {
+    updateUser: async (email, updateFields) => {
+        if (!email || !updateFields || Object.keys(updateFields).length === 0) {
             throw new Error("Faltan datos para actualizar el usuario");
         }
         const columns = Object.keys(updateFields);
         const values = Object.values(updateFields);
-        return await crudMySQL.updateData(tableName, columns, values, 'id', userId);
+        return await crudMySQL.updateData(tableName, columns, values, 'email', email);
     },
 
     /**
@@ -82,6 +82,10 @@ const usersModel = {
     getUserById: async (userId) => {
         const query = 'SELECT * FROM ?? WHERE id = ?';
         return await executeQuery(query, [tableName, userId]);
+    },
+    getUserByEmail: async (email) => {
+        const query = 'SELECT * FROM ?? WHERE email = ?';
+        return await executeQuery(query, [tableName, email]);
     },
 
 };

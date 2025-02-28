@@ -16,6 +16,7 @@ import updateUserController from '../controllers/updateUser.controller.js';
 import deleteUserController from '../controllers/deleteUser.controller.js';
 import resetPasswordController from '../controllers/resetPassword.controller.js';
 import adminController from '../controllers/admin.controller.js';
+import recoverPasswordController from '../controllers/recoverPassword.controller.js';
 
 
 
@@ -81,9 +82,8 @@ router.delete('/movieapp/v1/users/delete-user/:userId', verifyToken ,deleteUserC
  * @param {Object} res - El objeto de la respuesta.
  */
 router.post('/movieapp/v1/users/reset-password', verifyToken, resetPasswordController.requestPasswordReset); // Restablecer contraseña
-router.put('/movieapp/v1/users/new-password',verifyToken, resetPasswordController.resetPassword); // Restablecer contraseña
-
-
+router.put('/movieapp/v1/users/new-password',verifyToken, resetPasswordController.resetPassword); // Nuevacontraseña
+router.post('/movieapp/v1/users/recovery-mail', recoverPasswordController.recoverPassword); // Recuperar contraseña
 
 
 // Ruta de búsqueda de películas

@@ -21,6 +21,7 @@ import { ReviewsProvider } from './providers/ReviewsProvider';
 import PrivateRoute from './components/PrivateRoute';
 import ChangePassword from './components/ChangePassword';
 import AdminDashboard from './adminPages/AdminDashboard';
+import RecoveryPassword from './components/RecoveryPassword';
 
 function App() {
   return (
@@ -38,6 +39,7 @@ function App() {
                     <Route path="/login" element={<Login />} />
                     <Route path="/register" element={<SignupForm />} />
                     <Route path="/reset-password" element={<ChangePassword />} />
+                    <Route path="/recovery-password" element={<RecoveryPassword/>} />
 
                     {/* 🔹 Las rutas protegidas dentro de PrivateRoute */}
                     <Route element={<PrivateRoute />}>

@@ -72,7 +72,7 @@ const Login = () => {
     }, [data, error, navigate, login, hasLoggedIn]);
     // Renderizar el formulario
     return (
-        <div className="container mt-5" style={{ paddingTop: '100px' }}> 
+        <div className="container mt-5" style={{ paddingTop: '100px' }}>
             <div className="row justify-content-center">
                 <div className="col-md-4">
                     <div className="card shadow-lg" style={{ borderRadius: '15px', backgroundColor: '#f8f9fa' }}>
@@ -110,6 +110,16 @@ const Login = () => {
                             </form>
 
                             {error && <div className="alert alert-danger mt-3">{error}</div>}
+
+                            {/* Botón para redirigir a la página de recuperación de contraseña */}
+                            <div className="text-center mt-3">
+                                <button
+                                    className="btn btn-link"
+                                    onClick={() => navigate("/recovery-password")}
+                                >
+                                    ¿Olvidaste tu contraseña?
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>

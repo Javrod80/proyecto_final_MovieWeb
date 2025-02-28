@@ -38,10 +38,10 @@ const ResetPassword = () => {
     return (
         <div className="container mt-3">
             <h4>Cambiar Contraseña</h4>
-            <p>Se enviará un correo con un enlace para restablecer tu contraseña.</p>
+            <p>Se enviará un correo con un enlace para cambiar tu contraseña.</p>
             {error && <p className="text-danger">{error}</p>}
             <button className="btn btn-primary" onClick={handleRequestReset} disabled={loading || isLoading}>
-                {loading || isLoading ? 'Enviando...' : 'Enviar Correo de Restablecimiento'}
+                {loading || isLoading ? 'Enviando...' : 'Enviar correo cambio de contraseña'}
             </button>
         </div>
     );

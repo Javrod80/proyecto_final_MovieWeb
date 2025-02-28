@@ -42,25 +42,32 @@ export default {
      * @throws {Error} Lanza un error si ocurre algún problema.
      */
     resetPassword: async (req, res) => {
-        const { password } = req.body;
-
-    
-        if (!password) {
-            return res.status(400).json({ message: 'Nueva contraseña es obligatoria' });
-        }
-    
         try {
-            const userId = req.user.id; 
+            const { email, password } = req.body;
+
+            if (!email || !password) {
+                return res.status(400).json({ message: 'Correo electrónico y nueva contraseña son obligatorios' });
+            }
+
+            // Encriptar la nueva contraseña
             const hashedPassword = await bcrypt.hash(password, 10);
-    
-            await usersModel.updateUser(userId, { password: hashedPassword });
-    
+            console.log("Contraseña encriptada:", hashedPassword);
+
+            // Llamar a la función updateUser con el correo electrónico en lugar del userId
+            const result = await usersModel.updateUser(email, { password: hashedPassword });
+            console.log("Resultado de la actualización:", result);
+
+            if (!result) {
+                return res.status(400).json({ message: 'No se pudo actualizar la contraseña' });
+            }
+
             res.status(200).json({ message: 'Contraseña restablecida exitosamente' });
         } catch (error) {
             console.error('Error al restablecer la contraseña:', error);
             res.status(500).json({ message: 'Error al restablecer la contraseña', error });
         }
     }
+
     
 
 };

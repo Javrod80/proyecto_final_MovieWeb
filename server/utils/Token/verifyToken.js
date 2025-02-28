@@ -20,18 +20,24 @@ const verifyToken = (req, res, next) => {
         const bearerToken = bearerHeader.split(' ')[1];
         req.token = bearerToken;
 
-        //console.log('Token recibido:', req.token); 
+      //  console.log('Token recibido:', req.token); 
 
         // Decodificar el token y verificar si es válido
         const decoded = tokenUtils.decodeToken(req.token);
         if (!decoded) {
-            console.error('Token no válido o ha expirado');
+           // console.error('Token no válido o ha expirado');
             return res.status(403).json({ message: 'Token no válido o expirado' });
         }
-
-        // Si el token es válido, almacenar los datos decodificados en req.user
+        const currentTime = Math.floor(Date.now() / 1000); 
+        if (decoded.exp < currentTime) {
+          //  console.log('El token ha expirado');
+            return res.status(403).json({ message: 'Token ha expirado' });
+        }
+       
         req.user = decoded;
-        //  console.log('Token decodificado:', req.user); 
+          //console.log('Token decodificado:', req.user); 
+       // console.log(new Date().toString());
+
 
 
         next();
