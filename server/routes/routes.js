@@ -15,8 +15,9 @@ import deleteHistoryController from '../controllers/deleteHistory.controller.js'
 import updateUserController from '../controllers/updateUser.controller.js';
 import deleteUserController from '../controllers/deleteUser.controller.js';
 import resetPasswordController from '../controllers/resetPassword.controller.js';
-import adminController from '../controllers/admin.controller.js';
+import adminController from '../adminControllers/admin.controller.js';
 import recoverPasswordController from '../controllers/recoverPassword.controller.js';
+import isAdmin from '../utils/Admin/isAdmin.js';
 
 
 
@@ -217,6 +218,7 @@ router.delete('/movieapp/v1/reviews/delete-review/:reviewId',verifyToken , delet
 router.put('/movieapp/v1/reviews/update-review/:reviewId', verifyToken ,updateReviewsController.updateReviews);// Actualizamos una reseña
 
 
+
 // Rutas del administrador
 /**
  * Ruta para obtener todos los usuarios.
@@ -252,7 +254,7 @@ router.get('/movieapp/v1/admin/get-all-reviews', adminController.getAllReviews);
  * @param {Object} req - El objeto de la solicitud.
  * @param {Object} res - El objeto de la respuesta.
  */
-router.get('/movieapp/v1/admin/get-all-favorites', adminController.getAllFavorites);//todas las peliculas favoritas
+router.get('/movieapp/v1/admin/get-all-favorites',isAdmin ,adminController.getAllFavorites);//todas las peliculas favoritas
 
 
 

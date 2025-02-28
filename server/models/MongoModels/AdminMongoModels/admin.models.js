@@ -1,4 +1,4 @@
-import { getClient } from './mongo.models.js';
+import { getClient } from '../mongo.models.js';
 
 /**
  * Función genérica para obtener datos agrupados de una colección.

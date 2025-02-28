@@ -18,7 +18,7 @@ import WatchedProvider from './providers/WatchedProvider';
 import MovieWatched from './components/MovieWatched';
 import Reviews from './components/Reviews';
 import { ReviewsProvider } from './providers/ReviewsProvider';
-import PrivateRoute from './components/PrivateRoute';
+import PrivateRoute from './utils/PrivateRoute';
 import ChangePassword from './components/ChangePassword';
 import AdminDashboard from './adminPages/AdminDashboard';
 import RecoveryPassword from './components/RecoveryPassword';
@@ -40,7 +40,7 @@ function App() {
                     <Route path="/register" element={<SignupForm />} />
                     <Route path="/reset-password" element={<ChangePassword />} />
                     <Route path="/recovery-password" element={<RecoveryPassword/>} />
-
+                    
                     {/* 🔹 Las rutas protegidas dentro de PrivateRoute */}
                     <Route element={<PrivateRoute />}>
                       <Route path="/search" element={<MoviesSearch />} />

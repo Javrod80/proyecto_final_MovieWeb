@@ -1,5 +1,5 @@
 import usersModel from '../models/MySQLModels/users.models.js';
-import sendMailResetPassword from '../utils/nodemailer.js';
+import sendMailResetPassword from '../utils/Nodemailer/nodemailer.js';
 
 export default {
     recoverPassword: async (req, res) => {

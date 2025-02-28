@@ -56,6 +56,7 @@ const useFetch = () => {
             const url = `${BASE_URL}/${endpoint}`;
             const headers = {
                 "Content-Type": "application/json",
+                
             };
             // Agregar el token al encabezado de la solicitud
             if (token) {

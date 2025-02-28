@@ -1,4 +1,4 @@
-import { getFavoritesGrouped, getReviewsGrouped } from '../models/MongoModels/admin.models.js';
+import { getFavoritesGrouped, getReviewsGrouped } from '../models/MongoModels/AdminMongoModels/admin.models.js';
 
 /**
  * Función genérica para manejar las solicitudes y obtener los datos agrupados.

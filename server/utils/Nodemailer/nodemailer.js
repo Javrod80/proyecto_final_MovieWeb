@@ -1,6 +1,6 @@
 import nodemailer from 'nodemailer';
 import dotenv from 'dotenv';
-import tokenUtils from '../utils/Token/tokenUtils.js'; // 
+import tokenUtils from '../Token/tokenUtils.js'; // 
 dotenv.config();
 
 // Configuración del transporte

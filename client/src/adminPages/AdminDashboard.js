@@ -27,7 +27,7 @@ const AdminDashboard = () => {
       </div>
       <div className="row">
         <div className="col-12">
-          <AdminGetFavorites />
+          <AdminGetFavorites  />
         </div>
       </div>
       <div className="row mt-4">

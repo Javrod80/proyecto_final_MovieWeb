@@ -8,14 +8,17 @@ const AdminGetFavorites = () => {
   const { isLoading, error,  fetchData } = useFetch();
 
   useEffect(() => {
-      const fetchFavorites = async () => {
-          const result = await fetchData('admin/get-all-favorites');
+         const fetchFavorites = async () => {
+          const result = await fetchData('admin/get-all-favorites',
+        );   
+        
           if (result) {
               setFavorites(result);
           }
       };
       fetchFavorites();
   }, [fetchData]);
+ 
 
   return (
     <div className="container mt-5">
