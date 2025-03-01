@@ -11,6 +11,7 @@ const favoritesSwagger = YAML.load(path.resolve(__dirname, './favorites.yaml'));
 const moviesSwagger = YAML.load(path.resolve(__dirname, './movies.yaml'));
 const reviewsSwagger = YAML.load(path.resolve(__dirname, './reviews.yaml'));
 const watchHistorySwagger = YAML.load(path.resolve(__dirname, './watchHistory.yaml')); 
+const adminSwagger = YAML.load(path.resolve(__dirname, './admin.yaml'));
 
 const swaggerOptions = {
     definition: {
@@ -21,7 +22,7 @@ const swaggerOptions = {
             description: "Documentación de la API con Swagger",
             contact: {
                 name: "Javier",
-                email: 'javrod80@gmail.com',
+                email: 'mailitodeprueba25@gmail.com',
             },
         },
         tags: [
@@ -30,6 +31,7 @@ const swaggerOptions = {
             { name: 'Favorites', description: 'Operaciones relacionadas con las peliculas favoritas' },
             { name: 'Reviews', description: 'Operaciones relacionadas con las reseñas' },
             { name: 'Watch History', description: 'Operaciones relacionadas con el historial de las peloculas vistas' },
+            { name: 'Admin', description: 'Operaciones relacionadas con el Admin' },
             // ... otros tags
         ],
         servers: [

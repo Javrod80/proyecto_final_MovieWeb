@@ -1,0 +1,103 @@
+openapi: 3.0.0
+info:
+  title: API de Administración
+  version: 1.0.0
+  description: API para la administración de reseñas y películas favoritas
+components:
+  schemas:
+    Review:
+      type: object
+      properties:
+        user:
+          type: string
+          description: ID del usuario que hizo la reseña
+        movie:
+          type: string
+          description: ID de la película reseñada
+        rating:
+          type: number
+          format: float
+          description: Puntuación de la reseña
+        comment:
+          type: string
+          description: Comentario de la reseña
+    Favorite:
+      type: object
+      properties:
+        user:
+          type: string
+          description: ID del usuario
+        movie:
+          type: string
+          description: ID de la película favorita
+    Error:
+      type: object
+      properties:
+        message:
+          type: string
+          description: Descripción del error
+        error:
+          type: string
+          description: Tipo de error
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+paths:
+  /movieapp/v1/admin/get-all-reviews:
+    get:
+      tags:
+        - Admin
+      summary: Obtener todas las reseñas de películas
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Lista de todas las reseñas
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Review'
+        '401':
+          description: No autorizado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /movieapp/v1/admin/get-all-favorites:
+    get:
+      tags:
+        - Admin
+      summary: Obtener todas las películas favoritas de los usuarios
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Lista de todas las películas favoritas
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Favorite'
+        '401':
+          description: No autorizado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'

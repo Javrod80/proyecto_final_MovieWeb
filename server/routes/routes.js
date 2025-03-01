@@ -245,7 +245,7 @@ router.put('/movieapp/v1/reviews/update-review/:reviewId', verifyToken ,updateRe
  * @memberof module:router
  * @param {Object} req - El objeto de la solicitud.
  */
-router.get('/movieapp/v1/admin/get-all-reviews', adminController.getAllReviews);//todas las reseñas
+router.get('/movieapp/v1/admin/get-all-reviews', isAdmin ,adminController.getAllReviews);//todas las reseñas
 /**
  * Ruta para obtener todas las peliculas favoritas.
  * @name GET /movieapp/v1/admin/all-favorites
