@@ -98,73 +98,6 @@
 
         
             
-<h4 class="name" id="AuthProvider"><span class="type-signature">(constant) </span>AuthProvider<span class="type-signature"></span></h4>
-
-
-
-
-<div class="description">
-    Proveedor que maneja el estado de autenticación y proporciona las funciones de login y logout.El proveedor guarda el estado de la autenticación en `localStorage`, permitiendo que persista entre las sesiones. Proporciona funciones para iniciar y cerrar sesión, y para recuperar el estado de autenticación cuando el componente se monta.
-</div>
-
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="providers_AuthContext.js.html">providers/AuthContext.js</a>, <a href="providers_AuthContext.js.html#line55">line 55</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-    <h5>Example</h5>
-    
-    <pre class="prettyprint"><code>&lt;AuthProvider>  &lt;App />&lt;/AuthProvider></code></pre>
-
-
-
-        
-            
 <h4 class="name" id="FavoritesProvider"><span class="type-signature">(constant) </span>FavoritesProvider<span class="type-signature"></span></h4>
 
 
@@ -505,6 +438,32 @@
 
         <tr>
             
+                <td class="name"><code>userRole</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+|
+
+<span class="param-type">null</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">El rol del usuario autenticado o null si no está autenticado.</td>
+        </tr>
+
+    
+
+        <tr>
+            
                 <td class="name"><code>login</code></td>
             
 
@@ -521,7 +480,7 @@
 
             
 
-            <td class="description last">Función para autenticar al usuario con un ID.</td>
+            <td class="description last">Función para autenticar al usuario con un ID y rol.</td>
         </tr>
 
     
@@ -583,7 +542,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="providers_AuthContext.js.html">providers/AuthContext.js</a>, <a href="providers_AuthContext.js.html#line33">line 33</a>
+        <a href="providers_AuthContext.js.html">providers/AuthContext.js</a>, <a href="providers_AuthContext.js.html#line35">line 35</a>
     </li></ul></dd>
     
 
@@ -1275,6 +1234,226 @@
     
 
     
+    <h4 class="name" id="AdminGetFavorites"><span class="type-signature"></span>AdminGetFavorites<span class="signature">()</span><span class="type-signature"> &rarr; {JSX.Element}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    AdminGetFavorites es un componente que muestra una lista de películas favoritasde los usuarios. Este componente solo es accesible para los administradores.
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="admincomponents_AdminGetFavorites.js.html">admincomponents/AdminGetFavorites.js</a>, <a href="admincomponents_AdminGetFavorites.js.html#line12">line 12</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    El componente de administración para ver las películas favoritas.
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">JSX.Element</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="AdminGetReviews"><span class="type-signature"></span>AdminGetReviews<span class="signature">()</span><span class="type-signature"> &rarr; {JSX.Element}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Componente que muestra las reseñas de películas. Solo accesible por administradores.Muestra un listado de reseñas agrupadas por película.
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="admincomponents_AdminGetReviews.js.html">admincomponents/AdminGetReviews.js</a>, <a href="admincomponents_AdminGetReviews.js.html#line11">line 11</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    El componente de reseñas del administrador.
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">JSX.Element</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
     <h4 class="name" id="DeleteAccount"><span class="type-signature"></span>DeleteAccount<span class="signature">()</span><span class="type-signature"> &rarr; {JSX.Element}</span></h4>
     
 
@@ -1495,7 +1674,7 @@
     
 
     
-    <h4 class="name" id="Login"><span class="type-signature"></span>Login<span class="signature">(e)</span><span class="type-signature"> &rarr; {void}</span></h4>
+    <h4 class="name" id="Login"><span class="type-signature"></span>Login<span class="signature">()</span><span class="type-signature"> &rarr; {JSX.Element}</span></h4>
     
 
     
@@ -1503,7 +1682,7 @@
 
 
 <div class="description">
-    Función que maneja el envío del formulario de inicio de sesión.Realiza una solicitud para autenticar al usuario con las credenciales proporcionadas.
+    Componente de Login que permite a los usuarios iniciar sesión en la aplicación.Si el inicio de sesión es exitoso, el usuario es redirigido a una página diferente dependiendo de su rol.
 </div>
 
 
@@ -1512,55 +1691,6 @@
 
 
 
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>e</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">React.FormEvent</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">El evento de envío del formulario.</td>
-        </tr>
-
-    
-    </tbody>
-</table>
 
 
 
@@ -1596,7 +1726,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="pages_Login.js.html">pages/Login.js</a>, <a href="pages_Login.js.html#line27">line 27</a>
+        <a href="pages_Login.js.html">pages/Login.js</a>, <a href="pages_Login.js.html#line14">line 14</a>
     </li></ul></dd>
     
 
@@ -1624,6 +1754,10 @@
 <h5>Returns:</h5>
 
         
+<div class="param-desc">
+    El formulario de inicio de sesión.
+</div>
+
 
 
 <dl>
@@ -1632,7 +1766,7 @@
     </dt>
     <dd>
         
-<span class="param-type">void</span>
+<span class="param-type">JSX.Element</span>
 
 
     </dd>
@@ -2071,6 +2205,531 @@
 
 
         
+            
+
+    
+
+    
+    <h4 class="name" id="fetchFavorites"><span class="type-signature">(async) </span>fetchFavorites<span class="signature">()</span><span class="type-signature"> &rarr; {Promise.&lt;void>}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Función asincrónica para obtener las películas favoritas.Llama a la función fetchData para hacer una solicitud GET.
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="admincomponents_AdminGetFavorites.js.html">admincomponents/AdminGetFavorites.js</a>, <a href="admincomponents_AdminGetFavorites.js.html#line56">line 56</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise.&lt;void></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="fetchReviews"><span class="type-signature">(async) </span>fetchReviews<span class="signature">()</span><span class="type-signature"> &rarr; {Promise.&lt;void>}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Función asincrónica para obtener las reseñas de la API.
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="admincomponents_AdminGetReviews.js.html">admincomponents/AdminGetReviews.js</a>, <a href="admincomponents_AdminGetReviews.js.html#line57">line 57</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise.&lt;void></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="handleSubmit"><span class="type-signature">(async) </span>handleSubmit<span class="signature">(e)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Manejador de envío del formulario de inicio de sesión.Hace una solicitud POST para autenticar al usuario.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>e</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">React.FormEvent</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">El evento de envío del formulario.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="pages_Login.js.html">pages/Login.js</a>, <a href="pages_Login.js.html#line39">line 39</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="login"><span class="type-signature"></span>login<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Hook para obtener la función de autenticación del contexto de usuario.
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="pages_Login.js.html">pages/Login.js</a>, <a href="pages_Login.js.html#line15">line 15</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="navigate"><span class="type-signature"></span>navigate<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Hook para la navegación entre páginas.
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="pages_Login.js.html">pages/Login.js</a>, <a href="pages_Login.js.html#line20">line 20</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
     
 
     
@@ -2086,13 +2745,13 @@
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#AuthProvider">AuthProvider</a></li><li><a href="global.html#DeleteAccount">DeleteAccount</a></li><li><a href="global.html#Favorites">Favorites</a></li><li><a href="global.html#FavoritesProvider">FavoritesProvider</a></li><li><a href="global.html#Login">Login</a></li><li><a href="global.html#ReviewsProvider">ReviewsProvider</a></li><li><a href="global.html#SearchProvider">SearchProvider</a></li><li><a href="global.html#WatchedProvider">WatchedProvider</a></li><li><a href="global.html#useAuth">useAuth</a></li><li><a href="global.html#useFavorites">useFavorites</a></li><li><a href="global.html#useReviews">useReviews</a></li><li><a href="global.html#useWatched">useWatched</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#AdminGetFavorites">AdminGetFavorites</a></li><li><a href="global.html#AdminGetReviews">AdminGetReviews</a></li><li><a href="global.html#DeleteAccount">DeleteAccount</a></li><li><a href="global.html#Favorites">Favorites</a></li><li><a href="global.html#FavoritesProvider">FavoritesProvider</a></li><li><a href="global.html#Login">Login</a></li><li><a href="global.html#ReviewsProvider">ReviewsProvider</a></li><li><a href="global.html#SearchProvider">SearchProvider</a></li><li><a href="global.html#WatchedProvider">WatchedProvider</a></li><li><a href="global.html#fetchFavorites">fetchFavorites</a></li><li><a href="global.html#fetchReviews">fetchReviews</a></li><li><a href="global.html#handleSubmit">handleSubmit</a></li><li><a href="global.html#login">login</a></li><li><a href="global.html#navigate">navigate</a></li><li><a href="global.html#useAuth">useAuth</a></li><li><a href="global.html#useFavorites">useFavorites</a></li><li><a href="global.html#useReviews">useReviews</a></li><li><a href="global.html#useWatched">useWatched</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.4</a> on Wed Feb 26 2025 16:56:02 GMT+0100 (hora estándar de Europa central)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.4</a> on Sat Mar 01 2025 01:07:45 GMT+0100 (hora estándar de Europa central)
 </footer>
 
 <script> prettyPrint(); </script>

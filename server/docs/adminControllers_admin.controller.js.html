@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: utils/Token/tokenUtils.js</title>
+    <title>JSDoc: Source: adminControllers/admin.controller.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: utils/Token/tokenUtils.js</h1>
+    <h1 class="page-title">Source: adminControllers/admin.controller.js</h1>
 
     
 
@@ -26,52 +26,44 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>import jwt from 'jsonwebtoken';
-import dotenv from 'dotenv';
+            <pre class="prettyprint source linenums"><code>import { getFavoritesGrouped, getReviewsGrouped } from '../models/MongoModels/AdminMongoModels/admin.models.js';
 
-dotenv.config();
-const SECRET_KEY = process.env.SECRET_KEY;
-
-const tokenUtils = {
-    /**
-     * Función para generar un token JWT con los datos proporcionados.
-     * @param {Object} tokenFrom - Los datos que se incluirán en el token JWT.
-     * @returns {Promise&lt;Object>} Un objeto con el mensaje de éxito y el token JWT generado.
-     */
-    signJwt: (tokenFrom) => {
-        return new Promise((resolve, reject) => {
-            
-            const payload = { ...tokenFrom, rol: tokenFrom.rol || 'usuario' };
-
-            jwt.sign(payload, SECRET_KEY, { expiresIn: '4h' }, (err, token) => {
-                if (err) {
-                    reject({ error: 'No se pudo generar el token' });
-                } else {
-                    resolve({
-                        message: 'Usuario autenticado correctamente',
-                        token
-                    });
-                }
-            });
-        });
-    },
-
-    /**
-     * Función para verificar un token y devolver su contenido decodificado.
-     * @param {string} token - El token JWT a verificar y decodificar.
-     * @returns {Object|null} El contenido decodificado del token si es válido, o null si es inválido.
-     */
-    decodeToken: (token) => {
-        try {
-            return jwt.verify(token, SECRET_KEY);
-        } catch (error) {
-            console.error('Error al verificar token:', error.message);
-            return null;
-        }
-    },
+/**
+ * Función genérica para manejar las solicitudes y obtener los datos agrupados.
+ * @async
+ * @function handleRequest
+ * @param {Function} getDataFunction - La función que obtiene los datos agrupados.
+ * @param {Request} req - La solicitud de Express.
+ * @param {Response} res - La respuesta de Express.
+ */
+const handleRequest = async (getDataFunction, req, res) => {
+    try {
+        const data = await getDataFunction();
+        res.status(200).json(data);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
 };
 
-export default tokenUtils;
+export default {
+    getAllFavorites: (req, res) => handleRequest(getFavoritesGrouped, req, res),
+    getAllReviews: (req, res) => handleRequest(getReviewsGrouped, req, res)
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 </code></pre>
         </article>
     </section>

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: utils/Token/tokenUtils.js</title>
+    <title>JSDoc: Source: models/MongoModels/AdminMongoModels/admin.models.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: utils/Token/tokenUtils.js</h1>
+    <h1 class="page-title">Source: models/MongoModels/AdminMongoModels/admin.models.js</h1>
 
     
 
@@ -26,52 +26,82 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>import jwt from 'jsonwebtoken';
-import dotenv from 'dotenv';
+            <pre class="prettyprint source linenums"><code>import { getClient } from '../mongo.models.js';
 
-dotenv.config();
-const SECRET_KEY = process.env.SECRET_KEY;
+/**
+ * Función genérica para obtener datos agrupados de una colección.
+ * @async
+ * @function getGroupedData
+ * @param {string} collectionName - El nombre de la colección en la base de datos.
+ * @param {Object} groupFields - Los campos por los cuales se agruparán los datos.
+ * @param {Object} additionalGroupFields - Los campos adicionales que se agregarán al grupo.
+ * @param {Object} sortFields - Los campos por los cuales se ordenarán los datos agrupados.
+ * @returns {Promise&lt;Array>} Devuelve una promesa que contiene un arreglo con los documentos agrupados.
+ */
 
-const tokenUtils = {
-    /**
-     * Función para generar un token JWT con los datos proporcionados.
-     * @param {Object} tokenFrom - Los datos que se incluirán en el token JWT.
-     * @returns {Promise&lt;Object>} Un objeto con el mensaje de éxito y el token JWT generado.
-     */
-    signJwt: (tokenFrom) => {
-        return new Promise((resolve, reject) => {
-            
-            const payload = { ...tokenFrom, rol: tokenFrom.rol || 'usuario' };
+const getGroupedData = async (collectionName, groupFields,additionalGroupFields, sortFields) => {
+    const client = await getClient();
+    const db = client.db(process.env.MONGO_BBDD);
+    const collection = db.collection(collectionName);
 
-            jwt.sign(payload, SECRET_KEY, { expiresIn: '4h' }, (err, token) => {
-                if (err) {
-                    reject({ error: 'No se pudo generar el token' });
-                } else {
-                    resolve({
-                        message: 'Usuario autenticado correctamente',
-                        token
-                    });
+    try {
+        const result = await collection.aggregate([
+            {
+                $group: {
+                    _id: groupFields,
+                    ...additionalGroupFields,
+                    count: { $sum: 1 }
                 }
-            });
-        });
-    },
+            },
+            {
+                $sort: sortFields
+            }
+        ]).toArray();
+      //  console.log("Datos agrupados obtenidos:", result);
+        return result;
+    } catch (error) {
+        console.error('Error al agrupar datos en la colección:', error);
+        throw error;
+    }
+};
+/**
+ * Función para obtener los datos agrupados de la colección de favoritos.
+ * @async
+ * @function getFavoritesGrouped
+ * @returns {Promise&lt;Array>} Devuelve una promesa que contiene un arreglo con los documentos agrupados de favoritos.
+ */
+const getFavoritesGrouped = async () => {
+    const groupFields = { imdbID: "$imdbID", Title: "$Title", Poster: "$Poster", Plot: "$Plot" };
+    const additionalGroupFields = { users: { $push: "$userId" } };
+    const sortFields = { count: -1, "Title": 1 };
+    return getGroupedData(process.env.COLL_FAV, groupFields, additionalGroupFields, sortFields);
+};
+/**
+ * Función para obtener las reseñas agrupadas por película.
+ * @async
+ * @function getReviewsGrouped
+ * @returns {Promise&lt;Array>} Devuelve una promesa que contiene un arreglo con los documentos agrupados de reseñas.
+ */
 
-    /**
-     * Función para verificar un token y devolver su contenido decodificado.
-     * @param {string} token - El token JWT a verificar y decodificar.
-     * @returns {Object|null} El contenido decodificado del token si es válido, o null si es inválido.
-     */
-    decodeToken: (token) => {
-        try {
-            return jwt.verify(token, SECRET_KEY);
-        } catch (error) {
-            console.error('Error al verificar token:', error.message);
-            return null;
+const getReviewsGrouped = async () => {
+    const groupFields = { movieId: "$movieId" };
+    const additionalGroupFields = {
+        reviews: {
+            $push: {
+                userId: "$userId",
+                rating: "$rating",
+                review: "$review"
+            }
         }
-    },
+    };
+    const sortFields = { count: -1, "_id.movieId": 1 };
+    return getGroupedData(process.env.COLL_REV, groupFields, additionalGroupFields, sortFields);
 };
 
-export default tokenUtils;
+export { getFavoritesGrouped, getReviewsGrouped };
+
+
+
 </code></pre>
         </article>
     </section>

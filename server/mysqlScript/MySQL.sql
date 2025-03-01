@@ -42,4 +42,4 @@ VALUES (
         "$2a$10$McwDxzKUuJs4NmDMq17.Zuryfy6tFCCCB9DskM.63T.c7Gc8MCv3W",
         "admin"
     );
-    
+    Password123

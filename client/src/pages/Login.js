@@ -1,39 +1,49 @@
-/**
- * Componente de la página de inicio de sesión.
- * 
- * Permite a los usuarios iniciar sesión en la aplicación. Solicita un correo electrónico y una contraseña, 
- * y si las credenciales son correctas, guarda un token en el almacenamiento local y redirige al usuario a la página de búsqueda.
- * 
- * @component
- * @example
- * return <Login />;
- * 
- * @returns {JSX.Element} Renderiza la interfaz de inicio de sesión con campos para ingresar email y contraseña.
- */
-
-import React, { useEffect , useState} from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../providers/AuthContext";
 import { toast } from "react-toastify";
 import useFetch from "../hook/useFetch";
-import { jwtDecode } from 'jwt-decode';
-
-
-
+import { jwtDecode } from "jwt-decode";
 /**
-    * Función que maneja el envío del formulario de inicio de sesión.
-    * Realiza una solicitud para autenticar al usuario con las credenciales proporcionadas.
-    * 
-    * @param {React.FormEvent} e - El evento de envío del formulario.
-    * @returns {void}
-    */
+ * Componente de Login que permite a los usuarios iniciar sesión en la aplicación.
+ * Si el inicio de sesión es exitoso, el usuario es redirigido a una página diferente dependiendo de su rol.
+ *
+ * @component
+ * @returns {JSX.Element} El formulario de inicio de sesión.
+ */
 const Login = () => {
+    /**
+ * Hook para obtener la función de autenticación del contexto de usuario.
+ * @function login
+ */
     const { login } = useAuth();
+    /**
+  * Hook para la navegación entre páginas.
+  * @function navigate
+  */
     const navigate = useNavigate();
+    /**
+ * Hook para manejar el estado de la solicitud de datos.
+ * @type {Object}
+ * @property {boolean} isLoading - Indica si la solicitud está en proceso.
+ * @property {string|null} error - Mensaje de error si ocurre alguno.
+ * @property {Object|null} data - Datos de la respuesta, que incluye el token de autenticación.
+ * @property {Function} fetchData - Función para hacer solicitudes HTTP.
+ */
     const { isLoading, error, data, fetchData } = useFetch();
+    /**
+    * Estado para verificar si el usuario ya ha iniciado sesión.
+    * @type {boolean}
+    */
     const [hasLoggedIn, setHasLoggedIn] = useState(false);
-
-    // Manejar el envío del formulario
+    /**
+     * Manejador de envío del formulario de inicio de sesión.
+     * Hace una solicitud POST para autenticar al usuario.
+     * 
+     * @async
+     * @function handleSubmit
+     * @param {React.FormEvent} e - El evento de envío del formulario.
+     */
     const handleSubmit = async (e) => {
         e.preventDefault();
         const formData = new FormData(e.target);
@@ -42,12 +52,17 @@ const Login = () => {
 
         await fetchData("users/login", "POST", { email, password });
     };
-
+    /**
+      * Efecto que se ejecuta cuando la respuesta de la solicitud de inicio de sesión llega.
+      * Si la autenticación es exitosa, guarda el token y el rol del usuario en el almacenamiento local
+      * y redirige al usuario según su rol.
+      * 
+      * @effect
+      */
     useEffect(() => {
         if (error) {
             toast.error(error);
         }
-        // Verificar si el token está disponible en el almacenamiento local
 
         if (data && data.token && !hasLoggedIn) {
             toast.success(data.message || "Operación exitosa");
@@ -56,21 +71,20 @@ const Login = () => {
             localStorage.setItem("userId", data.user?.id);
 
             const decodedToken = jwtDecode(data.token);
-            const userRole = decodedToken.rol;
+            const userRole = decodedToken.rol; 
 
+            localStorage.setItem("rol", userRole); 
 
-            // Actualizar el estado de autenticación
-            login(data.user?.id);
-           // Redirigir según el rol del usuario
-           if (userRole === "admin") {
-            navigate("/admin-dashboard");
-        } else {
-            navigate("/search");
-        }
+            
+            login(data.user?.id, userRole);
+
+            // Redirigir según el rol
+            navigate(userRole === "admin" ? "/admin-dashboard" : "/search");
             setHasLoggedIn(true);
         }
     }, [data, error, navigate, login, hasLoggedIn]);
-    // Renderizar el formulario
+
+
     return (
         <div className="container mt-5" style={{ paddingTop: '100px' }}>
             <div className="row justify-content-center">
@@ -111,7 +125,6 @@ const Login = () => {
 
                             {error && <div className="alert alert-danger mt-3">{error}</div>}
 
-                            {/* Botón para redirigir a la página de recuperación de contraseña */}
                             <div className="text-center mt-3">
                                 <button
                                     className="btn btn-link"

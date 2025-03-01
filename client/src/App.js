@@ -22,6 +22,7 @@ import PrivateRoute from './utils/PrivateRoute';
 import ChangePassword from './components/ChangePassword';
 import AdminDashboard from './adminPages/AdminDashboard';
 import RecoveryPassword from './components/RecoveryPassword';
+import AdminRoute from './utils/AdminRoute';
 
 function App() {
   return (
@@ -49,10 +50,13 @@ function App() {
                       <Route path="/profile" element={<Profile />} />
                       <Route path="/watched" element={<MovieWatched />} />
                       <Route path="/reviews" element={<Reviews />} />
-                      <Route path="/admin-dashboard" element={<AdminDashboard />} />
+                      
                      
                     </Route>
-                    
+                    {/* Ruta protegida solo para admins */}
+                    <Route element={<AdminRoute />}>
+                      <Route path="/admin-dashboard" element={<AdminDashboard />} />
+                    </Route>
                     <Route path="*" element={<h1>Not Found</h1>} />
                   </Routes>
                 </div>

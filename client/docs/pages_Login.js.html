@@ -26,39 +26,52 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>/**
- * Componente de la página de inicio de sesión.
- * 
- * Permite a los usuarios iniciar sesión en la aplicación. Solicita un correo electrónico y una contraseña, 
- * y si las credenciales son correctas, guarda un token en el almacenamiento local y redirige al usuario a la página de búsqueda.
- * 
- * @component
- * @example
- * return &lt;Login />;
- * 
- * @returns {JSX.Element} Renderiza la interfaz de inicio de sesión con campos para ingresar email y contraseña.
- */
-
-import React, { useEffect , useState} from "react";
+            <pre class="prettyprint source linenums"><code>import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../providers/AuthContext";
 import { toast } from "react-toastify";
 import useFetch from "../hook/useFetch";
-
+import { jwtDecode } from "jwt-decode";
 /**
-    * Función que maneja el envío del formulario de inicio de sesión.
-    * Realiza una solicitud para autenticar al usuario con las credenciales proporcionadas.
-    * 
-    * @param {React.FormEvent} e - El evento de envío del formulario.
-    * @returns {void}
-    */
+ * Componente de Login que permite a los usuarios iniciar sesión en la aplicación.
+ * Si el inicio de sesión es exitoso, el usuario es redirigido a una página diferente dependiendo de su rol.
+ *
+ * @component
+ * @returns {JSX.Element} El formulario de inicio de sesión.
+ */
 const Login = () => {
+    /**
+ * Hook para obtener la función de autenticación del contexto de usuario.
+ * @function login
+ */
     const { login } = useAuth();
+    /**
+  * Hook para la navegación entre páginas.
+  * @function navigate
+  */
     const navigate = useNavigate();
+    /**
+ * Hook para manejar el estado de la solicitud de datos.
+ * @type {Object}
+ * @property {boolean} isLoading - Indica si la solicitud está en proceso.
+ * @property {string|null} error - Mensaje de error si ocurre alguno.
+ * @property {Object|null} data - Datos de la respuesta, que incluye el token de autenticación.
+ * @property {Function} fetchData - Función para hacer solicitudes HTTP.
+ */
     const { isLoading, error, data, fetchData } = useFetch();
+    /**
+    * Estado para verificar si el usuario ya ha iniciado sesión.
+    * @type {boolean}
+    */
     const [hasLoggedIn, setHasLoggedIn] = useState(false);
-
-    // Manejar el envío del formulario
+    /**
+     * Manejador de envío del formulario de inicio de sesión.
+     * Hace una solicitud POST para autenticar al usuario.
+     * 
+     * @async
+     * @function handleSubmit
+     * @param {React.FormEvent} e - El evento de envío del formulario.
+     */
     const handleSubmit = async (e) => {
         e.preventDefault();
         const formData = new FormData(e.target);
@@ -67,27 +80,41 @@ const Login = () => {
 
         await fetchData("users/login", "POST", { email, password });
     };
-
+    /**
+      * Efecto que se ejecuta cuando la respuesta de la solicitud de inicio de sesión llega.
+      * Si la autenticación es exitosa, guarda el token y el rol del usuario en el almacenamiento local
+      * y redirige al usuario según su rol.
+      * 
+      * @effect
+      */
     useEffect(() => {
         if (error) {
             toast.error(error);
         }
-        // Verificar si el token está disponible en el almacenamiento local
 
         if (data &amp;&amp; data.token &amp;&amp; !hasLoggedIn) {
             toast.success(data.message || "Operación exitosa");
 
             localStorage.setItem("token", data.token);
             localStorage.setItem("userId", data.user?.id);
-            // Actualizar el estado de autenticación
-            login(data.user?.id);
-            navigate("/search");
+
+            const decodedToken = jwtDecode(data.token);
+            const userRole = decodedToken.rol; 
+
+            localStorage.setItem("rol", userRole); 
+
+            
+            login(data.user?.id, userRole);
+
+            // Redirigir según el rol
+            navigate(userRole === "admin" ? "/admin-dashboard" : "/search");
             setHasLoggedIn(true);
         }
     }, [data, error, navigate, login, hasLoggedIn]);
-    // Renderizar el formulario
+
+
     return (
-        &lt;div className="container mt-5" style={{ paddingTop: '100px' }}> 
+        &lt;div className="container mt-5" style={{ paddingTop: '100px' }}>
             &lt;div className="row justify-content-center">
                 &lt;div className="col-md-4">
                     &lt;div className="card shadow-lg" style={{ borderRadius: '15px', backgroundColor: '#f8f9fa' }}>
@@ -125,6 +152,15 @@ const Login = () => {
                             &lt;/form>
 
                             {error &amp;&amp; &lt;div className="alert alert-danger mt-3">{error}&lt;/div>}
+
+                            &lt;div className="text-center mt-3">
+                                &lt;button
+                                    className="btn btn-link"
+                                    onClick={() => navigate("/recovery-password")}
+                                >
+                                    ¿Olvidaste tu contraseña?
+                                &lt;/button>
+                            &lt;/div>
                         &lt;/div>
                     &lt;/div>
                 &lt;/div>
@@ -144,13 +180,13 @@ export default Login;
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#AuthProvider">AuthProvider</a></li><li><a href="global.html#DeleteAccount">DeleteAccount</a></li><li><a href="global.html#Favorites">Favorites</a></li><li><a href="global.html#FavoritesProvider">FavoritesProvider</a></li><li><a href="global.html#Login">Login</a></li><li><a href="global.html#ReviewsProvider">ReviewsProvider</a></li><li><a href="global.html#SearchProvider">SearchProvider</a></li><li><a href="global.html#WatchedProvider">WatchedProvider</a></li><li><a href="global.html#useAuth">useAuth</a></li><li><a href="global.html#useFavorites">useFavorites</a></li><li><a href="global.html#useReviews">useReviews</a></li><li><a href="global.html#useWatched">useWatched</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#AdminGetFavorites">AdminGetFavorites</a></li><li><a href="global.html#AdminGetReviews">AdminGetReviews</a></li><li><a href="global.html#DeleteAccount">DeleteAccount</a></li><li><a href="global.html#Favorites">Favorites</a></li><li><a href="global.html#FavoritesProvider">FavoritesProvider</a></li><li><a href="global.html#Login">Login</a></li><li><a href="global.html#ReviewsProvider">ReviewsProvider</a></li><li><a href="global.html#SearchProvider">SearchProvider</a></li><li><a href="global.html#WatchedProvider">WatchedProvider</a></li><li><a href="global.html#fetchFavorites">fetchFavorites</a></li><li><a href="global.html#fetchReviews">fetchReviews</a></li><li><a href="global.html#handleSubmit">handleSubmit</a></li><li><a href="global.html#login">login</a></li><li><a href="global.html#navigate">navigate</a></li><li><a href="global.html#useAuth">useAuth</a></li><li><a href="global.html#useFavorites">useFavorites</a></li><li><a href="global.html#useReviews">useReviews</a></li><li><a href="global.html#useWatched">useWatched</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.4</a> on Wed Feb 26 2025 16:56:02 GMT+0100 (hora estándar de Europa central)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.4</a> on Sat Mar 01 2025 01:07:45 GMT+0100 (hora estándar de Europa central)
 </footer>
 
 <script> prettyPrint(); </script>

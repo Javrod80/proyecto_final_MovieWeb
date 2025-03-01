@@ -43,6 +43,10 @@ import deleteHistoryController from '../controllers/deleteHistory.controller.js'
 import updateUserController from '../controllers/updateUser.controller.js';
 import deleteUserController from '../controllers/deleteUser.controller.js';
 import resetPasswordController from '../controllers/resetPassword.controller.js';
+import adminController from '../adminControllers/admin.controller.js';
+import recoverPasswordController from '../controllers/recoverPassword.controller.js';
+import isAdmin from '../utils/Admin/isAdmin.js';
+
 
 
 
@@ -107,9 +111,8 @@ router.delete('/movieapp/v1/users/delete-user/:userId', verifyToken ,deleteUserC
  * @param {Object} res - El objeto de la respuesta.
  */
 router.post('/movieapp/v1/users/reset-password', verifyToken, resetPasswordController.requestPasswordReset); // Restablecer contraseña
-router.put('/movieapp/v1/users/new-password',verifyToken, resetPasswordController.resetPassword); // Restablecer contraseña
-
-
+router.put('/movieapp/v1/users/new-password',verifyToken, resetPasswordController.resetPassword); // Nuevacontraseña
+router.post('/movieapp/v1/users/recovery-mail', recoverPasswordController.recoverPassword); // Recuperar contraseña
 
 
 // Ruta de búsqueda de películas
@@ -243,6 +246,46 @@ router.delete('/movieapp/v1/reviews/delete-review/:reviewId',verifyToken , delet
 router.put('/movieapp/v1/reviews/update-review/:reviewId', verifyToken ,updateReviewsController.updateReviews);// Actualizamos una reseña
 
 
+
+// Rutas del administrador
+/**
+ * Ruta para obtener todos los usuarios.
+ * @name GET /movieapp/v1/admin/all-data-users
+ * @function
+ * @memberof module:router
+ * @param {Object} req - El objeto de la solicitud.
+ * @param {Object} res - El objeto de la respuesta.
+ */
+//router.get('/movieapp/v1/admin/users/all-data-users', adminController); // Obtenemos todos los usuarios
+/**
+ * Ruta para obtener todas las películas vistas.
+ * @name GET /movieapp/v1/admin/all-movies-watched
+ * @function
+ * @memberof module:router
+ * @param {Object} req - El objeto de la solicitud.
+ * @param {Object} res - El objeto de la respuesta.
+ */
+//router.get('/movieapp/v1/admin/all-movies-watched', adminController);//todas las peliculas vistas
+/**
+ * Ruta para obtener todas las reseñas.
+ * @name GET /movieapp/v1/admin/get-all-reviews
+ * @function
+ * @memberof module:router
+ * @param {Object} req - El objeto de la solicitud.
+ */
+router.get('/movieapp/v1/admin/get-all-reviews', adminController.getAllReviews);//todas las reseñas
+/**
+ * Ruta para obtener todas las peliculas favoritas.
+ * @name GET /movieapp/v1/admin/all-favorites
+ * @function
+ * @memberof module:router
+ * @param {Object} req - El objeto de la solicitud.
+ * @param {Object} res - El objeto de la respuesta.
+ */
+router.get('/movieapp/v1/admin/get-all-favorites',isAdmin ,adminController.getAllFavorites);//todas las peliculas favoritas
+
+
+
 export { router };</code></pre>
         </article>
     </section>
@@ -253,13 +296,13 @@ export { router };</code></pre>
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-router.html">router</a></li></ul><h3>Namespaces</h3><ul><li><a href="crudMySQL.html">crudMySQL</a></li><li><a href="usersModel.html">usersModel</a></li><li><a href="watchHistoryModel.html">watchHistoryModel</a></li></ul><h3>Global</h3><ul><li><a href="global.html#addMovieReview">addMovieReview</a></li><li><a href="global.html#addWatchHistory">addWatchHistory</a></li><li><a href="global.html#closeClient">closeClient</a></li><li><a href="global.html#connectToMongo">connectToMongo</a></li><li><a href="global.html#createData">createData</a></li><li><a href="global.html#createUser">createUser</a></li><li><a href="global.html#deleteData">deleteData</a></li><li><a href="global.html#deleteFavorite">deleteFavorite</a></li><li><a href="global.html#deleteFromCollection">deleteFromCollection</a></li><li><a href="global.html#deleteMovieReview">deleteMovieReview</a></li><li><a href="global.html#deleteUser">deleteUser</a></li><li><a href="global.html#deleteWatchHistory">deleteWatchHistory</a></li><li><a href="global.html#executeDbOperation">executeDbOperation</a></li><li><a href="global.html#executeQuery">executeQuery</a></li><li><a href="global.html#getAllUsers">getAllUsers</a></li><li><a href="global.html#getClient">getClient</a></li><li><a href="global.html#getData">getData</a></li><li><a href="global.html#getDataFromCollection">getDataFromCollection</a></li><li><a href="global.html#getFavorites">getFavorites</a></li><li><a href="global.html#getMovieReviews">getMovieReviews</a></li><li><a href="global.html#getReviewById">getReviewById</a></li><li><a href="global.html#getWatchHistory">getWatchHistory</a></li><li><a href="global.html#insertFavorites">insertFavorites</a></li><li><a href="global.html#insertIntoCollection">insertIntoCollection</a></li><li><a href="global.html#loginUser">loginUser</a></li><li><a href="global.html#mySQLConnection">mySQLConnection</a></li><li><a href="global.html#sleep">sleep</a></li><li><a href="global.html#testLogin">testLogin</a></li><li><a href="global.html#updateData">updateData</a></li><li><a href="global.html#updateFavorite">updateFavorite</a></li><li><a href="global.html#updateInCollection">updateInCollection</a></li><li><a href="global.html#updateMovieReview">updateMovieReview</a></li><li><a href="global.html#updateUser">updateUser</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-router.html">router</a></li></ul><h3>Namespaces</h3><ul><li><a href="crudMySQL.html">crudMySQL</a></li><li><a href="usersModel.html">usersModel</a></li><li><a href="watchHistoryModel.html">watchHistoryModel</a></li></ul><h3>Global</h3><ul><li><a href="global.html#addMovieReview">addMovieReview</a></li><li><a href="global.html#addWatchHistory">addWatchHistory</a></li><li><a href="global.html#closeClient">closeClient</a></li><li><a href="global.html#connectToMongo">connectToMongo</a></li><li><a href="global.html#createData">createData</a></li><li><a href="global.html#createUser">createUser</a></li><li><a href="global.html#deleteData">deleteData</a></li><li><a href="global.html#deleteFavorite">deleteFavorite</a></li><li><a href="global.html#deleteFromCollection">deleteFromCollection</a></li><li><a href="global.html#deleteMovieReview">deleteMovieReview</a></li><li><a href="global.html#deleteUser">deleteUser</a></li><li><a href="global.html#deleteWatchHistory">deleteWatchHistory</a></li><li><a href="global.html#executeDbOperation">executeDbOperation</a></li><li><a href="global.html#executeQuery">executeQuery</a></li><li><a href="global.html#getAllUsers">getAllUsers</a></li><li><a href="global.html#getClient">getClient</a></li><li><a href="global.html#getData">getData</a></li><li><a href="global.html#getDataFromCollection">getDataFromCollection</a></li><li><a href="global.html#getFavorites">getFavorites</a></li><li><a href="global.html#getFavoritesGrouped">getFavoritesGrouped</a></li><li><a href="global.html#getGroupedData">getGroupedData</a></li><li><a href="global.html#getMovieReviews">getMovieReviews</a></li><li><a href="global.html#getReviewById">getReviewById</a></li><li><a href="global.html#getReviewsGrouped">getReviewsGrouped</a></li><li><a href="global.html#getWatchHistory">getWatchHistory</a></li><li><a href="global.html#handleRequest">handleRequest</a></li><li><a href="global.html#insertFavorites">insertFavorites</a></li><li><a href="global.html#insertIntoCollection">insertIntoCollection</a></li><li><a href="global.html#isAdmin">isAdmin</a></li><li><a href="global.html#loginUser">loginUser</a></li><li><a href="global.html#mySQLConnection">mySQLConnection</a></li><li><a href="global.html#sleep">sleep</a></li><li><a href="global.html#testLogin">testLogin</a></li><li><a href="global.html#updateData">updateData</a></li><li><a href="global.html#updateFavorite">updateFavorite</a></li><li><a href="global.html#updateInCollection">updateInCollection</a></li><li><a href="global.html#updateMovieReview">updateMovieReview</a></li><li><a href="global.html#updateUser">updateUser</a></li><li><a href="global.html#verifyToken">verifyToken</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.4</a> on Wed Feb 26 2025 16:55:16 GMT+0100 (hora estándar de Europa central)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.4</a> on Sat Mar 01 2025 01:07:18 GMT+0100 (hora estándar de Europa central)
 </footer>
 
 <script> prettyPrint(); </script>

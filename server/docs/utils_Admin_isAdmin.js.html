@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: utils/Token/tokenUtils.js</title>
+    <title>JSDoc: Source: utils/Admin/isAdmin.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: utils/Token/tokenUtils.js</h1>
+    <h1 class="page-title">Source: utils/Admin/isAdmin.js</h1>
 
     
 
@@ -27,52 +27,39 @@
     <section>
         <article>
             <pre class="prettyprint source linenums"><code>import jwt from 'jsonwebtoken';
-import dotenv from 'dotenv';
+/**
+ * Middleware para verificar si el usuario tiene privilegios de administrador.
+ * Este middleware valida el token JWT proporcionado en los encabezados de la solicitud
+ * y asegura que el usuario esté autenticado y sea un administrador.
+ * 
+ * @function isAdmin
+ * @param {Object} req - El objeto de la solicitud.
+ * @param {Object} res - El objeto de la respuesta.
+ * @param {Function} next - La función que pasa el control al siguiente middleware.
+ * @returns {void}
+ */
+ function isAdmin(req, res, next) {
+    const token = req.headers.authorization?.split(' ')[1];
+    if (!token) {
+         res.status(401).send('No token provided');
+    }
 
-dotenv.config();
-const SECRET_KEY = process.env.SECRET_KEY;
-
-const tokenUtils = {
-    /**
-     * Función para generar un token JWT con los datos proporcionados.
-     * @param {Object} tokenFrom - Los datos que se incluirán en el token JWT.
-     * @returns {Promise&lt;Object>} Un objeto con el mensaje de éxito y el token JWT generado.
-     */
-    signJwt: (tokenFrom) => {
-        return new Promise((resolve, reject) => {
-            
-            const payload = { ...tokenFrom, rol: tokenFrom.rol || 'usuario' };
-
-            jwt.sign(payload, SECRET_KEY, { expiresIn: '4h' }, (err, token) => {
-                if (err) {
-                    reject({ error: 'No se pudo generar el token' });
-                } else {
-                    resolve({
-                        message: 'Usuario autenticado correctamente',
-                        token
-                    });
-                }
-            });
-        });
-    },
-
-    /**
-     * Función para verificar un token y devolver su contenido decodificado.
-     * @param {string} token - El token JWT a verificar y decodificar.
-     * @returns {Object|null} El contenido decodificado del token si es válido, o null si es inválido.
-     */
-    decodeToken: (token) => {
-        try {
-            return jwt.verify(token, SECRET_KEY);
-        } catch (error) {
-            console.error('Error al verificar token:', error.message);
-            return null;
+    jwt.verify(token, process.env.SECRET_KEY, (err, decoded) => {
+        if (err) {
+            res.status(401).send('Invalid token');
+        } else {
+            req.user = decoded;
+            next();
         }
-    },
-};
+    });
+    
+    
+   
+    
+  
+}
 
-export default tokenUtils;
-</code></pre>
+export default isAdmin;</code></pre>
         </article>
     </section>
 

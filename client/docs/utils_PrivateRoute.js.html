@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: components/Header.js</title>
+    <title>JSDoc: Source: utils/PrivateRoute.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: components/Header.js</h1>
+    <h1 class="page-title">Source: utils/PrivateRoute.js</h1>
 
     
 
@@ -26,29 +26,36 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>import React from "react";
-import '../styles/Header.css'; 
-
-
-/**
- * Componente Header
+            <pre class="prettyprint source linenums"><code>/**
+ * Componente para proteger rutas privadas.
  * 
- * Renderiza la cabecera de la aplicación con el título y subtítulo.
+ * Este componente se asegura de que los usuarios solo puedan acceder a rutas privadas si están autenticados.
+ * Si el usuario no tiene un token en el almacenamiento local, será redirigido a la página de login.
  * 
  * @component
  * @example
  * return (
- *   &lt;Header />
+ *   &lt;PrivateRoute />
  * )
  */
-export default function Header() {
-    return (
-        &lt;header className="header">
-            &lt;h1>Movies Web&lt;/h1>
-            &lt;p>Tu buscador de películas favoritas&lt;/p>
-        &lt;/header>
-    );
-}
+
+import { Navigate, Outlet } from "react-router-dom";
+
+const PrivateRoute = () => {
+    /**
+    * Obtiene el token de autenticación desde el almacenamiento local.
+    * @type {string | null}
+    */
+    const token = localStorage.getItem("token");
+    /**
+        * Si el token está presente, se muestra el contenido de la ruta protegida (Outlet),
+        * de lo contrario, se redirige al usuario a la página de login.
+        * @returns {JSX.Element} El contenido de la ruta protegida o la redirección.
+        */
+    return token ? &lt;Outlet /> : &lt;Navigate to="/login" replace />;
+};
+
+export default PrivateRoute;
 </code></pre>
         </article>
     </section>

@@ -27,49 +27,45 @@
     <section>
         <article>
             <pre class="prettyprint source linenums"><code>import tokenUtils from './tokenUtils.js';
-
-const verifyToken = (req, res, next) => {
-    /**
- * Middleware para verificar la validez del token JWT en las solicitudes.
+/**
+ * Middleware para verificar el token JWT en las solicitudes.
+ * Este middleware asegura que el token de autenticación esté presente y sea válido.
+ * Si el token es válido, se decodifica y se almacena en `req.user`. Si no es válido, se devuelve un error.
  * 
- * @param {Object} req - El objeto de solicitud de Express. Se agrega un token decodificado a `req.user` si el token es válido.
- * @param {Object} res - El objeto de respuesta de Express. Se envía un código de estado 403 si el token no es válido o está ausente.
- * @param {Function} next - La función de siguiente middleware que se ejecuta si el token es válido.
- * @returns {void} No devuelve valor, solo modifica el objeto `req` y, si el token es válido, llama a `next()`.
- * @throws {Error} Si no se proporciona un token o si el token es inválido, responde con un código de estado 403.
+ * @function verifyToken
+ * @param {Object} req - El objeto de la solicitud.
+ * @param {Object} res - El objeto de la respuesta.
+ * @param {Function} next - La función que pasa el control al siguiente middleware.
+ * @returns {void}
  */
 
-   // console.log('Verificando token..., req.headers:', req.headers);
-    const bearerHeader = req.headers['authorization'];
-   // console.log('Authorization Header:', bearerHeader);
+const verifyToken = (req, res, next) => {
+  const bearerHeader = req.headers['authorization'];
 
-    if (typeof bearerHeader !== 'undefined') {
-        // Extraer el token de la cabecera Authorization
-        const bearerToken = bearerHeader.split(' ')[1];
-        req.token = bearerToken;
+  if (!bearerHeader) {
+    return res.status(403).json({ message: 'Acceso denegado: Token no proporcionado' });
+  }
 
-        //console.log('Token recibido:', req.token); 
+  const bearerToken = bearerHeader.split(' ')[1];
+  req.token = bearerToken;
 
-        // Decodificar el token y verificar si es válido
-        const decoded = tokenUtils.decodeToken(req.token);
-        if (!decoded) {
-            console.error('Token no válido o ha expirado');
-            return res.status(403).json({ message: 'Token no válido o expirado' });
-        }
+  // Decodificar el token
+  const decoded = tokenUtils.decodeToken(req.token);
+  if (!decoded) {
+    return res.status(403).json({ message: 'Token inválido o expirado' });
+  }
 
-        // Si el token es válido, almacenar los datos decodificados en req.user
-        req.user = decoded;
-        //  console.log('Token decodificado:', req.user); 
+ 
+  if (!decoded.role) {
+    decoded.rol = 'usuario';
+  }
 
-
-        next();
-    } else {
-        console.error('No se proporcionó token ');
-        res.sendStatus(403);
-    }
+  req.user = decoded;
+  next();
 };
 
-export default verifyToken;</code></pre>
+export default verifyToken;
+</code></pre>
         </article>
     </section>
 
@@ -79,13 +75,13 @@ export default verifyToken;</code></pre>
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-router.html">router</a></li></ul><h3>Namespaces</h3><ul><li><a href="crudMySQL.html">crudMySQL</a></li><li><a href="usersModel.html">usersModel</a></li><li><a href="watchHistoryModel.html">watchHistoryModel</a></li></ul><h3>Global</h3><ul><li><a href="global.html#addMovieReview">addMovieReview</a></li><li><a href="global.html#addWatchHistory">addWatchHistory</a></li><li><a href="global.html#closeClient">closeClient</a></li><li><a href="global.html#connectToMongo">connectToMongo</a></li><li><a href="global.html#createData">createData</a></li><li><a href="global.html#createUser">createUser</a></li><li><a href="global.html#deleteData">deleteData</a></li><li><a href="global.html#deleteFavorite">deleteFavorite</a></li><li><a href="global.html#deleteFromCollection">deleteFromCollection</a></li><li><a href="global.html#deleteMovieReview">deleteMovieReview</a></li><li><a href="global.html#deleteUser">deleteUser</a></li><li><a href="global.html#deleteWatchHistory">deleteWatchHistory</a></li><li><a href="global.html#executeDbOperation">executeDbOperation</a></li><li><a href="global.html#executeQuery">executeQuery</a></li><li><a href="global.html#getAllUsers">getAllUsers</a></li><li><a href="global.html#getClient">getClient</a></li><li><a href="global.html#getData">getData</a></li><li><a href="global.html#getDataFromCollection">getDataFromCollection</a></li><li><a href="global.html#getFavorites">getFavorites</a></li><li><a href="global.html#getMovieReviews">getMovieReviews</a></li><li><a href="global.html#getReviewById">getReviewById</a></li><li><a href="global.html#getWatchHistory">getWatchHistory</a></li><li><a href="global.html#insertFavorites">insertFavorites</a></li><li><a href="global.html#insertIntoCollection">insertIntoCollection</a></li><li><a href="global.html#loginUser">loginUser</a></li><li><a href="global.html#mySQLConnection">mySQLConnection</a></li><li><a href="global.html#sleep">sleep</a></li><li><a href="global.html#testLogin">testLogin</a></li><li><a href="global.html#updateData">updateData</a></li><li><a href="global.html#updateFavorite">updateFavorite</a></li><li><a href="global.html#updateInCollection">updateInCollection</a></li><li><a href="global.html#updateMovieReview">updateMovieReview</a></li><li><a href="global.html#updateUser">updateUser</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-router.html">router</a></li></ul><h3>Namespaces</h3><ul><li><a href="crudMySQL.html">crudMySQL</a></li><li><a href="usersModel.html">usersModel</a></li><li><a href="watchHistoryModel.html">watchHistoryModel</a></li></ul><h3>Global</h3><ul><li><a href="global.html#addMovieReview">addMovieReview</a></li><li><a href="global.html#addWatchHistory">addWatchHistory</a></li><li><a href="global.html#closeClient">closeClient</a></li><li><a href="global.html#connectToMongo">connectToMongo</a></li><li><a href="global.html#createData">createData</a></li><li><a href="global.html#createUser">createUser</a></li><li><a href="global.html#deleteData">deleteData</a></li><li><a href="global.html#deleteFavorite">deleteFavorite</a></li><li><a href="global.html#deleteFromCollection">deleteFromCollection</a></li><li><a href="global.html#deleteMovieReview">deleteMovieReview</a></li><li><a href="global.html#deleteUser">deleteUser</a></li><li><a href="global.html#deleteWatchHistory">deleteWatchHistory</a></li><li><a href="global.html#executeDbOperation">executeDbOperation</a></li><li><a href="global.html#executeQuery">executeQuery</a></li><li><a href="global.html#getAllUsers">getAllUsers</a></li><li><a href="global.html#getClient">getClient</a></li><li><a href="global.html#getData">getData</a></li><li><a href="global.html#getDataFromCollection">getDataFromCollection</a></li><li><a href="global.html#getFavorites">getFavorites</a></li><li><a href="global.html#getFavoritesGrouped">getFavoritesGrouped</a></li><li><a href="global.html#getGroupedData">getGroupedData</a></li><li><a href="global.html#getMovieReviews">getMovieReviews</a></li><li><a href="global.html#getReviewById">getReviewById</a></li><li><a href="global.html#getReviewsGrouped">getReviewsGrouped</a></li><li><a href="global.html#getWatchHistory">getWatchHistory</a></li><li><a href="global.html#handleRequest">handleRequest</a></li><li><a href="global.html#insertFavorites">insertFavorites</a></li><li><a href="global.html#insertIntoCollection">insertIntoCollection</a></li><li><a href="global.html#isAdmin">isAdmin</a></li><li><a href="global.html#loginUser">loginUser</a></li><li><a href="global.html#mySQLConnection">mySQLConnection</a></li><li><a href="global.html#sleep">sleep</a></li><li><a href="global.html#testLogin">testLogin</a></li><li><a href="global.html#updateData">updateData</a></li><li><a href="global.html#updateFavorite">updateFavorite</a></li><li><a href="global.html#updateInCollection">updateInCollection</a></li><li><a href="global.html#updateMovieReview">updateMovieReview</a></li><li><a href="global.html#updateUser">updateUser</a></li><li><a href="global.html#verifyToken">verifyToken</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.4</a> on Wed Feb 26 2025 16:55:16 GMT+0100 (hora estándar de Europa central)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.4</a> on Sat Mar 01 2025 01:07:18 GMT+0100 (hora estándar de Europa central)
 </footer>
 
 <script> prettyPrint(); </script>

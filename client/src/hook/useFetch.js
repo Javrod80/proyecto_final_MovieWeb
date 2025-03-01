@@ -6,7 +6,7 @@
  * @example
  * const { isLoading, error, data, fetchData } = useFetch();
  * 
- * // Para realizar una solicitud:
+ * 
  * const result = await fetchData("endpoint", "POST", { key: "value" });
  * 
  * @returns {Object} Objeto con el estado de la solicitud HTTP y la función `fetchData`.

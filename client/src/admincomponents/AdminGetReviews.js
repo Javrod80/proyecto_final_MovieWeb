@@ -1,21 +1,74 @@
 import React, { useState, useEffect } from 'react';
 import useFetch from '../hook/useFetch';
-
-
+import { jwtDecode } from 'jwt-decode';
+/**
+ * Componente que muestra las reseñas de películas. Solo accesible por administradores.
+ * Muestra un listado de reseñas agrupadas por película.
+ *
+ * @component
+ * @returns {JSX.Element} El componente de reseñas del administrador.
+ */
 const AdminGetReviews = () => {
+    /**
+     * Estado para almacenar las reseñas obtenidas de la API.
+     * @type {Array}
+     */
     const [reviews, setReviews] = useState([]);
-    const { isLoading, error,  fetchData } = useFetch();
-    
-
+    /**
+    * Hook personalizado que maneja el estado de la carga, el error y la función para obtener los datos.
+    * @type {Object}
+    * @property {boolean} isLoading - Estado que indica si los datos están cargando.
+    * @property {string|null} error - Mensaje de error si ocurrió alguno.
+    * @property {Function} fetchData - Función para hacer solicitudes HTTP.
+    */
+    const { isLoading, error, fetchData } = useFetch();
+    /**
+    * Estado que indica si el usuario es un administrador.
+    * @type {boolean}
+    */
+    const [isAdmin, setIsAdmin] = useState(false);
+    /**
+        * Token obtenido de localStorage.
+        * @type {string|null}
+        */
+   
+    const token = localStorage.getItem('token');
+    /**
+   * Efecto que se ejecuta al montar el componente y al cambiar el token.
+   * Decodifica el token y establece el estado de isAdmin si el rol es 'admin'.
+   * 
+   * 
+   */
     useEffect(() => {
-        const fetchReviews = async () => {
-            const result = await fetchData('admin/get-all-reviews');
-            if (result) {
-                setReviews(result);
+        if (token) {
+            const decodedToken = jwtDecode(token);
+            if (decodedToken.rol === 'admin') {
+                setIsAdmin(true);
             }
-        };
-        fetchReviews();
-    }, [fetchData]);
+        }
+    }, [token]); 
+    /**
+        * Efecto que se ejecuta cuando isAdmin y token cambian.
+        * Si el usuario es un administrador, realiza una solicitud a la API 
+        * para obtener todas las reseñas y las almacena en el estado 'reviews'.
+        */
+    useEffect(() => {
+        if (isAdmin && token) {
+            /**
+           * Función asincrónica para obtener las reseñas de la API.
+           * @async
+           * @function fetchReviews
+           * @returns {Promise<void>}
+           */
+            const fetchReviews = async () => {
+                const result = await fetchData('admin/get-all-reviews', 'GET', null, token);
+                if (result) {
+                    setReviews(result);
+                }
+            };
+            fetchReviews();
+        }
+    }, [isAdmin, fetchData, token]); 
 
     return (
         <div className="container mt-5">
