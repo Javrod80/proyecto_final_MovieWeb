@@ -24,8 +24,8 @@ export default {
             * Ruta donde se almacena la imagen subida.
             * @constant {string}
             */
-            const imagePath = `/uploads/${req.file.filename}`;
-            // console.log("Ruta de la imagen:", imagePath);
+            const imagePath = `${req.file.filename}`;
+            console.log("Ruta de la imagen:", imagePath);
 
             /**
             * Inserta la imagen en la base de datos y asocia el archivo al usuario.

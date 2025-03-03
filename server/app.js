@@ -4,6 +4,7 @@ import { router } from './routes/routes.js'
 import dotenv from 'dotenv';
 import swaggerUi from "swagger-ui-express";
 import swaggerDocs from "./utils/Swagger/swaggerOptions.js";
+import path from 'path';
 
 
 
@@ -12,19 +13,24 @@ dotenv.config();
 const app = express()
 const PORT = process.env.PORT || 5000
 
+const __dirname = path.dirname(new URL(import.meta.url).pathname);
 
+app.use(cors())
 // Middleware para urlencoded
 app.use(express.json());
 app.use(urlencoded({ extended: false }))
 
+app.use(express.static(path.join(__dirname, 'files')));
 
+
+console.log("ruta",path.join(__dirname, 'files'));
 
 
 // Configuración de Swagger UI
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs, { explorer: true }));
 
 
-app.use(cors())
+
 
 app.get('/test', (req, res) => {
 	res.json({

@@ -101,7 +101,7 @@ router.post('/movieapp/v1/users/recovery-mail', recoverPasswordController.recove
  *
  */
 router.post('/movieapp/v1/users/upload-files' ,verifyToken, upload ,uploadFilesController.uploadFiles);
-router.get('/movieapp/v1/users/profile-image',verifyToken,upload , getImageController.getProfileImage);
+router.get('/movieapp/v1/users/profile-image',verifyToken, getImageController.getProfileImage);
 
 
 

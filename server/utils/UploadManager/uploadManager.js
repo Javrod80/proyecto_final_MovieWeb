@@ -19,7 +19,7 @@ const __dirname = path.dirname(__filename);
  * @constant {string}
  */
 const uploadDir = path.join(__dirname, "../../files");
-//console.log("Ruta de la carpeta de subidas:", uploadDir);
+console.log("Ruta de la carpeta de subidas:", uploadDir);
 
 /**
  * Verifica si la carpeta de subida existe, y la crea si no.

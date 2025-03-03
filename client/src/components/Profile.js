@@ -5,6 +5,7 @@ import UploadForm from './UploadForm';
 import DeleteAccount from './DeleteAccount';
 import ResetPassword from './ResetPassword';
 import useFetch from '../hook/useFetch';
+import { jwtDecode } from 'jwt-decode';
 
 const Profile = () => {
     const navigate = useNavigate();
@@ -14,10 +15,21 @@ const Profile = () => {
     useEffect(() => {
         const fetchProfileImage = async () => {
             const token = localStorage.getItem('token');
+            console.log("Token id obtenido:", token);
+
+            // Decodificar el token y extraer el userId
+            const decodedToken = jwtDecode(token);
+            const userId = decodedToken.id; 
+            console.log("userId obtenido:", userId);
+
             const result = await fetchData("users/profile-image", "GET", null, token);
 
             if (result) {
-                setProfileImage(result.imagePath);
+                console.log("Imagen obtenida:", result.imagePath);
+                setProfileImage(`${userId}/${result.imagePath}`);
+
+               
+             
             }
         };
 
@@ -40,6 +52,7 @@ const Profile = () => {
         setProfileImage(imagePath);
     };
 
+    console.log("Imagen obtenida:", profileImage);
     return (
         <div className="container mt-4">
             <div className="card p-3" style={{ maxWidth: '600px', margin: 'auto', top: '80px' }}>
@@ -48,7 +61,7 @@ const Profile = () => {
                     <p className="mb-3">Aquí podrás ver tus películas favoritas y vistas.</p>
                     
                     <img
-                        src={profileImage || peliculasImage} 
+                        src={profileImage ? `http://localhost:5000${profileImage}` : peliculasImage} 
                         alt="Imagen de perfil"
                         className="img-fluid mb-3"
                         style={{ maxWidth: "250px", borderRadius: "50%" }}
