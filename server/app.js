@@ -6,6 +6,7 @@ import swaggerUi from "swagger-ui-express";
 import swaggerDocs from "./utils/Swagger/swaggerOptions.js";
 
 
+
 // Cargar variables del archivo .env
 dotenv.config();
 const app = express()
@@ -15,6 +16,8 @@ const PORT = process.env.PORT || 5000
 // Middleware para urlencoded
 app.use(express.json());
 app.use(urlencoded({ extended: false }))
+
+
 
 
 // Configuración de Swagger UI

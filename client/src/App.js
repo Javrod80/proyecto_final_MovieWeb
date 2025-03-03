@@ -23,6 +23,7 @@ import ChangePassword from './components/ChangePassword';
 import AdminDashboard from './adminPages/AdminDashboard';
 import RecoveryPassword from './components/RecoveryPassword';
 import AdminRoute from './utils/AdminRoute';
+import UploadForm from './components/UploadForm';
 
 function App() {
   return (
@@ -50,7 +51,7 @@ function App() {
                       <Route path="/profile" element={<Profile />} />
                       <Route path="/watched" element={<MovieWatched />} />
                       <Route path="/reviews" element={<Reviews />} />
-                      
+                      <Route path="/upload-image" element={<UploadForm />} />
                      
                     </Route>
                     {/* Ruta protegida solo para admins */}

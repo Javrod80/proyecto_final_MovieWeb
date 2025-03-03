@@ -27,7 +27,7 @@ const verifyToken = (req, res, next) => {
     return res.status(403).json({ message: 'Token inválido o expirado' });
   }
 
- 
+  req.userId = String(decoded.id);
   if (!decoded.role) {
     decoded.rol = 'usuario';
   }

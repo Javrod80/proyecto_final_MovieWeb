@@ -18,6 +18,9 @@ import resetPasswordController from '../controllers/resetPassword.controller.js'
 import adminController from '../adminControllers/admin.controller.js';
 import recoverPasswordController from '../controllers/recoverPassword.controller.js';
 import isAdmin from '../utils/Admin/isAdmin.js';
+import uploadFilesController from '../controllers/uploadFiles.controller.js';
+import { upload } from "../utils/UploadManager/uploadManager.js";
+import getImageController from '../controllers/getImage.controller.js';
 
 
 
@@ -85,6 +88,21 @@ router.delete('/movieapp/v1/users/delete-user/:userId', verifyToken ,deleteUserC
 router.post('/movieapp/v1/users/reset-password', verifyToken, resetPasswordController.requestPasswordReset); // Restablecer contraseña
 router.put('/movieapp/v1/users/new-password',verifyToken, resetPasswordController.resetPassword); // Nuevacontraseña
 router.post('/movieapp/v1/users/recovery-mail', recoverPasswordController.recoverPassword); // Recuperar contraseña
+
+/**
+ * Ruta para la subida de archivos de usuario.
+ * 
+ * @name POST /movieapp/v1/users/upload-files
+ * @function
+ * @memberof module:routes
+ * @param {Request} req - Objeto de solicitud de Express.
+ * @param {Response} res - Objeto de respuesta de Express.
+ * @param {Function} next - Función para pasar al siguiente middleware.
+ *
+ */
+router.post('/movieapp/v1/users/upload-files' ,verifyToken, upload ,uploadFilesController.uploadFiles);
+router.get('/movieapp/v1/users/profile-image',verifyToken,upload , getImageController.getProfileImage);
+
 
 
 // Ruta de búsqueda de películas
