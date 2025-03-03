@@ -18,7 +18,7 @@ import { useAuth } from "../providers/AuthContext";
 import { useWatched } from "../providers/WatchedProvider";
 import useFetch from "../hook/useFetch";
 import usuario100 from '../images/usuario100.png';
-
+import { useProfileImage } from '../providers/ProfileImageContext';
 
 const MoviesSearch = () => {
     /**
@@ -44,7 +44,11 @@ const MoviesSearch = () => {
       */
     const { isLoading, error, data, fetchData } = useFetch();
     const [isCardExpanded, setIsCardExpanded] = useState(true);
-
+    /**
+     * Obtiene el contexto de la imagen de perfil.
+     * @type {Object}
+     */
+    const { profileImage } = useProfileImage();
     /**
       * Efecto que obtiene el historial de películas vistas cuando el usuario está autenticado.
       */
@@ -176,7 +180,11 @@ const MoviesSearch = () => {
                             <h3>{isCardExpanded ? "Bienvenido" : "Ver Perfil"}</h3>
                             {isCardExpanded && (
                                 <>
-                                    <img src={usuario100} alt="Foto de Perfil" className="img-fluid rounded-circle mb-3" style={{ width: '100px', height: '100px' }} />
+                                    <img src={profileImage ? `http://localhost:5000/${profileImage}` : usuario100}
+                                        alt="Imagen de usuario"
+                                        className="rounded-circle"
+                                        style={{ width: "50px", height: "50px" }}
+                                    />
                                     <div>
                                         <button className="btn btn-secondary mb-2 w-100" onClick={() => navigate("/profile")}>Ver Perfil</button>
                                         <button onClick={handleLogout} className="btn btn-danger w-100">Cerrar Sesión</button>

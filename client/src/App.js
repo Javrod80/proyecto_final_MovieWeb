@@ -24,10 +24,12 @@ import AdminDashboard from './adminPages/AdminDashboard';
 import RecoveryPassword from './components/RecoveryPassword';
 import AdminRoute from './utils/AdminRoute';
 import UploadForm from './components/UploadForm';
+import {ProfileImageProvider} from './providers/ProfileImageContext';
 
 function App() {
   return (
     <AuthProvider>
+      <ProfileImageProvider>
       <FavoritesProvider>
         <SearchProvider>
           <WatchedProvider>
@@ -67,6 +69,7 @@ function App() {
           </WatchedProvider>
         </SearchProvider>
       </FavoritesProvider>
+      </ProfileImageProvider>
     </AuthProvider>
   );
 }

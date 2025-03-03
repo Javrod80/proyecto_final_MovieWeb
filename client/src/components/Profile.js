@@ -1,4 +1,4 @@
-import React, { useState , useEffect} from 'react';
+import React, {  useEffect} from 'react';
 import { useNavigate } from 'react-router-dom';
 import peliculasImage from '../images/peliculas96.png';
 import UploadForm from './UploadForm'; 
@@ -6,6 +6,7 @@ import DeleteAccount from './DeleteAccount';
 import ResetPassword from './ResetPassword';
 import useFetch from '../hook/useFetch';
 import { jwtDecode } from 'jwt-decode';
+import {useProfileImage} from '../providers/ProfileImageContext';
 /**
  * Componente principal de perfil de usuario.
  * Muestra la información del perfil, la imagen de perfil y permite realizar acciones como cambiar contraseña, eliminar cuenta o subir una nueva imagen de perfil.
@@ -22,7 +23,8 @@ const Profile = () => {
      * Estado para almacenar la URL relativa de la imagen de perfil del usuario.
      * @constant {string|null} profileImage - Contiene la ruta de la imagen de perfil o `null` si no está disponible.
      */
-    const [profileImage, setProfileImage] = useState(null); 
+    const { profileImage, setProfileImage } = useProfileImage();
+
        /**
      * Hook personalizado para realizar solicitudes HTTP.
      * @constant {function} fetchData - Función para hacer peticiones HTTP.
@@ -35,6 +37,7 @@ const Profile = () => {
      * @function fetchProfileImage
      * @returns {Promise<void>} Actualiza el estado `profileImage` si se obtiene una imagen válida.
      */
+   
     useEffect(() => {
         const fetchProfileImage = async () => {
             const token = localStorage.getItem('token');
@@ -56,7 +59,7 @@ const Profile = () => {
                 const result = await fetchData("users/profile-image", "GET", null, token);
 
                 if (result && result.imagePath) {
-                    console.log("Estableciendo profileImage con:", result.imagePath);
+                   // console.log("Estableciendo profileImage con:", result.imagePath);
                     setProfileImage(result.imagePath);
                 } else {
                     console.warn("No se obtuvo una imagen válida del servidor.");
@@ -67,7 +70,7 @@ const Profile = () => {
         };
 
         fetchProfileImage();
-    }, [fetchData]);
+    }, [fetchData, setProfileImage]);
 
     if (error) {
         console.error("Error al obtener la imagen de perfil:", error);
@@ -107,7 +110,7 @@ const Profile = () => {
                         src={profileImage ? `http://localhost:5000/${profileImage}` : peliculasImage } 
                         alt="Imagen de perfil"
                         className="img-fluid mb-3"
-                        
+                        style={{ width: '150px', height: '150px', objectFit: 'cover', borderRadius: '50%' }}
                     />
                        
 
