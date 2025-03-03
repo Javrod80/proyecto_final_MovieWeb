@@ -14,8 +14,9 @@ export default {
     */
     uploadFiles: async (req, res) => {
         try {
-            // console.log("Archivo recibido:", req.file);
+          
             const userId = req.userId;
+          
 
             if (!req.file) {
                 return res.status(400).json({ message: "No se ha subido ningún archivo." });
@@ -24,9 +25,8 @@ export default {
             * Ruta donde se almacena la imagen subida.
             * @constant {string}
             */
-            const imagePath = `${req.file.filename}`;
-            console.log("Ruta de la imagen:", imagePath);
-
+            const imagePath = `files/${req.file.filename}`;
+         
             /**
             * Inserta la imagen en la base de datos y asocia el archivo al usuario.
             * @constant {Object} result - Resultado de la operación de inserción en MongoDB.

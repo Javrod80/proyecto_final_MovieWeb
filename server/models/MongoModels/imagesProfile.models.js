@@ -1,5 +1,5 @@
 import  {getDataFromCollection, deleteFromCollection, insertIntoCollection}  from './genericMongo.models.js';
-
+import path from 'path';
 import dotenv from 'dotenv';
 dotenv.config();
 const collectionName = process.env.COLL_IMAG;
@@ -15,7 +15,7 @@ const crudMongoDBImages = {
     insertImageForUser: async (userId, imagePath) => {
         return insertIntoCollection(collectionName, {
             userId,
-            imagePath,
+            imagePath:`files/${userId}/${path.basename(imagePath)}`,
             createdAt: new Date(),
         });
     },

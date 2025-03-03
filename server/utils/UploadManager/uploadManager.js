@@ -19,7 +19,7 @@ const __dirname = path.dirname(__filename);
  * @constant {string}
  */
 const uploadDir = path.join(__dirname, "../../files");
-console.log("Ruta de la carpeta de subidas:", uploadDir);
+//console.log("Ruta de la carpeta de subidas:", uploadDir);
 
 /**
  * Verifica si la carpeta de subida existe, y la crea si no.
@@ -68,7 +68,7 @@ const storage = multer.diskStorage({
  * @param {function(Error|null, boolean)} cb - Callback para aceptar o rechazar el archivo.
  */
 const fileFilter = (req, file, cb) => {
-    const allowedTypes = ["image/jpeg", "image/png", "image/gif"];
+    const allowedTypes = ["image/jpeg", "image/png", "image/gif", "image/jpg"];
     if (allowedTypes.includes(file.mimetype)) {
         cb(null, true);
     } else {
