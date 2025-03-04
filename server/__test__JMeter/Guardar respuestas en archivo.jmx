@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jmeterTestPlan version="1.2" properties="5.0" jmeter="5.6.3">
+  <hashTree>
+    <ResultSaver guiclass="ResultSaverGui" testclass="ResultSaver" testname="Guardar respuestas en archivo">
+      <stringProp name="FileSaver.filename"></stringProp>
+      <boolProp name="FileSaver.errorsonly">false</boolProp>
+      <boolProp name="FileSaver.successonly">false</boolProp>
+      <boolProp name="FileSaver.skipsuffix">false</boolProp>
+      <boolProp name="FileSaver.skipautonumber">false</boolProp>
+    </ResultSaver>
+    <hashTree/>
+  </hashTree>
+</jmeterTestPlan>
