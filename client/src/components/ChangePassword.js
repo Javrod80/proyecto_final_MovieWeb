@@ -3,23 +3,17 @@ import { useSearchParams, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import useFetch from "../hook/useFetch";
 import { jwtDecode } from 'jwt-decode';
+import usePasswordValidation from "../hook/usePasswordValidation";
 
 const ChangePassword = () => {
     const [searchParams] = useSearchParams();
     const token = searchParams.get("token");
-    const [password, setPassword] = useState("");
+    const { password, setPassword, validateAndHandleError } = usePasswordValidation();
     const [showForm, setShowForm] = useState(true);
     const { isLoading, error, fetchData } = useFetch();
     const navigate = useNavigate();
 
-    // Validar la contraseña antes de enviarla
-    const validatePassword = (password) => {
-        if (password.length < 8) return "La contraseña debe tener al menos 8 caracteres.";
-        if (!/[A-Z]/.test(password)) return "La contraseña debe contener al menos una letra mayúscula.";
-        if (!/[0-9]/.test(password)) return "La contraseña debe contener al menos un número.";
-        return null;
-    };
-
+ 
     // Obtener el correo electrónico del token JWT
     const getEmailFromToken = () => {
         if (token) {
@@ -41,14 +35,13 @@ const ChangePassword = () => {
     const handleChangePassword = async (e) => {
         e.preventDefault();
 
-        const validationError = validatePassword(password);
-        if (validationError) {
-            toast.error(validationError);
-            return;
+        // Validar la contraseña
+        if (!validateAndHandleError()) {
+            return; 
         }
 
-        console.log("Token recibido en frontend:", token);
-        console.log("Correo electrónico obtenido del token:", email);
+      //  console.log("Token recibido en frontend:", token);
+       // console.log("Correo electrónico obtenido del token:", email);
 
         if (!token || !email) {
             toast.error("Token no válido o expirado.");
@@ -58,7 +51,7 @@ const ChangePassword = () => {
         // Datos que se enviarán al servidor
         const requestData = { password, email };
 
-        console.log("Datos enviados al servidor:", requestData);
+       // console.log("Datos enviados al servidor:", requestData);
 
         const response = await fetchData("users/new-password", "PUT", requestData, token);
 

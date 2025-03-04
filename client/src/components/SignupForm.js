@@ -1,6 +1,12 @@
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import useFetch from "../hook/useFetch";
+import usePasswordValidation from "../hook/usePasswordValidation";
+
 /**
- * Componente para el registro de un nuevo usuario.
- * Este formulario permite a un usuario registrar su cuenta proporcionando su nombre, apellido, email y contraseña.
+ * Componente de formulario para el registro de nuevos usuarios.
+ * Este formulario permite a los usuarios registrarse ingresando su información personal y una contraseña válida.
  *
  * @component
  * @example
@@ -8,75 +14,80 @@
  *   <SignupForm />
  * );
  */
-import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
-import useFetch from "../hook/useFetch";
-
 const SignupForm = () => {
-    /**
-    * Datos del formulario que incluyen nombre, apellido, email y contraseña.
-    * @type {Object}
-    * @property {string} user_name - Nombre del usuario.
-    * @property {string} user_lastnames - Apellido del usuario.
-    * @property {string} email - Correo electrónico del usuario.
-    * @property {string} password - Contraseña del usuario.
-    */
+    const { password, setPassword, validateAndHandleError } = usePasswordValidation(); // Hook para manejar la validación de contraseñas
     const [formData, setFormData] = useState({
         user_name: "",
         user_lastnames: "",
-        email: "",
-        password: ""
-    });
+        email: ""
+    }); // Estado para los datos del formulario
 
-    const { isLoading, error, data, fetchData } = useFetch();
-    const navigate = useNavigate();
+    const { isLoading, error, data, fetchData } = useFetch(); // Hook personalizado para manejar solicitudes HTTP
+    const navigate = useNavigate(); // Hook para redirigir a otras rutas
+
     /**
-     * Maneja los cambios en los campos del formulario.
-     * Actualiza el estado `formData` con los nuevos valores.
-     * 
-     * @param {Object} e - El evento del formulario.
+     * Maneja los cambios en los campos del formulario y actualiza el estado correspondiente.
+     * Si el campo es "password", actualiza el estado manejado por el hook de validación.
+     *
+     * @param {Object} e - Evento del formulario.
      * @param {string} e.target.name - Nombre del campo que cambió.
      * @param {string} e.target.value - Valor del campo que cambió.
      */
     const handleChange = (e) => {
-        setFormData({
-            ...formData,
-            [e.target.name]: e.target.value
-        });
+        const { name, value } = e.target;
+        if (name === "password") {
+            setPassword(value); // Actualiza la contraseña en el hook de validación
+        } else {
+            setFormData({
+                ...formData,
+                [name]: value // Actualiza otros datos del formulario
+            });
+        }
     };
+
     /**
-    * Maneja el envío del formulario.
-    * Realiza una petición POST al endpoint de registro de usuario y muestra un mensaje de éxito o error.
-    * 
-    * @param {Object} e - El evento de envío del formulario.
-    */
+     * Maneja el envío del formulario. Valida la contraseña antes de enviar los datos al servidor.
+     *
+     * @param {Object} e - Evento de envío del formulario.
+     * @returns {void}
+     */
     const handleSubmit = async (e) => {
         e.preventDefault();
-        await fetchData("users/signup", "POST", formData);
+
+        // Validar la contraseña usando el hook de validación
+        if (!validateAndHandleError()) {
+            return; // Detiene el envío si la validación de contraseña falla
+        }
+
+        // Preparar los datos para enviarlos al servidor
+        const finalData = { ...formData, password };
+
+        await fetchData("users/signup", "POST", finalData); // Enviar solicitud al servidor
     };
+
     /**
-       * Efecto secundario para manejar los datos y errores de la respuesta de la API.
-       * Si la respuesta es exitosa, muestra un mensaje de éxito y redirige al usuario a la página de login.
-       */
+     * Efecto secundario que reacciona a los cambios en los datos de la solicitud.
+     * Muestra mensajes de éxito o error según la respuesta del servidor y redirige al usuario en caso de éxito.
+     */
     useEffect(() => {
         if (error) {
-            toast.error(error);
+            toast.error(error); // Mostrar mensaje de error si ocurre
         }
 
         if (data) {
-            toast.success("Usuario registrado con éxito 🎉");
-            setFormData({ user_name: "", user_lastnames: "", email: "", password: "" });
-            setTimeout(() => navigate("/login"), 2000);
+            toast.success("Usuario registrado con éxito 🎉"); // Mostrar mensaje de éxito
+            setFormData({ user_name: "", user_lastnames: "", email: "" }); // Limpiar datos del formulario
+            setPassword(""); // Restablecer el estado de la contraseña
+            setTimeout(() => navigate("/login"), 2000); // Redirigir al usuario a la página de inicio de sesión
         }
-    }, [data, error, navigate]);
+    }, [data, error, navigate, setPassword]);
+
     /**
-    * Renderiza el formulario de registro.
-    * Muestra un formulario con campos para nombre, apellido, email y contraseña.
-    * También maneja el estado de carga y los mensajes de error.
-    *
-    * @returns {JSX.Element} Formulario de registro de usuario.
-    */
+     * Renderiza el formulario de registro de usuario.
+     * Incluye campos para nombre, apellidos, email y contraseña.
+     *
+     * @returns {JSX.Element} Formulario de registro.
+     */
     return (
         <div className="container mt-12"> 
             <div className="row justify-content-center">
@@ -135,7 +146,7 @@ const SignupForm = () => {
                                         className="form-control"
                                         placeholder="Ingrese su contraseña"
                                         name="password"
-                                        value={formData.password}
+                                        value={password}
                                         onChange={handleChange}
                                         required
                                     />
