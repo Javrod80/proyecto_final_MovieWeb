@@ -1,10 +1,11 @@
 {
   "devDependencies": {
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
-    "jest": "^29.7.0",
-    "nodemon": "^3.1.9"
+    "jest": "^29.7.0"
+   
   },
   "dependencies": {
+     "nodemon": "^3.1.9",
     "bcryptjs": "^3.0.0",
     "bootstrap": "^5.3.3",
     "bson": "^6.10.3",
@@ -34,7 +35,7 @@
     }
   },
   "scripts": {
- "build": "cd client && npm install && npm run build",
+    "build": "cd client && npm install && npm run build",
     "start": "cd server && nodemon app.js"
   }
 }
