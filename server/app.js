@@ -40,7 +40,7 @@ const normalizedPath = path.resolve(__dirname.replace(/^\\/, ''), 'files');
  * Exponen el contenido estático del directorio `files` en la URL base `/files`.
  */
 app.use('/files', express.static(normalizedPath));
-
+app.use(express.static(path.join(__dirname, '../client/build')));
 /**
  * Middleware para habilitar el uso de CORS (Cross-Origin Resource Sharing).
  * Permite que recursos sean accedidos desde diferentes orígenes.

@@ -34,7 +34,7 @@
     }
   },
   "scripts": {
-    "prestart": "cd server && npm install",
+
     "start": "cd server && nodemon app.js"
   }
 }
