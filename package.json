@@ -8,6 +8,7 @@
     "bcryptjs": "^3.0.0",
     "bootstrap": "^5.3.3",
     "chromedriver": "^133.0.2",
+    "express": "^4.21.2",
     "geckodriver": "^5.0.0",
     "jsdoc": "^4.0.4",
     "selenium-webdriver": "^4.29.0"
