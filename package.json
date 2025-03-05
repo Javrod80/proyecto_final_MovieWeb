@@ -35,6 +35,6 @@
   },
   "scripts": {
     "build": "cd client && npm install && npm run build",
-    "start": "cd server && npm nodemon app.js"
+    "start": "cd server && npx nodemon app.js"
   }
 }
