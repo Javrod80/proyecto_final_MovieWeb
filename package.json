@@ -7,11 +7,26 @@
   "dependencies": {
     "bcryptjs": "^3.0.0",
     "bootstrap": "^5.3.3",
+    "bson": "^6.10.3",
     "chromedriver": "^133.0.2",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
     "express": "^4.21.2",
     "geckodriver": "^5.0.0",
+    "js-yaml": "^4.1.0",
     "jsdoc": "^4.0.4",
-    "selenium-webdriver": "^4.29.0"
+    "jsonwebtoken": "^9.0.2",
+    "mongodb": "^6.14.2",
+    "multer": "^1.4.5-lts.1",
+    "mysql2": "^3.12.0",
+    "node-fetch": "^3.3.2",
+    "nodemailer": "^6.10.0",
+    "path": "^0.12.7",
+    "selenium-webdriver": "^4.29.0",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.1",
+    "yaml": "^2.7.0",
+    "yamljs": "^0.3.0"
   },
   "jest": {
     "transform": {
@@ -19,6 +34,7 @@
     }
   },
   "scripts": {
+    "prestart": "cd server && npm install",
     "start": "cd server && nodemon app.js"
   }
 }
