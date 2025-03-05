@@ -15,5 +15,8 @@
     "transform": {
       "^.+\\.js$": "babel-jest"
     }
+  },
+  "scripts": {
+    "start": "cd server && nodemon app.js"
   }
 }
