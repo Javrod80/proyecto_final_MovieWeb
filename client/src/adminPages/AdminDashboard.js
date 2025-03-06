@@ -3,6 +3,8 @@ import AdminGetFavorites from "../admincomponents/AdminGetFavorites";
 import AdminGetReviews from "../admincomponents/AdminGetReviews";
 import { useAuth } from "../providers/AuthContext";
 import { useNavigate } from "react-router-dom";
+import AdminGetAllUsers from "../admincomponents/AdminGetAllUsers";
+import AdminGetAllWatched from "../admincomponents/AdminGetAllWatched";
 
 const AdminDashboard = () => {
   const { logout } = useAuth();
@@ -33,6 +35,16 @@ const AdminDashboard = () => {
       <div className="row mt-4">
         <div className="col-12">
           <AdminGetReviews />
+        </div>
+      </div>
+      <div className="row mt-4">
+        <div className="col-12">
+          <AdminGetAllUsers />
+        </div>
+      </div>
+      <div className="row mt-4">
+        <div className="col-12">
+          <AdminGetAllWatched />
         </div>
       </div>
     </div>

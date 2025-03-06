@@ -21,6 +21,7 @@ import isAdmin from '../utils/Admin/isAdmin.js';
 import uploadFilesController from '../controllers/uploadFiles.controller.js';
 import { upload } from "../utils/UploadManager/uploadManager.js";
 import getImageController from '../controllers/getImage.controller.js';
+import adminSqlController from '../adminControllers/adminSql.controller.js';
 
 
 
@@ -246,7 +247,7 @@ router.put('/movieapp/v1/reviews/update-review/:reviewId', verifyToken ,updateRe
  * @param {Object} req - El objeto de la solicitud.
  * @param {Object} res - El objeto de la respuesta.
  */
-//router.get('/movieapp/v1/admin/users/all-data-users', adminController); // Obtenemos todos los usuarios
+router.get('/movieapp/v1/admin/users/all-data-users', isAdmin ,adminSqlController.getAllUsers); // Obtenemos todos los usuarios
 /**
  * Ruta para obtener todas las películas vistas.
  * @name GET /movieapp/v1/admin/all-movies-watched
@@ -255,7 +256,7 @@ router.put('/movieapp/v1/reviews/update-review/:reviewId', verifyToken ,updateRe
  * @param {Object} req - El objeto de la solicitud.
  * @param {Object} res - El objeto de la respuesta.
  */
-//router.get('/movieapp/v1/admin/all-movies-watched', adminController);//todas las peliculas vistas
+router.get('/movieapp/v1/admin/all-movies-watched', isAdmin ,adminSqlController.getAllWatchHistory);//todas las peliculas vistas
 /**
  * Ruta para obtener todas las reseñas.
  * @name GET /movieapp/v1/admin/get-all-reviews

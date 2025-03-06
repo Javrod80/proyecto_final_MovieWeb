@@ -13,7 +13,7 @@ import jwt from 'jsonwebtoken';
  function isAdmin(req, res, next) {
     const token = req.headers.authorization?.split(' ')[1];
     if (!token) {
-         res.status(401).send('No token provided');
+        return res.status(401).send('No token provided');
     }
 
     jwt.verify(token, process.env.SECRET_KEY, (err, decoded) => {
