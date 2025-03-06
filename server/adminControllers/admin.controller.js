@@ -8,7 +8,7 @@ import { getFavoritesGrouped, getReviewsGrouped } from '../models/MongoModels/Ad
  * @param {Request} req - La solicitud de Express.
  * @param {Response} res - La respuesta de Express.
  */
-const handleRequest = async (getDataFunction, req, res) => {
+export const handleRequest = async (getDataFunction, req, res) => {
     try {
         const data = await getDataFunction();
         res.status(200).json(data);
