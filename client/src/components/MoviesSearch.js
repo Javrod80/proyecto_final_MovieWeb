@@ -16,7 +16,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useSearch } from "../providers/SearchProvider";
 import { useAuth } from "../providers/AuthContext";
 import { useWatched } from "../providers/WatchedProvider";
-import useFetch from "../hook/useFetch";
+import useFetch from "../hooks/useFetch";
 import usuario100 from '../images/usuario100.png';
 import { useProfileImage } from '../providers/ProfileImageContext';
 

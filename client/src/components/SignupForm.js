@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import useFetch from "../hook/useFetch";
-import usePasswordValidation from "../hook/usePasswordValidation";
+import useFetch from "../hooks/useFetch";
+import usePasswordValidation from "../hooks/usePasswordValidation";
 
 /**
  * Componente de formulario para el registro de nuevos usuarios.

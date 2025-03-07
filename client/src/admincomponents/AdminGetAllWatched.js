@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import useFetch from '../hook/useFetch';
+import useFetch from '../hooks/useFetch';
 import { jwtDecode } from 'jwt-decode';
 
 const AdminGetWatchedMovies = () => {

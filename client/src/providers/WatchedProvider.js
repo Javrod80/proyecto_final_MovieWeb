@@ -19,7 +19,7 @@
  */
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { useAuth } from './AuthContext';
-import useFetch from '../hook/useFetch';
+import useFetch from '../hooks/useFetch';
 
 const WatchedContext = createContext();
 /**

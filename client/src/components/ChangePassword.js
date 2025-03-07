@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import useFetch from "../hook/useFetch";
+import useFetch from "../hooks/useFetch";
 import { jwtDecode } from 'jwt-decode';
-import usePasswordValidation from "../hook/usePasswordValidation";
+import usePasswordValidation from "../hooks/usePasswordValidation";
 
 const ChangePassword = () => {
     const [searchParams] = useSearchParams();

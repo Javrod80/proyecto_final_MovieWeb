@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import useFetch from '../hook/useFetch';
+import useFetch from '../hooks/useFetch';
 import useAdminStatus from './useAdminStatus';
 
 const useFetchAdminData = (endpoint) => {

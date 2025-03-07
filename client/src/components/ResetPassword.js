@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useAuth } from '../providers/AuthContext';
 import { toast } from 'react-toastify';
-import useFetch from '../hook/useFetch';
+import useFetch from '../hooks/useFetch';
 
 const ResetPassword = () => {
     const { userId } = useAuth();

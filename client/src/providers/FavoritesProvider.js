@@ -18,7 +18,7 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from "react";
 import { toast } from "react-toastify";
 import { useAuth } from "./AuthContext";
-import useFetch from "../hook/useFetch";
+import useFetch from "../hooks/useFetch";
 
 const FavoritesContext = createContext();
 /**

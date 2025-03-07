@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../providers/AuthContext";
 import { toast } from "react-toastify";
-import useFetch from "../hook/useFetch";
+import useFetch from "../hooks/useFetch";
 import { jwtDecode } from "jwt-decode";
 /**
  * Componente de Login que permite a los usuarios iniciar sesión en la aplicación.

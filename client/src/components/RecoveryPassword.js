@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { toast } from "react-toastify";
-import useFetch from "../hook/useFetch";
+import useFetch from "../hooks/useFetch";
 import { useNavigate } from "react-router-dom";
 
 const RecoveryPassword = () => {

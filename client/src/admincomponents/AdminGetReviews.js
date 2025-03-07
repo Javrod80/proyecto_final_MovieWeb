@@ -1,5 +1,5 @@
 import React from 'react';
-import useFetch from '../hook/useFetch';
+import useFetch from '../hooks/useFetch';
 import useFetchAdminData from '../adminHooks/useFetchAdminData';
 import useAdminStatus from '../adminHooks/useAdminStatus';
 

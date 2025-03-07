@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import useFetch from "../hook/useFetch";
+import useFetch from "../hooks/useFetch";
 /**
  * Componente para subir imágenes al servidor.
  * 

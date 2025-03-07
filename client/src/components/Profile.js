@@ -4,7 +4,7 @@ import peliculasImage from '../images/peliculas96.png';
 import UploadForm from './UploadForm'; 
 import DeleteAccount from './DeleteAccount';
 import ResetPassword from './ResetPassword';
-import useFetch from '../hook/useFetch';
+import useFetch from '../hooks/useFetch';
 import { jwtDecode } from 'jwt-decode';
 import {useProfileImage} from '../providers/ProfileImageContext';
 /**

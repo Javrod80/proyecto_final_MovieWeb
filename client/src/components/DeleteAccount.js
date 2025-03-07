@@ -6,7 +6,7 @@ import React, { useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../providers/AuthContext";
 import { toast } from "react-toastify";
-import useFetch from "../hook/useFetch";
+import useFetch from "../hooks/useFetch";
 
 /**
  * Componente funcional para manejar la eliminación de la cuenta de usuario.

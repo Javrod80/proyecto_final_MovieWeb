@@ -15,7 +15,7 @@
  * @returns {JSX.Element} El proveedor de contexto que envuelve el árbol de componentes.
  */
 import React, { createContext, useContext, useState, useCallback } from 'react';
-import useFetch from '../hook/useFetch';
+import useFetch from '../hooks/useFetch';
 
 const ReviewsContext = createContext();
 /**

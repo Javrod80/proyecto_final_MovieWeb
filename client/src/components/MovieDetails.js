@@ -12,7 +12,7 @@ import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useAuth } from "../providers/AuthContext";
 import { toast } from "react-toastify";
-import useFetch from "../hook/useFetch";
+import useFetch from "../hooks/useFetch";
 
 
 const MovieDetails = () => {
