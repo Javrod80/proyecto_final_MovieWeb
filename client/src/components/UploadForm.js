@@ -11,12 +11,12 @@ import useFetch from "../hooks/useFetch";
 const UploadForm = ({ onImageUpload }) => {
     /**
      * Estado para almacenar la imagen seleccionada.
-     * @type {[File|null, function]} 
+     * @type {FileFunctionArray} 
      */
     const [image, setImage] = useState(null);
     /**
    * Estado para almacenar mensajes de éxito o error.
-   * @type {[string, function]}
+   * @type {FileFunctionArray}
    */
     const [message, setMessage] = useState("");
     /**

@@ -13,7 +13,7 @@ const ProfileImageContext = createContext();
 export const ProfileImageProvider = ({ children }) => {
     /**
     * Estado que almacena la imagen de perfil del usuario.
-    * @type {[string|null, Function]}
+    * @type {FileFunctionArray}
     */
     const [profileImage, setProfileImage] = useState(null);
 
