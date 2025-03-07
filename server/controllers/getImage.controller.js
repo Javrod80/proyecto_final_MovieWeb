@@ -21,8 +21,10 @@ export default {
             if (images.length === 0 || !images[0].imagePath) {
                 return res.status(404).json({ error: 'No se encontró la imagen de perfil' });
             }
-
-            res.json({ imagePath: images[0].imagePath });
+            // Ordenar la imagen por la última para mostrar
+            images.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+            const latestImage = images[0];
+            res.json({ imagePath: latestImage.imagePath });
           
         } catch (error) {
             console.error('Error al obtener la imagen de perfil:', error);

@@ -25,7 +25,7 @@ const crudMongoDBImages = {
      * @returns {Promise<Array>} - Devuelve una promesa con un arreglo de las imágenes asociadas al usuario.
      */
     getImagesForUser: async (userId) => {
-        return getDataFromCollection(collectionName, { userId });
+        return getDataFromCollection(collectionName, { userId } );
     },
 
     /**
