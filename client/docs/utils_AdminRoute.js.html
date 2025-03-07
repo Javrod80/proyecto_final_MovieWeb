@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: providers/AuthContext.js</title>
+    <title>JSDoc: Source: utils/AdminRoute.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: providers/AuthContext.js</h1>
+    <h1 class="page-title">Source: utils/AdminRoute.js</h1>
 
     
 
@@ -26,88 +26,41 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>/**
- * Proveedor del contexto de autenticación para el manejo de sesión de usuario.
- * 
- * Este componente crea un contexto que permite a la aplicación manejar el estado de autenticación del usuario. 
- * Proporciona funciones para iniciar sesión, cerrar sesión y verificar si el usuario está autenticado.
- * Utiliza `localStorage` para persistir el estado de autenticación entre sesiones.
- * 
- * @component
- * @example
- * 
- * &lt;AuthProvider>
- *   &lt;App />
- * &lt;/AuthProvider>
- * 
- * @returns {JSX.Element} El proveedor de contexto que envuelve el árbol de componentes.
- */
-
-import React, { createContext, useContext, useState, useEffect } from "react";
-
-const AuthContext = createContext();
+            <pre class="prettyprint source linenums"><code>import { Navigate, Outlet } from "react-router-dom";
+import { jwtDecode } from "jwt-decode";
 
 /**
- * Hook personalizado para acceder al contexto de autenticación.
+ * Componente de ruta protegida para administradores.
  * 
- * Este hook proporciona el estado de autenticación actual y las funciones para 
- * manejar la sesión del usuario (iniciar sesión y cerrar sesión).
+ * Este componente verifica si el usuario tiene un token válido en localStorage
+ * y si su rol es "admin". Si el usuario no está autenticado o no tiene los
+ * permisos adecuados, es redirigido a la página de inicio de sesión o al home.
  * 
- * @returns {Object} El contexto de autenticación con el estado y funciones necesarias.
- * @property {boolean} isAuthenticated - Estado que indica si el usuario está autenticado.
- * @property {string|null} userId - El ID del usuario autenticado o null si no está autenticado.
- * @property {string|null} userRole - El rol del usuario autenticado o null si no está autenticado.
- * @property {Function} login - Función para autenticar al usuario con un ID y rol.
- * @property {Function} logout - Función para cerrar sesión y eliminar el estado de autenticación.
+ * @component
+ * @returns {JSX.Element} Redirige al usuario si no es administrador o muestra el contenido protegido.
  */
-export const useAuth = () => {
-    return useContext(AuthContext);
+const AdminRoute = () => {
+    // Obtener el token de localStorage
+    const token = localStorage.getItem("token");
+
+    // Si no hay token, redirigir al inicio de sesión
+    if (!token) {
+        return &lt;Navigate to="/login" replace />;
+    }
+
+    try {
+        // Decodificar el token para obtener el rol
+        const decodedToken = jwtDecode(token);
+        const isAdmin = decodedToken.rol === "admin";
+        // Si es administrador, mostrar el contenido protegido
+        return isAdmin ? &lt;Outlet /> : &lt;Navigate to="/" replace />;
+    } catch (error) {
+        console.error("Error al decodificar el token:", error);
+        return &lt;Navigate to="/login" replace />;
+    }
 };
 
-
-export const AuthProvider = ({ children }) => {
-    const [isAuthenticated, setIsAuthenticated] = useState(false);
-    const [userId, setUserId] = useState(null);
-    const [userRole, setUserRole] = useState(null); 
-
-    
-    useEffect(() => {
-        const token = localStorage.getItem("token");
-        const storedUserId = localStorage.getItem("userId");
-        const storedUserRole = localStorage.getItem("rol"); 
-
-        if (token &amp;&amp; storedUserId &amp;&amp; storedUserRole) {
-            setIsAuthenticated(true);
-            setUserId(storedUserId);
-            setUserRole(storedUserRole);
-        }
-    }, []);
-
-   
-    const login = (id, rol) => {
-        setIsAuthenticated(true);
-        setUserId(id);
-        setUserRole(rol); 
-        localStorage.setItem("userId", id);
-        localStorage.setItem("rol", rol); 
-    };
-
-    
-    const logout = () => {
-        localStorage.removeItem("token");  
-        localStorage.removeItem("userId");  
-        localStorage.removeItem("rol");  
-        setIsAuthenticated(false);
-        setUserId(null);
-        setUserRole(null);
-    };
-
-    return (
-        &lt;AuthContext.Provider value={{ isAuthenticated, userId, userRole, login, logout }}>
-            {children}
-        &lt;/AuthContext.Provider>
-    );
-};
+export default AdminRoute;
 </code></pre>
         </article>
     </section>

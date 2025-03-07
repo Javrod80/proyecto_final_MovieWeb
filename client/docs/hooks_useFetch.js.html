@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: providers/AuthContext.js</title>
+    <title>JSDoc: Source: hooks/useFetch.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: providers/AuthContext.js</h1>
+    <h1 class="page-title">Source: hooks/useFetch.js</h1>
 
     
 
@@ -27,87 +27,95 @@
     <section>
         <article>
             <pre class="prettyprint source linenums"><code>/**
- * Proveedor del contexto de autenticación para el manejo de sesión de usuario.
+ * Hook personalizado para realizar solicitudes HTTP a una API.
+ * Este hook maneja el estado de carga, el error y los datos de la respuesta.
+ * Permite realizar solicitudes HTTP de tipo GET, POST, PUT, DELETE, entre otros.
  * 
- * Este componente crea un contexto que permite a la aplicación manejar el estado de autenticación del usuario. 
- * Proporciona funciones para iniciar sesión, cerrar sesión y verificar si el usuario está autenticado.
- * Utiliza `localStorage` para persistir el estado de autenticación entre sesiones.
- * 
- * @component
  * @example
+ * const { isLoading, error, data, fetchData } = useFetch();
  * 
- * &lt;AuthProvider>
- *   &lt;App />
- * &lt;/AuthProvider>
  * 
- * @returns {JSX.Element} El proveedor de contexto que envuelve el árbol de componentes.
+ * const result = await fetchData("endpoint", "POST", { key: "value" });
+ * 
+ * @returns {Object} Objeto con el estado de la solicitud HTTP y la función `fetchData`.
+ * @returns {boolean} isLoading - Estado de carga (true mientras se espera la respuesta).
+ * @returns {string|null} error - Mensaje de error si ocurre un problema en la solicitud.
+ * @returns {Object|null} data - Datos de la respuesta si la solicitud fue exitosa.
+ * @returns {function} fetchData - Función para realizar la solicitud HTTP.
  */
 
-import React, { createContext, useContext, useState, useEffect } from "react";
+import { useState, useCallback } from "react";
 
-const AuthContext = createContext();
+const BASE_URL = "http://localhost:5000/movieapp/v1"; 
 
-/**
- * Hook personalizado para acceder al contexto de autenticación.
- * 
- * Este hook proporciona el estado de autenticación actual y las funciones para 
- * manejar la sesión del usuario (iniciar sesión y cerrar sesión).
- * 
- * @returns {Object} El contexto de autenticación con el estado y funciones necesarias.
- * @property {boolean} isAuthenticated - Estado que indica si el usuario está autenticado.
- * @property {string|null} userId - El ID del usuario autenticado o null si no está autenticado.
- * @property {string|null} userRole - El rol del usuario autenticado o null si no está autenticado.
- * @property {Function} login - Función para autenticar al usuario con un ID y rol.
- * @property {Function} logout - Función para cerrar sesión y eliminar el estado de autenticación.
- */
-export const useAuth = () => {
-    return useContext(AuthContext);
-};
-
-
-export const AuthProvider = ({ children }) => {
-    const [isAuthenticated, setIsAuthenticated] = useState(false);
-    const [userId, setUserId] = useState(null);
-    const [userRole, setUserRole] = useState(null); 
-
-    
-    useEffect(() => {
-        const token = localStorage.getItem("token");
-        const storedUserId = localStorage.getItem("userId");
-        const storedUserRole = localStorage.getItem("rol"); 
-
-        if (token &amp;&amp; storedUserId &amp;&amp; storedUserRole) {
-            setIsAuthenticated(true);
-            setUserId(storedUserId);
-            setUserRole(storedUserRole);
+const useFetch = () => {
+    /**
+       * Estado que indica si la solicitud está en proceso.
+       * @type {boolean}
+       */
+    const [isLoading, setIsLoading] = useState(false);
+    /**
+    * Estado para almacenar el mensaje de error, si ocurre uno.
+    * @type {string|null}
+    */
+    const [error, setError] = useState(null);
+    /**
+   * Estado para almacenar los datos obtenidos de la respuesta de la solicitud.
+   * @type {Object|null}
+   */
+    const [data, setData] = useState(null);
+    /**
+     * Función para realizar solicitudes HTTP.
+     * Esta función utiliza `fetch` para enviar una solicitud a la API y maneja los estados de carga, error y datos.
+     * 
+     * @param {string} endpoint - Endpoint de la API al que se enviará la solicitud.
+     * @param {string} [method="GET"] - Método HTTP a usar (por defecto es "GET").
+     * @param {Object|null} [body=null] - Cuerpo de la solicitud (usualmente para POST, PUT).
+     * @param {string|null} [token=null] - Token de autenticación (opcional).
+     * 
+     * @returns {Promise&lt;Object|null>} - Datos de la respuesta de la API o null si ocurre un error.
+     */
+    const fetchData = useCallback(async (endpoint, method = "GET", body = null, token = null) => {
+        setIsLoading(true);
+        setError(null);
+        setData(null);
+        // Realizar la solicitud
+        try {
+            const url = `${BASE_URL}/${endpoint}`;
+            const headers = {
+                "Content-Type": "application/json",
+                
+            };
+            // Agregar el token al encabezado de la solicitud
+            if (token) {
+                headers["Authorization"] = `Bearer ${token}`;
+            }
+            // Realizar la solicitud
+            const response = await fetch(url, {
+                method,
+                headers,
+                body: body ? JSON.stringify(body) : null,
+            });
+            // Manejar la respuesta
+            const result = await response.json();
+            if (!response.ok) {
+                throw new Error(result.message || "Error en la solicitud");
+            }
+            // Actualizar los estados
+            setData(result);
+            return result;
+        } catch (err) {
+            setError(err.message);
+            return null;
+        } finally {
+            setIsLoading(false);
         }
     }, []);
 
-   
-    const login = (id, rol) => {
-        setIsAuthenticated(true);
-        setUserId(id);
-        setUserRole(rol); 
-        localStorage.setItem("userId", id);
-        localStorage.setItem("rol", rol); 
-    };
-
-    
-    const logout = () => {
-        localStorage.removeItem("token");  
-        localStorage.removeItem("userId");  
-        localStorage.removeItem("rol");  
-        setIsAuthenticated(false);
-        setUserId(null);
-        setUserRole(null);
-    };
-
-    return (
-        &lt;AuthContext.Provider value={{ isAuthenticated, userId, userRole, login, logout }}>
-            {children}
-        &lt;/AuthContext.Provider>
-    );
+    return { isLoading, error, data, fetchData };
 };
+
+export default useFetch;
 </code></pre>
         </article>
     </section>

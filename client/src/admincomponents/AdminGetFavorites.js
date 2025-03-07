@@ -2,7 +2,15 @@ import React from 'react';
 import useFetch from '../hooks/useFetch';
 import useFetchAdminData from '../adminHooks/useFetchAdminData';
 import useAdminStatus from '../adminHooks/useAdminStatus';
-
+/**
+ * Componente para obtener y mostrar los favoritos en el dashboard de administración.
+ *
+ * Este componente utiliza varios hooks personalizados para obtener el estado de administrador,
+ * el estado de carga y los datos de los favoritos desde un endpoint. Solo los administradores pueden ver los favoritos.
+ *
+ * @component
+ * @returns {JSX.Element} El componente de favoritos del dashboard de administración.
+ */
 
 const AdminGetFavorites = () => {
   const { isLoading, error } = useFetch(); 

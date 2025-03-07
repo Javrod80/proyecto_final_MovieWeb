@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: adminComponents/AdminGetReviews.js</title>
+    <title>JSDoc: Source: adminComponents/AdminGetAllWatched.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: adminComponents/AdminGetReviews.js</h1>
+    <h1 class="page-title">Source: adminComponents/AdminGetAllWatched.js</h1>
 
     
 
@@ -31,60 +31,75 @@ import useFetch from '../hooks/useFetch';
 import useFetchAdminData from '../adminHooks/useFetchAdminData';
 import useAdminStatus from '../adminHooks/useAdminStatus';
 /**
- * Componente para obtener y mostrar las reseñas en el dashboard de administración.
+ * Componente para obtener y mostrar las películas vistas en el dashboard de administración.
  *
  * Este componente utiliza varios hooks personalizados para obtener el estado de administrador,
- * el estado de carga y los datos de las reseñas desde un endpoint. Solo los administradores pueden ver las reseñas.
+ * el estado de carga y los datos de las películas vistas desde un endpoint. Solo los administradores pueden ver las películas vistas.
  *
  * @component
- * @returns {JSX.Element} El componente de reseñas del dashboard de administración.
+ * @returns {JSX.Element} El componente de películas vistas del dashboard de administración.
  */
-const AdminGetReviews = () => {
-   
+const AdminGetWatchedMovies = () => {
     const { isLoading, error } = useFetch(); 
     const { isAdmin } = useAdminStatus();
-    const { data: reviews } = useFetchAdminData('admin/get-all-reviews');
-    
+    const { data: watchedMovies } = useFetchAdminData('admin/all-movies-watched');
 
+   
 
     return (
-        &lt;div className="container mt-5">
-          &lt;h1 className="text-primary text-center mb-4">Admin Dashboard&lt;/h1>
-          &lt;h2 className="text-success text-center">Reviews Collections&lt;/h2>
-          {isLoading &amp;&amp; &lt;p className="text-warning text-center">Loading...&lt;/p>}
-          {error &amp;&amp; &lt;p className="text-danger text-center">Error: {error}&lt;/p>}
-          {isAdmin ? (
-            Array.isArray(reviews) &amp;&amp; reviews.length > 0 ?(
-              &lt;div className="row justify-content-center">
-                {reviews.map((reviewGroup) => (
-                  &lt;div key={reviewGroup._id.movieId} className="card mb-3 shadow-lg" style={{ maxWidth: '500px' }}>
-                    &lt;div className="card-body text-center">
-                      &lt;h5 className="card-title text-dark">Movie ID: {reviewGroup._id.movieId}&lt;/h5>
-                      &lt;p className="card-text text-muted">Total Reviews: &lt;span className="text-primary">{reviewGroup.count}&lt;/span>&lt;/p>
-                      {reviewGroup.reviews.map((review, index) => (
-                        &lt;div key={index} className="card mb-3 shadow-sm" style={{ maxWidth: '450px', margin: 'auto' }}>
-                          &lt;div className="card-body">
-                            &lt;p className="card-text">&lt;span className="text-info">User ID:&lt;/span> {review.userId}&lt;/p>
-                            &lt;p className="card-text">&lt;span className="text-warning">Rating:&lt;/span> {review.rating}&lt;/p>
-                            &lt;p className="card-text text-muted">Review: {review.review}&lt;/p>
-                          &lt;/div>
-                        &lt;/div>
-                      ))}
-                    &lt;/div>
-                  &lt;/div>
-                ))}
-              &lt;/div>
-            ) : (
-              &lt;p className="text-secondary text-center">No reviews found.&lt;/p>
-            )
+        &lt;div className="container mt-4">
+          &lt;h2 className="mb-4 text-primary font-weight-bold">Películas Vistas&lt;/h2>
+          {isLoading ? (
+            &lt;div className="alert alert-info" role="alert">Cargando...&lt;/div>
+          ) : error ? (
+            &lt;div className="alert alert-danger" role="alert">Error: {error}&lt;/div>
+          ) : isAdmin ? (
+            &lt;div className="table-responsive">
+              &lt;table className="table table-striped table-bordered table-hover">
+                &lt;thead className="table-dark">
+                  &lt;tr>
+                    &lt;th scope="col" style={{ width: '15%' }}>User ID&lt;/th>
+                    &lt;th scope="col" style={{ width: '25%' }}>Título&lt;/th>
+                    &lt;th scope="col" style={{ width: '10%' }}>Poster&lt;/th>
+                    &lt;th scope="col" style={{ width: '15%' }}>Fecha de Visualización&lt;/th>
+                  &lt;/tr>
+                &lt;/thead>
+                &lt;tbody>
+                  {Array.isArray(watchedMovies) &amp;&amp; watchedMovies.length > 0 ? (
+                    watchedMovies.map((movie) => (
+                      &lt;tr key={movie.id} className="table-info">
+                        &lt;td>{movie.user_id}&lt;/td>
+                        &lt;td style={{ maxWidth: '200px', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                          {movie.title}
+                        &lt;/td>
+                        &lt;td>
+                          &lt;img
+                            src={movie.poster}
+                            alt={movie.title}
+                            style={{ width: '100px', height: '150px', objectFit: 'cover' }}
+                          />
+                        &lt;/td>
+                        &lt;td>{new Date(movie.watched_at).toLocaleDateString()}&lt;/td>
+                      &lt;/tr>
+                    ))
+                  ) : (
+                    &lt;tr>
+                      &lt;td colSpan="4" className="text-center">No se encontraron películas vistas.&lt;/td>
+                    &lt;/tr>
+                  )}
+                &lt;/tbody>
+              &lt;/table>
+            &lt;/div>
           ) : (
             &lt;p className="text-danger text-center">No tienes permisos de administrador.&lt;/p>
           )}
         &lt;/div>
       );    
+
+
 };
 
-export default AdminGetReviews;
+export default AdminGetWatchedMovies;
 </code></pre>
         </article>
     </section>

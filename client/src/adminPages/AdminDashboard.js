@@ -1,11 +1,19 @@
 import React from "react";
-import AdminGetFavorites from "../admincomponents/AdminGetFavorites";
-import AdminGetReviews from "../admincomponents/AdminGetReviews";
+import AdminGetFavorites from "../adminComponents/AdminGetFavorites";
+import AdminGetReviews from "../adminComponents/AdminGetReviews";
 import { useAuth } from "../providers/AuthContext";
 import { useNavigate } from "react-router-dom";
-import AdminGetAllUsers from "../admincomponents/AdminGetAllUsers";
-import AdminGetAllWatched from "../admincomponents/AdminGetAllWatched";
-
+import AdminGetAllUsers from "../adminComponents/AdminGetAllUsers";
+import AdminGetAllWatched from "../adminComponents/AdminGetAllWatched";
+/**
+ * Componente del dashboard de administración.
+ *
+ * Este componente representa el panel de administración que contiene diferentes secciones para que los administradores 
+ * puedan ver y gestionar favoritos, reseñas, usuarios y visualizaciones.
+ *
+ * @component
+ * @returns {JSX.Element} El componente del dashboard de administración.
+ */
 const AdminDashboard = () => {
   const { logout } = useAuth();
   const navigate = useNavigate();

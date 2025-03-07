@@ -4,7 +4,14 @@ import { toast } from "react-toastify";
 import useFetch from "../hooks/useFetch";
 import { jwtDecode } from 'jwt-decode';
 import usePasswordValidation from "../hooks/usePasswordValidation";
-
+/**
+ * Componente para cambiar la contraseña del usuario.
+ *
+ * Este componente permite a los usuarios cambiar su contraseña utilizando un token que se pasa a través de la URL.
+ *
+ * @component
+ * @returns {JSX.Element} El componente de cambio de contraseña.
+ */
 const ChangePassword = () => {
     const [searchParams] = useSearchParams();
     const token = searchParams.get("token");
@@ -14,7 +21,11 @@ const ChangePassword = () => {
     const navigate = useNavigate();
 
  
-    // Obtener el correo electrónico del token JWT
+   /**
+   * Obtener el correo electrónico del token JWT.
+   *
+   * @returns {string|null} El correo electrónico extraído del token, o null si hay un error.
+   */
     const getEmailFromToken = () => {
         if (token) {
             try {
@@ -30,8 +41,11 @@ const ChangePassword = () => {
     };
 
     const email = getEmailFromToken();
-
-    // Manejar el envío del formulario
+  /**
+   * Manejar el envío del formulario para cambiar la contraseña.
+   *
+   * @param {React.FormEvent} e - El evento de envío del formulario.
+   */
     const handleChangePassword = async (e) => {
         e.preventDefault();
 

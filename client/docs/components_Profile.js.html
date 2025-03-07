@@ -26,61 +26,121 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>/**
- * Componente para mostrar el perfil del usuario.
- * 
- * Este componente permite a los usuarios ver su perfil, incluyendo enlaces a sus películas favoritas y vistas,
- * cambiar su contraseña y eliminar su cuenta. Los usuarios pueden acceder a sus favoritos y películas vistas 
- * a través de botones de navegación, y también tienen la opción de cambiar su contraseña o eliminar su cuenta.
- * 
- * @component
- * @example
- * return (
- *   &lt;Profile />
- * )
- */
-import React from 'react';
+            <pre class="prettyprint source linenums"><code>import React, {  useEffect} from 'react';
 import { useNavigate } from 'react-router-dom';
 import peliculasImage from '../images/peliculas96.png';
+import UploadForm from './UploadForm'; 
 import DeleteAccount from './DeleteAccount';
 import ResetPassword from './ResetPassword';
-
-
+import useFetch from '../hooks/useFetch';
+import { jwtDecode } from 'jwt-decode';
+import {useProfileImage} from '../providers/ProfileImageContext';
+/**
+ * Componente principal de perfil de usuario.
+ * Muestra la información del perfil, la imagen de perfil y permite realizar acciones como cambiar contraseña, eliminar cuenta o subir una nueva imagen de perfil.
+ * @component
+ * @returns {JSX.Element} El componente del perfil de usuario.
+ */
 const Profile = () => {
-    /**
-     * Hook de navegación para cambiar de página.
-     * @type {Function}
+     /**
+     * Navegador para redireccionar a otras rutas.
+     * @constant {function} navigate
      */
     const navigate = useNavigate();
-
-    /**
-     * Función para navegar a la página de favoritos.
-     * @returns {void}
+     /**
+     * Estado para almacenar la URL relativa de la imagen de perfil del usuario.
+     * @constant {string|null} profileImage - Contiene la ruta de la imagen de perfil o `null` si no está disponible.
      */
-    
+    const { profileImage, setProfileImage } = useProfileImage();
+
+       /**
+     * Hook personalizado para realizar solicitudes HTTP.
+     * @constant {function} fetchData - Función para hacer peticiones HTTP.
+     * @constant {Error|null} error - Posible error devuelto al realizar la solicitud.
+     */
+    const { fetchData, error } = useFetch();
+   /**
+     * Hook para obtener la imagen de perfil al cargar el componente.
+     * Decodifica el token almacenado localmente, obtiene el `userId` y realiza una solicitud al backend para recuperar la URL de la imagen de perfil.
+     * @function fetchProfileImage
+     * @returns {Promise&lt;void>} Actualiza el estado `profileImage` si se obtiene una imagen válida.
+     */
+   
+    useEffect(() => {
+        const fetchProfileImage = async () => {
+            const token = localStorage.getItem('token');
+          
+            // Decodificar el token y extraer el userId
+            const decodedToken = jwtDecode(token);
+            const userId = decodedToken.id; 
+        
+           
+
+            // Verificar que userId sea válido
+            if (!userId) {
+                console.error("El token no contiene un ID de usuario válido.");
+                return;
+            }
+
+            try {
+                // Realizar la solicitud al backend
+                const result = await fetchData("users/profile-image", "GET", null, token);
+
+                if (result &amp;&amp; result.imagePath) {
+                   // console.log("Estableciendo profileImage con:", result.imagePath);
+                    setProfileImage(result.imagePath);
+                } else {
+                    console.warn("No se obtuvo una imagen válida del servidor.");
+                }
+            } catch (error) {
+                console.error("Error al obtener la imagen de perfil:", error);
+            }
+        };
+
+        fetchProfileImage();
+    }, [fetchData, setProfileImage]);
+
+    if (error) {
+        console.error("Error al obtener la imagen de perfil:", error);
+    }
+ /**
+     * Redirecciona al usuario a la página de películas favoritas.
+     * @function goToFavorites
+     */
     const goToFavorites = () => {
-        navigate('/favorites'); 
+        navigate('/favorites');
     };
-    /**
-    * Función para navegar a la página de vistas.
-    * @returns {void}
-    */
-const goToWatched = () => {
-    navigate('/watched'); 
-};
-    // Renderizar el perfil del usuario
+   /**
+     * Redirecciona al usuario a la página de películas vistas.
+     * @function goToWatched
+     */
+    const goToWatched = () => {
+        navigate('/watched');
+    };
+ /**
+     * Callback para manejar la subida de una nueva imagen.
+     * Actualiza el estado `profileImage` con la nueva imagen subida.
+     * @function handleImageUpload
+     * @param {string} imagePath - Ruta de la nueva imagen subida.
+     */
+    const handleImageUpload = (imagePath) => {
+        setProfileImage(imagePath);
+    };
+
     return (
-        &lt;div className="container mt-4"> 
-            &lt;div className="card p-3" style={{ maxWidth: '600px', margin: 'auto', top: '80px' }}> 
+        &lt;div className="container mt-4">
+            &lt;div className="card p-3" style={{ maxWidth: '600px', margin: 'auto', top: '80px' }}>
                 &lt;div className="card-body text-center">
-                    &lt;h2 className="mb-3">Perfil de Usuario&lt;/h2> 
-                    &lt;p className="mb-3">Aquí podrás ver tus películas favoritas y vistas.&lt;/p> 
+                    &lt;h2 className="mb-3">Perfil de Usuario&lt;/h2>
+                    &lt;p className="mb-3">Aquí podrás ver tus películas favoritas y vistas.&lt;/p>
+                    
                     &lt;img
-                        src={peliculasImage}
-                        alt="Imagen de fondo"
-                        className="img-fluid mb-3" 
-                        style={{ maxWidth: "250px" }} 
+                        src={profileImage ? `http://localhost:5000/${profileImage}` : peliculasImage } 
+                        alt="Imagen de perfil"
+                        className="img-fluid mb-3"
+                        style={{ width: '150px', height: '150px', objectFit: 'cover', borderRadius: '50%' }}
                     />
+                       
 
                     &lt;div className="d-flex justify-content-center mb-3">
                         &lt;button
@@ -94,12 +154,14 @@ const goToWatched = () => {
                             Ver Películas Vistas
                         &lt;/button>
                     &lt;/div>
-                    {/*Botón para cambiar la contraseña*/} 
-                    &lt;div className="mt-3"> 
+
+                    {/* Subir nueva imagen */}
+                    &lt;UploadForm onImageUpload={handleImageUpload} /> 
+
+                    &lt;div className="mt-3">
                         &lt;ResetPassword />
                     &lt;/div>
-                    {/*Botón para eliminar la cuenta*/}
-                    &lt;div className="mt-2"> 
+                    &lt;div className="mt-2">
                         &lt;DeleteAccount />
                     &lt;/div>
                 &lt;/div>
@@ -108,7 +170,8 @@ const goToWatched = () => {
     );
 };
 
-export default Profile;</code></pre>
+export default Profile;
+</code></pre>
         </article>
     </section>
 
@@ -118,13 +181,13 @@ export default Profile;</code></pre>
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#AdminGetFavorites">AdminGetFavorites</a></li><li><a href="global.html#AdminGetReviews">AdminGetReviews</a></li><li><a href="global.html#DeleteAccount">DeleteAccount</a></li><li><a href="global.html#Favorites">Favorites</a></li><li><a href="global.html#FavoritesProvider">FavoritesProvider</a></li><li><a href="global.html#Login">Login</a></li><li><a href="global.html#ReviewsProvider">ReviewsProvider</a></li><li><a href="global.html#SearchProvider">SearchProvider</a></li><li><a href="global.html#WatchedProvider">WatchedProvider</a></li><li><a href="global.html#fetchFavorites">fetchFavorites</a></li><li><a href="global.html#fetchReviews">fetchReviews</a></li><li><a href="global.html#handleSubmit">handleSubmit</a></li><li><a href="global.html#login">login</a></li><li><a href="global.html#navigate">navigate</a></li><li><a href="global.html#useAuth">useAuth</a></li><li><a href="global.html#useFavorites">useFavorites</a></li><li><a href="global.html#useReviews">useReviews</a></li><li><a href="global.html#useWatched">useWatched</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#AdminDashboard">AdminDashboard</a></li><li><a href="global.html#AdminGetAllUsers">AdminGetAllUsers</a></li><li><a href="global.html#AdminGetFavorites">AdminGetFavorites</a></li><li><a href="global.html#AdminGetReviews">AdminGetReviews</a></li><li><a href="global.html#AdminGetWatchedMovies">AdminGetWatchedMovies</a></li><li><a href="global.html#AdminRoute">AdminRoute</a></li><li><a href="global.html#ChangePassword">ChangePassword</a></li><li><a href="global.html#DeleteAccount">DeleteAccount</a></li><li><a href="global.html#Favorites">Favorites</a></li><li><a href="global.html#FavoritesProvider">FavoritesProvider</a></li><li><a href="global.html#Login">Login</a></li><li><a href="global.html#Profile">Profile</a></li><li><a href="global.html#ProfileImageContext">ProfileImageContext</a></li><li><a href="global.html#ProfileImageProvider">ProfileImageProvider</a></li><li><a href="global.html#RecoveryPassword">RecoveryPassword</a></li><li><a href="global.html#ResetPassword">ResetPassword</a></li><li><a href="global.html#ReviewsProvider">ReviewsProvider</a></li><li><a href="global.html#SearchProvider">SearchProvider</a></li><li><a href="global.html#SignupForm">SignupForm</a></li><li><a href="global.html#UploadForm">UploadForm</a></li><li><a href="global.html#WatchedProvider">WatchedProvider</a></li><li><a href="global.html#error">error</a></li><li><a href="global.html#fetchProfileImage">fetchProfileImage</a></li><li><a href="global.html#goToFavorites">goToFavorites</a></li><li><a href="global.html#goToWatched">goToWatched</a></li><li><a href="global.html#handleImageUpload">handleImageUpload</a></li><li><a href="global.html#handleSubmit">handleSubmit</a></li><li><a href="global.html#login">login</a></li><li><a href="global.html#navigate">navigate</a></li><li><a href="global.html#profileImage">profileImage</a></li><li><a href="global.html#useAdminStatus">useAdminStatus</a></li><li><a href="global.html#useAuth">useAuth</a></li><li><a href="global.html#useFavorites">useFavorites</a></li><li><a href="global.html#useFetchAdminData">useFetchAdminData</a></li><li><a href="global.html#usePasswordValidation">usePasswordValidation</a></li><li><a href="global.html#useProfileImage">useProfileImage</a></li><li><a href="global.html#useReviews">useReviews</a></li><li><a href="global.html#useWatched">useWatched</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.4</a> on Sat Mar 01 2025 01:07:45 GMT+0100 (hora estándar de Europa central)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.4</a> on Fri Mar 07 2025 19:14:09 GMT+0100 (hora estándar de Europa central)
 </footer>
 
 <script> prettyPrint(); </script>

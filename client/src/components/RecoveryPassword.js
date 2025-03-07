@@ -2,13 +2,24 @@ import React, { useState } from "react";
 import { toast } from "react-toastify";
 import useFetch from "../hooks/useFetch";
 import { useNavigate } from "react-router-dom";
-
+/**
+ * Componente para la recuperación de contraseña.
+ *
+ * Este componente permite a los usuarios solicitar un correo electrónico para restablecer su contraseña.
+ *
+ * @component
+ * @returns {JSX.Element} El componente de recuperación de contraseña.
+ */
 const RecoveryPassword = () => {
     const [email, setEmail] = useState("");
     const { isLoading, error, fetchData } = useFetch();
     const navigate = useNavigate();
 
-
+ /**
+   * Manejar el envío del formulario para la recuperación de contraseña.
+   *
+   * @param {React.FormEvent} e - El evento de envío del formulario.
+   */
 
     const handleForgotPassword = async (e) => {
         e.preventDefault();

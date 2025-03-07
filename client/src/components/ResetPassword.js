@@ -2,7 +2,14 @@ import React, { useState } from 'react';
 import { useAuth } from '../providers/AuthContext';
 import { toast } from 'react-toastify';
 import useFetch from '../hooks/useFetch';
-
+/**
+ * Componente para restablecer la contraseña.
+ *
+ * Este componente permite a los usuarios solicitar un correo electrónico para restablecer su contraseña.
+ *
+ * @component
+ * @returns {JSX.Element} El componente de restablecimiento de contraseña.
+ */
 const ResetPassword = () => {
     const { userId } = useAuth();
     const { isLoading, error, fetchData } = useFetch();

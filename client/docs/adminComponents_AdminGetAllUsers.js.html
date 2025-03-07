@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: providers/AuthContext.js</title>
+    <title>JSDoc: Source: adminComponents/AdminGetAllUsers.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: providers/AuthContext.js</h1>
+    <h1 class="page-title">Source: adminComponents/AdminGetAllUsers.js</h1>
 
     
 
@@ -26,89 +26,68 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>/**
- * Proveedor del contexto de autenticación para el manejo de sesión de usuario.
- * 
- * Este componente crea un contexto que permite a la aplicación manejar el estado de autenticación del usuario. 
- * Proporciona funciones para iniciar sesión, cerrar sesión y verificar si el usuario está autenticado.
- * Utiliza `localStorage` para persistir el estado de autenticación entre sesiones.
- * 
- * @component
- * @example
- * 
- * &lt;AuthProvider>
- *   &lt;App />
- * &lt;/AuthProvider>
- * 
- * @returns {JSX.Element} El proveedor de contexto que envuelve el árbol de componentes.
- */
-
-import React, { createContext, useContext, useState, useEffect } from "react";
-
-const AuthContext = createContext();
-
+            <pre class="prettyprint source linenums"><code>import React from 'react';
+import useFetch from '../hooks/useFetch';
+import useFetchAdminData from '../adminHooks/useFetchAdminData';
+import useAdminStatus from '../adminHooks/useAdminStatus';
 /**
- * Hook personalizado para acceder al contexto de autenticación.
- * 
- * Este hook proporciona el estado de autenticación actual y las funciones para 
- * manejar la sesión del usuario (iniciar sesión y cerrar sesión).
- * 
- * @returns {Object} El contexto de autenticación con el estado y funciones necesarias.
- * @property {boolean} isAuthenticated - Estado que indica si el usuario está autenticado.
- * @property {string|null} userId - El ID del usuario autenticado o null si no está autenticado.
- * @property {string|null} userRole - El rol del usuario autenticado o null si no está autenticado.
- * @property {Function} login - Función para autenticar al usuario con un ID y rol.
- * @property {Function} logout - Función para cerrar sesión y eliminar el estado de autenticación.
+ * Componente para obtener y mostrar los usuarios en el dashboard de administración.
+ *
+ * Este componente utiliza varios hooks personalizados para obtener el estado de administrador,
+ * el estado de carga y los datos de los usuarios desde un endpoint. Solo los administradores pueden ver los usuarios.
+ *
+ * @component
+ * @returns {JSX.Element} El componente de usuarios del dashboard de administración.
  */
-export const useAuth = () => {
-    return useContext(AuthContext);
-};
 
+const AdminGetAllUsers = () => {
+    const { isLoading, error } = useFetch(); 
+    const { isAdmin } = useAdminStatus();
+    const { data: users  } = useFetchAdminData('admin/users/all-data-users');
 
-export const AuthProvider = ({ children }) => {
-    const [isAuthenticated, setIsAuthenticated] = useState(false);
-    const [userId, setUserId] = useState(null);
-    const [userRole, setUserRole] = useState(null); 
-
-    
-    useEffect(() => {
-        const token = localStorage.getItem("token");
-        const storedUserId = localStorage.getItem("userId");
-        const storedUserRole = localStorage.getItem("rol"); 
-
-        if (token &amp;&amp; storedUserId &amp;&amp; storedUserRole) {
-            setIsAuthenticated(true);
-            setUserId(storedUserId);
-            setUserRole(storedUserRole);
-        }
-    }, []);
-
-   
-    const login = (id, rol) => {
-        setIsAuthenticated(true);
-        setUserId(id);
-        setUserRole(rol); 
-        localStorage.setItem("userId", id);
-        localStorage.setItem("rol", rol); 
-    };
-
-    
-    const logout = () => {
-        localStorage.removeItem("token");  
-        localStorage.removeItem("userId");  
-        localStorage.removeItem("rol");  
-        setIsAuthenticated(false);
-        setUserId(null);
-        setUserRole(null);
-    };
 
     return (
-        &lt;AuthContext.Provider value={{ isAuthenticated, userId, userRole, login, logout }}>
-            {children}
-        &lt;/AuthContext.Provider>
+        &lt;div className="container mt-4">
+            &lt;h2 className="mb-4 text-primary font-weight-bold">Usuarios&lt;/h2>
+            {isLoading ? (
+                &lt;div className="alert alert-info" role="alert">Cargando...&lt;/div>
+            ) : error ? (
+                &lt;div className="alert alert-danger" role="alert">Error: {error}&lt;/div>
+            ) : isAdmin ? (
+                &lt;div className="table-responsive">
+                    &lt;table className="table table-striped table-bordered table-hover">
+                        &lt;thead className="table-dark">
+                            &lt;tr>
+                                &lt;th scope="col">ID&lt;/th>
+                                &lt;th scope="col">Nombre&lt;/th>
+                                &lt;th scope="col">Apellido&lt;/th>
+                                &lt;th scope="col">Correo Electrónico&lt;/th>
+                                &lt;th scope="col">Fecha de Creación&lt;/th>
+                            &lt;/tr>
+                        &lt;/thead>
+                        &lt;tbody>
+                            {users.map((user) => (
+                                &lt;tr key={user.id} className="table-info">
+                                    &lt;td>{user.id}&lt;/td>
+                                    &lt;td>{user.user_name}&lt;/td>
+                                    &lt;td>{user.user_lastnames}&lt;/td>
+                                    &lt;td>{user.email}&lt;/td>
+                                    &lt;td>{new Date(user.created_at).toLocaleDateString()}&lt;/td>
+                                &lt;/tr>
+                            ))}
+                        &lt;/tbody>
+                    &lt;/table>
+                &lt;/div>
+            ) : (
+                &lt;div className="alert alert-danger" role="alert">Acceso Denegado&lt;/div>
+            )};
+
+        &lt;/div>
+
     );
 };
-</code></pre>
+
+export default AdminGetAllUsers;</code></pre>
         </article>
     </section>
 

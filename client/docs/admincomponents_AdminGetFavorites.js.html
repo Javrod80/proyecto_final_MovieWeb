@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: admincomponents/AdminGetFavorites.js</title>
+    <title>JSDoc: Source: adminComponents/AdminGetFavorites.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: admincomponents/AdminGetFavorites.js</h1>
+    <h1 class="page-title">Source: adminComponents/AdminGetFavorites.js</h1>
 
     
 
@@ -26,79 +26,24 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>import React, { useEffect, useState } from 'react';
-import useFetch from '../hook/useFetch';
-import { jwtDecode } from 'jwt-decode';
+            <pre class="prettyprint source linenums"><code>import React from 'react';
+import useFetch from '../hooks/useFetch';
+import useFetchAdminData from '../adminHooks/useFetchAdminData';
+import useAdminStatus from '../adminHooks/useAdminStatus';
 /**
- * AdminGetFavorites es un componente que muestra una lista de películas favoritas
- * de los usuarios. Este componente solo es accesible para los administradores.
- * 
+ * Componente para obtener y mostrar los favoritos en el dashboard de administración.
+ *
+ * Este componente utiliza varios hooks personalizados para obtener el estado de administrador,
+ * el estado de carga y los datos de los favoritos desde un endpoint. Solo los administradores pueden ver los favoritos.
+ *
  * @component
- * @returns {JSX.Element} El componente de administración para ver las películas favoritas.
+ * @returns {JSX.Element} El componente de favoritos del dashboard de administración.
  */
 
 const AdminGetFavorites = () => {
-  /**
-  * Estado para almacenar las películas favoritas obtenidas de la API.
-  * @type {Array}
-  */
-  const [favorites, setFavorites] = useState([]);
-  /**
-  * Estados para manejar el estado de carga, el error y la función para obtener datos.
-  * @type {Object}
-  * @property {boolean} isLoading - Indica si los datos están siendo cargados.
-  * @property {string|null} error - El mensaje de error, si ocurre alguno.
-  * @property {Function} fetchData - Función para hacer solicitudes HTTP.
-  */
-  const { isLoading, error, fetchData } = useFetch();
-  /**
- * Estado que indica si el usuario tiene privilegios de administrador.
- * @type {boolean}
- */
-  const [isAdmin, setIsAdmin] = useState(false);
-  /**
-    * Token obtenido del almacenamiento local.
-    * @type {string|null}
-    */
-  const token = localStorage.getItem('token');
-  /**
-  * Efecto que se ejecuta una vez al cargar el componente y valida si el usuario es un administrador.
-  * Si el token es válido y el rol es 'admin', establece el estado de isAdmin a true.
-  * 
-  * 
-  */
-  useEffect(() => {
-    if (token) {
-      const decodedToken = jwtDecode(token);
-      if (decodedToken.rol === 'admin') {
-        setIsAdmin(true);
-      }
-    }
-  }, [token]);
-  /**
-    * Este efecto se ejecuta cuando isAdmin es true y realiza una petición para obtener
-    * todas las películas favoritas de los usuarios. Los resultados se almacenan en el estado `favorites`.
-    */
-  useEffect(() => {
-    if (isAdmin) {
-      /**
-        * Función asincrónica para obtener las películas favoritas.
-        * Llama a la función fetchData para hacer una solicitud GET.
-        * 
-        * @async
-        * @function fetchFavorites
-        * @returns {Promise&lt;void>}
-        */
-      const fetchFavorites = async () => {
-        const result = await fetchData('admin/get-all-favorites', 'GET', null, token);
-
-        if (result) {
-          setFavorites(result);
-        }
-      };
-      fetchFavorites();
-    }
-  }, [isAdmin, fetchData, token]);
+  const { isLoading, error } = useFetch(); 
+  const { isAdmin } = useAdminStatus();
+  const { data: favorites } = useFetchAdminData('admin/get-all-favorites');
 
   return (
     &lt;div className="container mt-5">
@@ -146,13 +91,13 @@ export default AdminGetFavorites;
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#AdminGetFavorites">AdminGetFavorites</a></li><li><a href="global.html#AdminGetReviews">AdminGetReviews</a></li><li><a href="global.html#DeleteAccount">DeleteAccount</a></li><li><a href="global.html#Favorites">Favorites</a></li><li><a href="global.html#FavoritesProvider">FavoritesProvider</a></li><li><a href="global.html#Login">Login</a></li><li><a href="global.html#ReviewsProvider">ReviewsProvider</a></li><li><a href="global.html#SearchProvider">SearchProvider</a></li><li><a href="global.html#WatchedProvider">WatchedProvider</a></li><li><a href="global.html#fetchFavorites">fetchFavorites</a></li><li><a href="global.html#fetchReviews">fetchReviews</a></li><li><a href="global.html#handleSubmit">handleSubmit</a></li><li><a href="global.html#login">login</a></li><li><a href="global.html#navigate">navigate</a></li><li><a href="global.html#useAuth">useAuth</a></li><li><a href="global.html#useFavorites">useFavorites</a></li><li><a href="global.html#useReviews">useReviews</a></li><li><a href="global.html#useWatched">useWatched</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#AdminDashboard">AdminDashboard</a></li><li><a href="global.html#AdminGetAllUsers">AdminGetAllUsers</a></li><li><a href="global.html#AdminGetFavorites">AdminGetFavorites</a></li><li><a href="global.html#AdminGetReviews">AdminGetReviews</a></li><li><a href="global.html#AdminGetWatchedMovies">AdminGetWatchedMovies</a></li><li><a href="global.html#AdminRoute">AdminRoute</a></li><li><a href="global.html#ChangePassword">ChangePassword</a></li><li><a href="global.html#DeleteAccount">DeleteAccount</a></li><li><a href="global.html#Favorites">Favorites</a></li><li><a href="global.html#FavoritesProvider">FavoritesProvider</a></li><li><a href="global.html#Login">Login</a></li><li><a href="global.html#Profile">Profile</a></li><li><a href="global.html#ProfileImageContext">ProfileImageContext</a></li><li><a href="global.html#ProfileImageProvider">ProfileImageProvider</a></li><li><a href="global.html#RecoveryPassword">RecoveryPassword</a></li><li><a href="global.html#ResetPassword">ResetPassword</a></li><li><a href="global.html#ReviewsProvider">ReviewsProvider</a></li><li><a href="global.html#SearchProvider">SearchProvider</a></li><li><a href="global.html#SignupForm">SignupForm</a></li><li><a href="global.html#UploadForm">UploadForm</a></li><li><a href="global.html#WatchedProvider">WatchedProvider</a></li><li><a href="global.html#error">error</a></li><li><a href="global.html#fetchProfileImage">fetchProfileImage</a></li><li><a href="global.html#goToFavorites">goToFavorites</a></li><li><a href="global.html#goToWatched">goToWatched</a></li><li><a href="global.html#handleImageUpload">handleImageUpload</a></li><li><a href="global.html#handleSubmit">handleSubmit</a></li><li><a href="global.html#login">login</a></li><li><a href="global.html#navigate">navigate</a></li><li><a href="global.html#profileImage">profileImage</a></li><li><a href="global.html#useAdminStatus">useAdminStatus</a></li><li><a href="global.html#useAuth">useAuth</a></li><li><a href="global.html#useFavorites">useFavorites</a></li><li><a href="global.html#useFetchAdminData">useFetchAdminData</a></li><li><a href="global.html#usePasswordValidation">usePasswordValidation</a></li><li><a href="global.html#useProfileImage">useProfileImage</a></li><li><a href="global.html#useReviews">useReviews</a></li><li><a href="global.html#useWatched">useWatched</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.4</a> on Sat Mar 01 2025 01:07:45 GMT+0100 (hora estándar de Europa central)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.4</a> on Fri Mar 07 2025 19:14:09 GMT+0100 (hora estándar de Europa central)
 </footer>
 
 <script> prettyPrint(); </script>

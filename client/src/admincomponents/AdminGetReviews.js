@@ -2,7 +2,15 @@ import React from 'react';
 import useFetch from '../hooks/useFetch';
 import useFetchAdminData from '../adminHooks/useFetchAdminData';
 import useAdminStatus from '../adminHooks/useAdminStatus';
-
+/**
+ * Componente para obtener y mostrar las reseñas en el dashboard de administración.
+ *
+ * Este componente utiliza varios hooks personalizados para obtener el estado de administrador,
+ * el estado de carga y los datos de las reseñas desde un endpoint. Solo los administradores pueden ver las reseñas.
+ *
+ * @component
+ * @returns {JSX.Element} El componente de reseñas del dashboard de administración.
+ */
 const AdminGetReviews = () => {
    
     const { isLoading, error } = useFetch(); 
