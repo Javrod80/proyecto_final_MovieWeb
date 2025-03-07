@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: controllers/favorites.controller.js</title>
+    <title>JSDoc: Source: utils/UploadManager/uploadManager.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: controllers/favorites.controller.js</h1>
+    <h1 class="page-title">Source: utils/UploadManager/uploadManager.js</h1>
 
     
 
@@ -26,40 +26,97 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>import crudMongoDB from "../models/MongoModels/favorites.models.js";
+            <pre class="prettyprint source linenums"><code>import multer from "multer";
+import path from "path";
+import fs from "fs";
+import { fileURLToPath } from "url";
 
+/**
+ * Obtiene la ruta del archivo actual en módulos ESM.
+ * @constant {string} __filename
+ */
+const __filename = fileURLToPath(import.meta.url);
+/**
+ * Obtiene el directorio del archivo actual.
+ * @constant {string} __dirname
+ */
+const __dirname = path.dirname(__filename);
 
+/**
+ * Ruta donde se almacenarán los archivos subidos.
+ * @constant {string}
+ */
+const uploadDir = path.join(__dirname, "../../files");
+//console.log("Ruta de la carpeta de subidas:", uploadDir);
 
-
-export default {
+/**
+ * Verifica si la carpeta de subida existe, y la crea si no.
+ */
+if (!fs.existsSync(uploadDir)) {
+    fs.mkdirSync(uploadDir, { recursive: true }); 
+}
+/**
+ * Configuración del almacenamiento de archivos con Multer.
+ * Define el destino y el nombre de los archivos subidos.
+ * @constant {multer.StorageEngine}
+ */
+const storage = multer.diskStorage({
     /**
-     * Agrega una película a los favoritos del usuario.
-     * 
-     * 
-     * @param {Request} req - Objeto de solicitud de Express, que contiene el `userId` y los detalles de la película en el cuerpo de la solicitud.
-     * @param {Response} res - Objeto de respuesta de Express, que envía una respuesta de éxito o error.
-     * @returns {Promise&lt;void>} Responde con un mensaje de éxito y el resultado de la operación, o un mensaje de error si algo falla.
-     * @throws {Error} Lanza un error si ocurre un problema al agregar la película a favoritos.
-     */
-    addFavorites: async (req, res) => {
-       // console.log("Cuerpo de la petición:", req.body); 
-
-        const{userId , ...movie} = req.body;
-
-
-        if (!userId || !movie) {
-            return res.status(400).json({ message: "Faltan datos requeridos" });
+    * Define la carpeta de destino para los archivos subidos.
+    * 
+    * @param {Request} req - Objeto de solicitud de Express.
+    * @param {Express.Multer.File} file - Archivo subido.
+    * @param {function(Error|null, string)} cb - Callback para indicar la ruta de destino.
+    */
+    destination: (req, file, cb) => {
+      // console.log("Destino configurado para Multer:", uploadDir);
+        const userFolder = path.join(uploadDir, req.userId); 
+        if (!fs.existsSync(userFolder)) {
+            fs.mkdirSync(userFolder, { recursive: true });
         }
+        cb(null, userFolder); 
+    },
+    /**
+   * Define el nombre del archivo subido.
+   * 
+   * @param {Request} req - Objeto de solicitud de Express.
+   * @param {Express.Multer.File} file - Archivo subido.
+   * @param {function(Error|null, string)} cb - Callback para indicar el nombre del archivo.
+   */
+    filename: (req, file, cb) => {
+        cb(null, `${Date.now()}-${file.originalname}`);
+    },
+});
 
-        try {
-            const result = await crudMongoDB.insertFavorites(userId, movie);
-            res.status(201).json({ message: 'Película agregada a favoritos', result });
-        } catch (error) {
-            console.error('Error al agregar a favoritos:', error);
-            res.status(500).json({ message: 'Error al agregar la película a favoritos' });
-        }
+/**
+ * Filtro para aceptar solo archivos de imagen (JPEG, PNG, GIF).
+ * 
+ * @param {Request} req - Objeto de solicitud de Express.
+ * @param {Express.Multer.File} file - Archivo subido.
+ * @param {function(Error|null, boolean)} cb - Callback para aceptar o rechazar el archivo.
+ */
+const fileFilter = (req, file, cb) => {
+    const allowedTypes = ["image/jpeg", "image/png", "image/gif", "image/jpg"];
+    if (allowedTypes.includes(file.mimetype)) {
+        cb(null, true);
+    } else {
+        cb(new Error("Formato de archivo no válido. Solo se permiten imágenes."), false);
     }
 };
+
+/**
+ * Middleware de Multer para la subida de archivos.
+ * - Almacena los archivos en `storage`.
+ * - Aplica `fileFilter` para validar los formatos permitidos.
+ * - Limita el tamaño de los archivos a 5MB.
+ * 
+ * @constant {Multer}
+ */
+export const upload = multer({
+    storage,
+    fileFilter,
+    limits: { fileSize: 5 * 1024 * 1024 }, // Límite de 5MB
+}).single("image");
 </code></pre>
         </article>
     </section>

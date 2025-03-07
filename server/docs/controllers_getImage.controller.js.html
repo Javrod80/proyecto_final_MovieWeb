@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: controllers/favorites.controller.js</title>
+    <title>JSDoc: Source: controllers/getImage.controller.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: controllers/favorites.controller.js</h1>
+    <h1 class="page-title">Source: controllers/getImage.controller.js</h1>
 
     
 
@@ -26,41 +26,39 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>import crudMongoDB from "../models/MongoModels/favorites.models.js";
-
-
+            <pre class="prettyprint source linenums"><code>import crudMongoDBImages from "../models/MongoModels/imagesProfile.models.js";
 
 
 export default {
     /**
-     * Agrega una película a los favoritos del usuario.
+     * Obtiene la imagen de perfil de un usuario.
      * 
      * 
-     * @param {Request} req - Objeto de solicitud de Express, que contiene el `userId` y los detalles de la película en el cuerpo de la solicitud.
-     * @param {Response} res - Objeto de respuesta de Express, que envía una respuesta de éxito o error.
-     * @returns {Promise&lt;void>} Responde con un mensaje de éxito y el resultado de la operación, o un mensaje de error si algo falla.
-     * @throws {Error} Lanza un error si ocurre un problema al agregar la película a favoritos.
+     * @param {Request} req - Objeto de solicitud de Express.
+     * @param {Response} res - Objeto de respuesta de Express.  
+     * @returns {Promise&lt;void>} Responde con la imagen de perfil del usuario o un mensaje de error.
      */
-    addFavorites: async (req, res) => {
-       // console.log("Cuerpo de la petición:", req.body); 
-
-        const{userId , ...movie} = req.body;
-
-
-        if (!userId || !movie) {
-            return res.status(400).json({ message: "Faltan datos requeridos" });
-        }
-
+    getProfileImage: async (req, res) => {
         try {
-            const result = await crudMongoDB.insertFavorites(userId, movie);
-            res.status(201).json({ message: 'Película agregada a favoritos', result });
+            const userId = String(req.userId); 
+        
+
+            const images = await crudMongoDBImages.getImagesForUser(userId);
+       
+            // Verifica si se encontró alguna imagen
+            if (images.length === 0 || !images[0].imagePath) {
+                return res.status(404).json({ error: 'No se encontró la imagen de perfil' });
+            }
+
+            res.json({ imagePath: images[0].imagePath });
+          
         } catch (error) {
-            console.error('Error al agregar a favoritos:', error);
-            res.status(500).json({ message: 'Error al agregar la película a favoritos' });
+            console.error('Error al obtener la imagen de perfil:', error);
+            res.status(500).json({ error: 'Error al obtener la imagen de perfil' });
         }
     }
-};
-</code></pre>
+
+}</code></pre>
         </article>
     </section>
 

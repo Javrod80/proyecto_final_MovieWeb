@@ -4,7 +4,17 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 const tableName = process.env.TAB_SECOND;
-
+ /**
+   * Obtener todos los usuarios.
+   *
+   * Este método obtiene una lista de todos los usuarios utilizando el modelo usersModel.
+   *
+   * @async
+   * @function getAllUsers
+   * @param {object} req - El objeto de solicitud.
+   * @param {object} res - El objeto de respuesta.
+   * @returns {Promise<void>} Retorna una respuesta JSON con la lista de usuarios o un mensaje de error.
+   */
 export default {
     getAllUsers: async (req, res) => {
      

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: controllers/favorites.controller.js</title>
+    <title>JSDoc: Source: controllers/uploadFiles.controller.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: controllers/favorites.controller.js</h1>
+    <h1 class="page-title">Source: controllers/uploadFiles.controller.js</h1>
 
     
 
@@ -26,40 +26,50 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>import crudMongoDB from "../models/MongoModels/favorites.models.js";
-
-
+            <pre class="prettyprint source linenums"><code>import crudMongoDBImages from "../models/MongoModels/imagesProfile.models.js";
 
 
 export default {
+
     /**
-     * Agrega una película a los favoritos del usuario.
-     * 
-     * 
-     * @param {Request} req - Objeto de solicitud de Express, que contiene el `userId` y los detalles de la película en el cuerpo de la solicitud.
-     * @param {Response} res - Objeto de respuesta de Express, que envía una respuesta de éxito o error.
-     * @returns {Promise&lt;void>} Responde con un mensaje de éxito y el resultado de la operación, o un mensaje de error si algo falla.
-     * @throws {Error} Lanza un error si ocurre un problema al agregar la película a favoritos.
-     */
-    addFavorites: async (req, res) => {
-       // console.log("Cuerpo de la petición:", req.body); 
-
-        const{userId , ...movie} = req.body;
-
-
-        if (!userId || !movie) {
-            return res.status(400).json({ message: "Faltan datos requeridos" });
-        }
-
+    * Sube un archivo de imagen y lo asocia a un usuario en la base de datos.
+    * 
+    * @async
+    * @function uploadFiles
+    * @param {Request} req - Objeto de solicitud de Express.
+    * @param {Response} res - Objeto de respuesta de Express.
+    * @returns {Promise&lt;void>} Responde con un mensaje de éxito o error en formato JSON.
+    */
+    uploadFiles: async (req, res) => {
         try {
-            const result = await crudMongoDB.insertFavorites(userId, movie);
-            res.status(201).json({ message: 'Película agregada a favoritos', result });
-        } catch (error) {
-            console.error('Error al agregar a favoritos:', error);
-            res.status(500).json({ message: 'Error al agregar la película a favoritos' });
+          
+            const userId = req.userId;
+          
+
+            if (!req.file) {
+                return res.status(400).json({ message: "No se ha subido ningún archivo." });
+            }
+            /**
+            * Ruta donde se almacena la imagen subida.
+            * @constant {string}
+            */
+            const imagePath = `files/${req.file.filename}`;
+         
+            /**
+            * Inserta la imagen en la base de datos y asocia el archivo al usuario.
+            * @constant {Object} result - Resultado de la operación de inserción en MongoDB.
+            * @property {string} result.insertedId - ID del documento insertado en la base de datos.
+            */
+            const result = await crudMongoDBImages.insertImageForUser(userId, imagePath);
+
+            res.status(200).json({ message: "Imagen subida con éxito", imageId: result.insertedId, imagePath });
+        } catch (err) {
+            console.error(err);
+            res.status(500).json({ message: "Error al subir la imagen." });
         }
     }
-};
+}
+
 </code></pre>
         </article>
     </section>

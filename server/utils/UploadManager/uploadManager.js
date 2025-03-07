@@ -36,7 +36,7 @@ const storage = multer.diskStorage({
     /**
     * Define la carpeta de destino para los archivos subidos.
     * 
-    * @param {import("express").Request} req - Objeto de solicitud de Express.
+    * @param {Request} req - Objeto de solicitud de Express.
     * @param {Express.Multer.File} file - Archivo subido.
     * @param {function(Error|null, string)} cb - Callback para indicar la ruta de destino.
     */
@@ -51,7 +51,7 @@ const storage = multer.diskStorage({
     /**
    * Define el nombre del archivo subido.
    * 
-   * @param {import("express").Request} req - Objeto de solicitud de Express.
+   * @param {Request} req - Objeto de solicitud de Express.
    * @param {Express.Multer.File} file - Archivo subido.
    * @param {function(Error|null, string)} cb - Callback para indicar el nombre del archivo.
    */
@@ -63,7 +63,7 @@ const storage = multer.diskStorage({
 /**
  * Filtro para aceptar solo archivos de imagen (JPEG, PNG, GIF).
  * 
- * @param {import("express").Request} req - Objeto de solicitud de Express.
+ * @param {Request} req - Objeto de solicitud de Express.
  * @param {Express.Multer.File} file - Archivo subido.
  * @param {function(Error|null, boolean)} cb - Callback para aceptar o rechazar el archivo.
  */
@@ -82,7 +82,7 @@ const fileFilter = (req, file, cb) => {
  * - Aplica `fileFilter` para validar los formatos permitidos.
  * - Limita el tamaño de los archivos a 5MB.
  * 
- * @constant {import("multer").Multer}
+ * @constant {Multer}
  */
 export const upload = multer({
     storage,

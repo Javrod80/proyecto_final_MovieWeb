@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: controllers/favorites.controller.js</title>
+    <title>JSDoc: Source: adminControllers/adminSql.controller.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: controllers/favorites.controller.js</h1>
+    <h1 class="page-title">Source: adminControllers/adminSql.controller.js</h1>
 
     
 
@@ -26,37 +26,43 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>import crudMongoDB from "../models/MongoModels/favorites.models.js";
+            <pre class="prettyprint source linenums"><code>import usersModel from '../models/MySQLModels/users.models.js';
+import genericMySqlModel from '../models/MySQLModels/genericMySQL.models.js';
+import dotenv from 'dotenv';
+dotenv.config();
 
-
-
-
+const tableName = process.env.TAB_SECOND;
+ /**
+   * Obtener todos los usuarios.
+   *
+   * Este método obtiene una lista de todos los usuarios utilizando el modelo usersModel.
+   *
+   * @async
+   * @function getAllUsers
+   * @param {object} req - El objeto de solicitud.
+   * @param {object} res - El objeto de respuesta.
+   * @returns {Promise&lt;void>} Retorna una respuesta JSON con la lista de usuarios o un mensaje de error.
+   */
 export default {
-    /**
-     * Agrega una película a los favoritos del usuario.
-     * 
-     * 
-     * @param {Request} req - Objeto de solicitud de Express, que contiene el `userId` y los detalles de la película en el cuerpo de la solicitud.
-     * @param {Response} res - Objeto de respuesta de Express, que envía una respuesta de éxito o error.
-     * @returns {Promise&lt;void>} Responde con un mensaje de éxito y el resultado de la operación, o un mensaje de error si algo falla.
-     * @throws {Error} Lanza un error si ocurre un problema al agregar la película a favoritos.
-     */
-    addFavorites: async (req, res) => {
-       // console.log("Cuerpo de la petición:", req.body); 
-
-        const{userId , ...movie} = req.body;
-
-
-        if (!userId || !movie) {
-            return res.status(400).json({ message: "Faltan datos requeridos" });
-        }
-
+    getAllUsers: async (req, res) => {
+     
         try {
-            const result = await crudMongoDB.insertFavorites(userId, movie);
-            res.status(201).json({ message: 'Película agregada a favoritos', result });
+            const users = await usersModel.getAllUsers();
+            res.json(users); 
         } catch (error) {
-            console.error('Error al agregar a favoritos:', error);
-            res.status(500).json({ message: 'Error al agregar la película a favoritos' });
+            console.error("Error al obtener usuarios:", error);
+            res.status(500).json({ message: "Error al obtener usuarios" });
+        }
+    },
+    getAllWatchHistory: async (req, res) => {
+     
+        try {
+            const watchHistory = await genericMySqlModel.getData(tableName);
+          
+            res.json(watchHistory); 
+        } catch (error) {
+            console.error("Error al obtener historial de visualización:", error);
+            res.status(500).json({ message: "Error al obtener historial de visualización" });
         }
     }
 };

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: controllers/favorites.controller.js</title>
+    <title>JSDoc: Source: models/MongoModels/imagesProfile.models.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: controllers/favorites.controller.js</h1>
+    <h1 class="page-title">Source: models/MongoModels/imagesProfile.models.js</h1>
 
     
 
@@ -26,41 +26,48 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>import crudMongoDB from "../models/MongoModels/favorites.models.js";
+            <pre class="prettyprint source linenums"><code>import  {getDataFromCollection, deleteFromCollection, insertIntoCollection}  from './genericMongo.models.js';
+import path from 'path';
+import dotenv from 'dotenv';
+dotenv.config();
+const collectionName = process.env.COLL_IMAG;
 
+const crudMongoDBImages = {
 
-
-
-export default {
     /**
-     * Agrega una película a los favoritos del usuario.
-     * 
-     * 
-     * @param {Request} req - Objeto de solicitud de Express, que contiene el `userId` y los detalles de la película en el cuerpo de la solicitud.
-     * @param {Response} res - Objeto de respuesta de Express, que envía una respuesta de éxito o error.
-     * @returns {Promise&lt;void>} Responde con un mensaje de éxito y el resultado de la operación, o un mensaje de error si algo falla.
-     * @throws {Error} Lanza un error si ocurre un problema al agregar la película a favoritos.
+     * Función para insertar la imagen en la colección de imágenes
+     * @param {string} userId - El ID del usuario que sube la imagen.
+     * @param {string} imagePath - La ruta de la imagen subida.
+     * @returns {Promise&lt;Object>} - Devuelve una promesa con el resultado de la operación de inserción.
      */
-    addFavorites: async (req, res) => {
-       // console.log("Cuerpo de la petición:", req.body); 
+    insertImageForUser: async (userId, imagePath) => {
+        return insertIntoCollection(collectionName, {
+            userId,
+            imagePath:`files/${userId}/${path.basename(imagePath)}`,
+            createdAt: new Date(),
+        });
+    },
+    /**
+     * Función para obtener las imágenes de un usuario
+     * @param {string} userId - El ID del usuario.
+     * @returns {Promise&lt;Array>} - Devuelve una promesa con un arreglo de las imágenes asociadas al usuario.
+     */
+    getImagesForUser: async (userId) => {
+        return getDataFromCollection(collectionName, { userId });
+    },
 
-        const{userId , ...movie} = req.body;
-
-
-        if (!userId || !movie) {
-            return res.status(400).json({ message: "Faltan datos requeridos" });
-        }
-
-        try {
-            const result = await crudMongoDB.insertFavorites(userId, movie);
-            res.status(201).json({ message: 'Película agregada a favoritos', result });
-        } catch (error) {
-            console.error('Error al agregar a favoritos:', error);
-            res.status(500).json({ message: 'Error al agregar la película a favoritos' });
-        }
+    /**
+     * Función para eliminar una imagen de un usuario
+     * @param {string} userId - El ID del usuario.
+     * @param {string} imageId - El ID de la imagen a eliminar.
+     * @returns {Promise&lt;Object>} - Devuelve una promesa con el resultado de la operación de eliminación.
+     */
+    deleteImageForUser: async (userId, imageId) => {
+        return deleteFromCollection(collectionName, { userId, _id: new ObjectId(imageId) });
     }
-};
-</code></pre>
+}
+
+export default crudMongoDBImages;</code></pre>
         </article>
     </section>
 
