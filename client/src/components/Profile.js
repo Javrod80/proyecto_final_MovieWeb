@@ -32,9 +32,11 @@ const Profile = () => {
     }, [error]); 
    
     useEffect(() => {
-
-    }, [profileImage]);
-        
+        if (profileImage) {
+            // Forzar la actualización de la imagen
+            console.log("Imagen de perfil actualizada:", profileImage);
+        }
+    }, [profileImage]); 
 
  /**
      * Redirecciona al usuario a la página de películas favoritas.

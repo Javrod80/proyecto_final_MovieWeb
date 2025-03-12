@@ -20,59 +20,57 @@ export const ProfileImageProvider = ({ children }) => {
     * @type {FileFunctionArray}
     */
     const [profileImage, setProfileImage] = useState(null);
-    const { fetchData } = useFetch();
-    const [token ,setToken] = useState(null);
+    const { fetchData  } = useFetch();
+    const [token, setToken] = useState(localStorage.getItem('token'));
+    
 
- 
     useEffect(() => {
-        const storedToken = localStorage.getItem('token');
-     //   console.log("stored",storedToken)
-        setToken(storedToken);
-    }, []);
+       
+        const checkToken = () => {
+            const storedToken = localStorage.getItem('token');
+            if (storedToken !== token) {
+                setToken(storedToken);
+            }
+        };
+            // para obtener asegurarce el token de localStorage
+        
+        const tokenCheckInterval = setInterval(checkToken, 500);
+
+        return () => clearInterval(tokenCheckInterval); 
+    }, [token]);
+  
 
     useEffect(() => {
         const fetchProfileImage = async () => {
-            
-
-            if (!token) {
-                console.log("Token no encontrado. El usuario no está autenticado.");
-                setProfileImage(null);
-                return;
-            }
-
+            if (!token) return; 
             try {
                 // Decodificar el token y extraer el userId
                 const decodedToken = jwtDecode(token);
                 const userId = decodedToken.id;
 
-                // Verificar que userId sea válido
                 if (!userId) {
                     console.error("El token no contiene un ID de usuario válido.");
                     setProfileImage(null);
                     return;
                 }
 
-                // Realizar la solicitud al backend para obtener la imagen de perfil
+                console.log("Llamando a fetchData...");
                 const result = await fetchData("users/profile-image", "GET", null, token);
-
-                if (result && result.imagePath) {
-                    setProfileImage(result.imagePath);
-                } else {
-                    console.warn("No se obtuvo una imagen válida del servidor.");
-                    setProfileImage(null);
-                }
+                console.log("token:", token);
+                console.log("respuesta:", result);
+                setProfileImage(result?.imagePath ?? null);
+                console.log("Imagen de perfil actualizada:", result?.imagePath);
             } catch (error) {
                 console.error("Error al obtener la imagen de perfil:", error);
                 setProfileImage(null);
             }
         };
+
         if (token) {
             fetchProfileImage();
         }
-
-   
     }, [fetchData, token]);
-
+    
     return (
         <ProfileImageContext.Provider value={{ profileImage, setProfileImage }}>
             {children}
