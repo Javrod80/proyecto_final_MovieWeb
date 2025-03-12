@@ -14,9 +14,9 @@ export default {
     */
     uploadFiles: async (req, res) => {
         try {
-          
+
             const userId = req.userId;
-          
+
 
             if (!req.file) {
                 return res.status(400).json({ message: "No se ha subido ningún archivo." });
@@ -26,7 +26,7 @@ export default {
             * @constant {string}
             */
             const imagePath = `files/${req.file.filename}`;
-         
+
             /**
             * Inserta la imagen en la base de datos y asocia el archivo al usuario.
             * @constant {Object} result - Resultado de la operación de inserción en MongoDB.
@@ -41,4 +41,3 @@ export default {
         }
     }
 }
-

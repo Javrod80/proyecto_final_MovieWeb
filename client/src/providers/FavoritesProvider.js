@@ -74,7 +74,12 @@ export const FavoritesProvider = ({ children }) => {
 
     // Cargar favoritos desde la API cuando los datos estén disponibles
     useEffect(() => {
-        if (data) setFavorites(data);
+        if (Array.isArray(data)){
+            setFavorites(data);
+        } 
+        else {
+            setFavorites([]);
+        }
     }, [data]);
     // Actualizar favoritos cada vez que se obtienen nuevos datos
     useEffect(() => {

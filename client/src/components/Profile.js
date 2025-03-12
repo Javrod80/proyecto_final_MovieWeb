@@ -23,7 +23,7 @@ const Profile = () => {
      * Estado para almacenar la URL relativa de la imagen de perfil del usuario.
      * @constant {string|null} profileImage - Contiene la ruta de la imagen de perfil o `null` si no está disponible.
      */
-    const { profileImage, setProfileImage } = useProfileImage();
+    const { profileImage, setProfileImage } = useProfileImage(null);
 
        /**
      * Hook personalizado para realizar solicitudes HTTP.
@@ -41,31 +41,38 @@ const Profile = () => {
     useEffect(() => {
         const fetchProfileImage = async () => {
             const token = localStorage.getItem('token');
-          
-            // Decodificar el token y extraer el userId
-            const decodedToken = jwtDecode(token);
-            const userId = decodedToken.id; 
-        
-           
 
-            // Verificar que userId sea válido
-            if (!userId) {
-                console.error("El token no contiene un ID de usuario válido.");
+            // Verificar si el token está presente
+            if (!token) {
+                console.log("Token no encontrado. El usuario no está autenticado.");
+                setProfileImage(null);  
                 return;
             }
 
             try {
-                // Realizar la solicitud al backend
+                // Decodificar el token y extraer el userId
+                const decodedToken = jwtDecode(token);
+                const userId = decodedToken.id;
+
+                // Verificar que userId sea válido
+                if (!userId) {
+                    console.error("El token no contiene un ID de usuario válido.");
+                    setProfileImage(null); 
+                    return;
+                }
+
+                // Realizar la solicitud al backend para obtener la imagen de perfil
                 const result = await fetchData("users/profile-image", "GET", null, token);
 
                 if (result && result.imagePath) {
-                   // console.log("Estableciendo profileImage con:", result.imagePath);
                     setProfileImage(result.imagePath);
                 } else {
                     console.warn("No se obtuvo una imagen válida del servidor.");
+                    setProfileImage(null);  
                 }
             } catch (error) {
                 console.error("Error al obtener la imagen de perfil:", error);
+                setProfileImage(null);  
             }
         };
 
@@ -107,7 +114,7 @@ const Profile = () => {
                     <p className="mb-3">Aquí podrás ver tus películas favoritas y vistas.</p>
                     
                     <img
-                        src={profileImage ? `http://localhost:5000/${profileImage}` : peliculasImage } 
+                        src={profileImage ? `http://localhost:5000/${profileImage}?t=${new Date().getTime()}` : peliculasImage } 
                         alt="Imagen de perfil"
                         className="img-fluid mb-3"
                         style={{ width: '150px', height: '150px', objectFit: 'cover', borderRadius: '50%' }}

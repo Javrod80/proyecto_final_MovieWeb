@@ -30,7 +30,7 @@ const Favorites = () => {
 
             {isLoading ? (
                 <p className="text-center text-muted">Cargando películas favoritas...</p>
-            ) : favorites.length === 0 ? (
+            ) : !Array.isArray(favorites) || favorites.length === 0 ? (
                 <p className="text-center text-muted">No tienes películas favoritas.</p>
             ) : (
                 <div>

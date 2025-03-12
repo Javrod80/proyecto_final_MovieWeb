@@ -26,12 +26,13 @@ const verifyToken = (req, res, next) => {
   if (!decoded) {
     return res.status(403).json({ message: 'Token inválido o expirado' });
   }
-
-  req.userId = String(decoded.id);
+//  console.log('Token decodificado:', decoded);
+  req.userId = String(decoded.id); 
+  
   if (!decoded.role) {
     decoded.rol = 'usuario';
   }
-
+  
   req.user = decoded;
   next();
 };

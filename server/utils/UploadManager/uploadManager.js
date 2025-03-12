@@ -80,12 +80,12 @@ const fileFilter = (req, file, cb) => {
  * Middleware de Multer para la subida de archivos.
  * - Almacena los archivos en `storage`.
  * - Aplica `fileFilter` para validar los formatos permitidos.
- * - Limita el tamaño de los archivos a 5MB.
+ * - Limita el tamaño de los archivos a 10MB.
  * 
  * @constant {Multer}
  */
 export const upload = multer({
     storage,
     fileFilter,
-    limits: { fileSize: 5 * 1024 * 1024 }, // Límite de 5MB
+    limits: { fileSize: 10 * 1024 * 1024 }, 
 }).single("image");

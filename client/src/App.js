@@ -24,53 +24,53 @@ import AdminDashboard from './adminPages/AdminDashboard';
 import RecoveryPassword from './components/RecoveryPassword';
 import AdminRoute from './utils/AdminRoute';
 import UploadForm from './components/UploadForm';
-import {ProfileImageProvider} from './providers/ProfileImageContext';
+import { ProfileImageProvider } from './providers/ProfileImageContext';
 
 function App() {
   return (
-    <AuthProvider>
-      <ProfileImageProvider>
-      <FavoritesProvider>
-        <SearchProvider>
-          <WatchedProvider>
-            <ReviewsProvider>
-              <Router>
-                <ToastContainer />
-                <Header />
-                <div className="MiApp">
-                  <Routes>
-                    <Route path="/" element={<Home />} />
-                    <Route path="/login" element={<Login />} />
-                    <Route path="/register" element={<SignupForm />} />
-                    <Route path="/reset-password" element={<ChangePassword />} />
-                    <Route path="/recovery-password" element={<RecoveryPassword/>} />
-                    
-                    {/* 🔹 Las rutas protegidas dentro de PrivateRoute */}
-                    <Route element={<PrivateRoute />}>
-                      <Route path="/search" element={<MoviesSearch />} />
-                      <Route path="/movie/:imdbID" element={<MovieDetails />} />
-                      <Route path="/favorites" element={<Favorites />} />
-                      <Route path="/profile" element={<Profile />} />
-                      <Route path="/watched" element={<MovieWatched />} />
-                      <Route path="/reviews" element={<Reviews />} />
-                      <Route path="/upload-image" element={<UploadForm />} />
-                     
-                    </Route>
-                    {/* Ruta protegida solo para admins */}
-                    <Route element={<AdminRoute />}>
-                      <Route path="/admin-dashboard" element={<AdminDashboard />} />
-                    </Route>
-                    <Route path="*" element={<h1>Not Found</h1>} />
-                  </Routes>
-                </div>
-                <Footer />
-              </Router>
-            </ReviewsProvider>
-          </WatchedProvider>
-        </SearchProvider>
-      </FavoritesProvider>
-      </ProfileImageProvider>
-    </AuthProvider>
+    <ProfileImageProvider>
+      <AuthProvider>
+              <FavoritesProvider>
+          <SearchProvider>
+            <WatchedProvider>
+              <ReviewsProvider>
+                <Router>
+                  <ToastContainer />
+                  <Header />
+                  <div className="MiApp">
+                    <Routes>
+                      <Route path="/" element={<Home />} />
+                      <Route path="/login" element={<Login />} />
+                      <Route path="/register" element={<SignupForm />} />
+                      <Route path="/reset-password" element={<ChangePassword />} />
+                      <Route path="/recovery-password" element={<RecoveryPassword />} />
+
+                      {/* 🔹 Las rutas protegidas dentro de PrivateRoute */}
+                      <Route element={<PrivateRoute />}>
+                        <Route path="/search" element={<MoviesSearch />} />
+                        <Route path="/movie/:imdbID" element={<MovieDetails />} />
+                        <Route path="/favorites" element={<Favorites />} />
+                        <Route path="/profile" element={<Profile />} />
+                        <Route path="/watched" element={<MovieWatched />} />
+                        <Route path="/reviews" element={<Reviews />} />
+                        <Route path="/upload-image" element={<UploadForm />} />
+
+                      </Route>
+                      {/* Ruta protegida solo para admins */}
+                      <Route element={<AdminRoute />}>
+                        <Route path="/admin-dashboard" element={<AdminDashboard />} />
+                      </Route>
+                      <Route path="*" element={<h1>Not Found</h1>} />
+                    </Routes>
+                  </div>
+                  <Footer />
+                </Router>
+              </ReviewsProvider>
+            </WatchedProvider>
+          </SearchProvider>
+        </FavoritesProvider>
+          </AuthProvider>
+    </ProfileImageProvider>
   );
 }
 

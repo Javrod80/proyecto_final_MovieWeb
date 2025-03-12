@@ -84,9 +84,13 @@ const UploadForm = ({ onImageUpload }) => {
             * @property {string} [imagePath] - Ruta de la imagen subida.
             */
             const result = await response.json();
-            // console.log("Respuesta del servidor:", result);
-            setMessage(`Imagen subida con éxito: ${result.imagePath || 'Ruta no disponible'}`);
-            onImageUpload(result.imagePath);
+            if (result.imagePath) {
+                setMessage(`Imagen subida con éxito.`);
+                
+                onImageUpload(result.imagePath);
+            } else {
+                setMessage(' imagen no disponible.');
+            };
         } catch (err) {
             console.error("Error al realizar la solicitud:", err);
             setMessage("Error al realizar la solicitud: " + err.message);

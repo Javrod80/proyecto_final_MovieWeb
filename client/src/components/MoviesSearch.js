@@ -21,6 +21,7 @@ import usuario100 from '../images/usuario100.png';
 import { useProfileImage } from '../providers/ProfileImageContext';
 import fetchProfileImage from "./Profile";
 
+
 const MoviesSearch = () => {
     /**
      * Obtiene el historial de películas vistas del contexto de búsqueda.
@@ -51,6 +52,7 @@ const MoviesSearch = () => {
      */
     const { profileImage } = useProfileImage();
     fetchProfileImage();
+    
      
     /**
       * Efecto que obtiene el historial de películas vistas cuando el usuario está autenticado.

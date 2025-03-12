@@ -1,4 +1,5 @@
-import  {getDataFromCollection, deleteFromCollection, insertIntoCollection}  from './genericMongo.models.js';
+import  { deleteFromCollection, insertIntoCollection}  from './genericMongo.models.js';
+import { executeDbOperation } from './mongo.models.js';
 import path from 'path';
 import dotenv from 'dotenv';
 dotenv.config();
@@ -20,14 +21,15 @@ const crudMongoDBImages = {
         });
     },
     /**
-     * Función para obtener las imágenes de un usuario
-     * @param {string} userId - El ID del usuario.
-     * @returns {Promise<Array>} - Devuelve una promesa con un arreglo de las imágenes asociadas al usuario.
-     */
+  * Función para obtener la última imagen de perfil de un usuario
+  * @param {string} userId - El ID del usuario.
+  * @returns {Promise<Object|null>} - Devuelve la última imagen del usuario o null si no tiene.
+  */
     getImagesForUser: async (userId) => {
-        return getDataFromCollection(collectionName, { userId } );
+        return executeDbOperation(collectionName, (collection) =>
+            collection.find({ userId }).sort({ createdAt: -1 }).limit(1).toArray()
+        );
     },
-
     /**
      * Función para eliminar una imagen de un usuario
      * @param {string} userId - El ID del usuario.

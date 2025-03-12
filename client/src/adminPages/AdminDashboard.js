@@ -1,10 +1,10 @@
 import React from "react";
-import AdminGetFavorites from "../adminComponents/AdminGetFavorites";
-import AdminGetReviews from "../adminComponents/AdminGetReviews";
+import AdminGetFavorites from "../admincomponents/AdminGetFavorites";
+import AdminGetReviews from "../admincomponents/AdminGetReviews";
 import { useAuth } from "../providers/AuthContext";
 import { useNavigate } from "react-router-dom";
-import AdminGetAllUsers from "../adminComponents/AdminGetAllUsers";
-import AdminGetAllWatched from "../adminComponents/AdminGetAllWatched";
+import AdminGetAllUsers from "../admincomponents/AdminGetAllUsers";
+import AdminGetAllWatched from "../admincomponents/AdminGetAllWatched";
 /**
  * Componente del dashboard de administración.
  *
