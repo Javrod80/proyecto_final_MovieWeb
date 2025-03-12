@@ -16,7 +16,7 @@
  */
 
 import React, { createContext, useContext, useState, useEffect } from "react";
-import { useProfileImage } from "../providers/ProfileImageContext";
+
 
 
 const AuthContext = createContext();
@@ -43,7 +43,7 @@ export const AuthProvider = ({ children }) => {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [userId, setUserId] = useState(null);
     const [userRole, setUserRole] = useState(null); 
-   const { setProfileImage } = useProfileImage();
+ 
    
 
     
@@ -76,7 +76,7 @@ export const AuthProvider = ({ children }) => {
         setIsAuthenticated(false);
         setUserId(null);
         setUserRole(null);
-       setProfileImage(null);
+       
         
     };
 

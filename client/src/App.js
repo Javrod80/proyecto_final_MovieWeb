@@ -29,8 +29,10 @@ import { ProfileImageProvider } from './providers/ProfileImageContext';
 function App() {
   return (
     <ProfileImageProvider>
-      <AuthProvider>
+    <AuthProvider>
+   
               <FavoritesProvider>
+             
           <SearchProvider>
             <WatchedProvider>
               <ReviewsProvider>
@@ -68,9 +70,13 @@ function App() {
               </ReviewsProvider>
             </WatchedProvider>
           </SearchProvider>
+         
         </FavoritesProvider>
-          </AuthProvider>
+       
+    </AuthProvider>
     </ProfileImageProvider>
+
+
   );
 }
 

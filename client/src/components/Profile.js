@@ -5,7 +5,6 @@ import UploadForm from './UploadForm';
 import DeleteAccount from './DeleteAccount';
 import ResetPassword from './ResetPassword';
 import useFetch from '../hooks/useFetch';
-import { jwtDecode } from 'jwt-decode';
 import {useProfileImage} from '../providers/ProfileImageContext';
 /**
  * Componente principal de perfil de usuario.
@@ -23,65 +22,20 @@ const Profile = () => {
      * Estado para almacenar la URL relativa de la imagen de perfil del usuario.
      * @constant {string|null} profileImage - Contiene la ruta de la imagen de perfil o `null` si no está disponible.
      */
-    const { profileImage, setProfileImage } = useProfileImage(null);
+        const { profileImage, setProfileImage } = useProfileImage();
+        const {  error } = useFetch
 
-       /**
-     * Hook personalizado para realizar solicitudes HTTP.
-     * @constant {function} fetchData - Función para hacer peticiones HTTP.
-     * @constant {Error|null} error - Posible error devuelto al realizar la solicitud.
-     */
-    const { fetchData, error } = useFetch();
-   /**
-     * Hook para obtener la imagen de perfil al cargar el componente.
-     * Decodifica el token almacenado localmente, obtiene el `userId` y realiza una solicitud al backend para recuperar la URL de la imagen de perfil.
-     * @function fetchProfileImage
-     * @returns {Promise<void>} Actualiza el estado `profileImage` si se obtiene una imagen válida.
-     */
+    useEffect(() => {
+        if (error) {
+            console.error("Error al obtener la imagen de perfil:", error);
+        }
+    }, [error]); 
    
     useEffect(() => {
-        const fetchProfileImage = async () => {
-            const token = localStorage.getItem('token');
 
-            // Verificar si el token está presente
-            if (!token) {
-                console.log("Token no encontrado. El usuario no está autenticado.");
-                setProfileImage(null);  
-                return;
-            }
+    }, [profileImage]);
+        
 
-            try {
-                // Decodificar el token y extraer el userId
-                const decodedToken = jwtDecode(token);
-                const userId = decodedToken.id;
-
-                // Verificar que userId sea válido
-                if (!userId) {
-                    console.error("El token no contiene un ID de usuario válido.");
-                    setProfileImage(null); 
-                    return;
-                }
-
-                // Realizar la solicitud al backend para obtener la imagen de perfil
-                const result = await fetchData("users/profile-image", "GET", null, token);
-
-                if (result && result.imagePath) {
-                    setProfileImage(result.imagePath);
-                } else {
-                    console.warn("No se obtuvo una imagen válida del servidor.");
-                    setProfileImage(null);  
-                }
-            } catch (error) {
-                console.error("Error al obtener la imagen de perfil:", error);
-                setProfileImage(null);  
-            }
-        };
-
-        fetchProfileImage();
-    }, [fetchData, setProfileImage]);
-
-    if (error) {
-        console.error("Error al obtener la imagen de perfil:", error);
-    }
  /**
      * Redirecciona al usuario a la página de películas favoritas.
      * @function goToFavorites

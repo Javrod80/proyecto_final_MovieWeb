@@ -19,7 +19,7 @@ import { useWatched } from "../providers/WatchedProvider";
 import useFetch from "../hooks/useFetch";
 import usuario100 from '../images/usuario100.png';
 import { useProfileImage } from '../providers/ProfileImageContext';
-import fetchProfileImage from "./Profile";
+
 
 
 const MoviesSearch = () => {
@@ -50,8 +50,8 @@ const MoviesSearch = () => {
      * Obtiene el contexto de la imagen de perfil.
      * @type {Object}
      */
-    const { profileImage } = useProfileImage();
-    fetchProfileImage();
+    const { profileImage, setProfileImage  } = useProfileImage();
+    
     
      
     /**
@@ -93,6 +93,7 @@ const MoviesSearch = () => {
     const handleLogout = () => {
         logout();
         navigate("/");
+        setProfileImage(null);
     };
     /**
     * Verifica si una película ya ha sido marcada como vista.

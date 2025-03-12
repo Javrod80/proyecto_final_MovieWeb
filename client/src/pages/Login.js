@@ -74,10 +74,10 @@ const Login = () => {
             const userRole = decodedToken.rol; 
 
             localStorage.setItem("rol", userRole); 
-
-            
+           
             login(data.user?.id, userRole);
-
+            
+        
             // Redirigir según el rol
             navigate(userRole === "admin" ? "/admin-dashboard" : "/search");
             setHasLoggedIn(true);
