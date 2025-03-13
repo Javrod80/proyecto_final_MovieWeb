@@ -15,8 +15,9 @@ export default {
         const { reviewId } = req.params;
         const { rating, review: reviewText } = req.body; 
         const userId = req.user.id;
-
-        if (!reviewId || !Number.isFinite(rating) || !reviewText?.trim()) {
+        
+        const ratingNumber = Number(rating);
+        if (!reviewId || !Number.isFinite(ratingNumber) || !reviewText?.trim()) {
             return res.status(400).json({ error: "Faltan datos requeridos" });
         }
 

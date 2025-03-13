@@ -34,8 +34,7 @@ const EditReviewForm = ({ review, onCancel,onSubmit }) => {
    */
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const newReviewData = { review: newReview, rating: newRating };
-        onSubmit(review._id, newReviewData); // Llama la función onSubmit del componente principal para actualizar
+        onSubmit(review._id, { rating: newRating, review: newReview });
     };
         // Renderizar el formulario
     return (

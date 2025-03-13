@@ -109,9 +109,9 @@ const ReviewsProvider = ({ children }) => {
      * 
      * @returns {Object|null} La reseña actualizada si la actualización fue exitosa, o null si no se pudo actualizar.
      */
-    const updateReview = useCallback(async (reviewId, newReviewData) => {
+    const updateReview = useCallback(async (reviewId, newReview) => {
         const token = localStorage.getItem('token');
-        const response = await fetchData(`reviews/update-review/${reviewId}`, 'PUT', newReviewData, token);
+        const response = await fetchData(`reviews/update-review/${reviewId}`, 'PUT', newReview, token);
         return response;
     }, [fetchData]);
     /**
