@@ -120,6 +120,20 @@ $ cd server
 $ npm test
 ```
 
+📷 Capturas de Pantalla
+![image](https://github.com/user-attachments/assets/ff631604-a006-43d9-989d-d30bbe043f97)
+![image](https://github.com/user-attachments/assets/c51a6658-e181-49c8-99be-fe2b20f8cc72)
+![image](https://github.com/user-attachments/assets/610c9759-ee67-481f-a308-d4389a4b5b31)
+![image](https://github.com/user-attachments/assets/aeb0f950-8e7b-4977-a04d-e97233b1da9d)
+![image](https://github.com/user-attachments/assets/9ac85810-1f53-409d-a328-4a036365f5cb)
+![image](https://github.com/user-attachments/assets/6bd7edea-4811-4451-9cb8-9767142be2f0)
+![image](https://github.com/user-attachments/assets/51c805eb-dde2-4fd0-a7bf-5b4bf8682d3d)
+![image](https://github.com/user-attachments/assets/670a434a-1815-4a88-b9b9-27f485803101)
+![image](https://github.com/user-attachments/assets/29c173e9-e89e-4265-af58-b9f3f502ea3f)
+![image](https://github.com/user-attachments/assets/da12c726-5e5a-4087-acc3-8a0cff42edf0)
+![image](https://github.com/user-attachments/assets/d84df469-d6d7-46e0-9a8b-69246ee520b2)
+
+
 ## Contribución
 Si deseas contribuir a MovieWeb:
 1. Realiza un fork del repositorio.
